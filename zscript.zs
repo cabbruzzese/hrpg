@@ -1,0 +1,13 @@
+version "4.3.0"
+
+#include "hrpgscripts/HRpgPlayer.zs"
+#include "hrpgscripts/HRpgStatusBar.zs"
+#include "hrpgscripts/ExpSquishbag.zs"
+#include "hrpgscripts/HRpgImp.zs"
+#include "hrpgscripts/HRpgBeast.zs"
+#include "hrpgscripts/HRpgClink.zs"
+#include "hrpgscripts/HrpgIronlich.zs"
+#include "hrpgscripts/HRpgKnight.zs"
+#include "hrpgscripts/HRpgMummy.zs"
+#include "hrpgscripts/HRpgSnake.zs"
+#include "hrpgscripts/HRpgWizard.zs"
