@@ -30,12 +30,12 @@ gameinfo
 	intermissionmusic = "mus_intr"
 	intermissioncounter = false
 	weaponslot = 1, "Staff", "Gauntlets"
-	weaponslot = 2, "GoldWand"
+	weaponslot = 2, "HRpgGoldWand"
 	weaponslot = 3, "Crossbow"
 	weaponslot = 4, "Blaster"
 	weaponslot = 5, "SkullRod"
 	weaponslot = 6, "PhoenixRod"
-	weaponslot = 7, "Mace"
+	weaponslot = 7, "HRpgMace"
 	dimcolor = "00 00 40"
 	dimamount = 0.5
 	bluramount = 0

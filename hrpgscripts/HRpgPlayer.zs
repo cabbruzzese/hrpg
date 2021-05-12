@@ -23,16 +23,18 @@ class HRpgPlayer : HereticPlayer
 		Painchance 255;
 		Speed 1;
 		Player.DisplayName "Corvus";
-		Player.StartItem "GoldWand";
+		Player.StartItem "HRpgGoldWand";
 		Player.StartItem "Staff";
 		Player.StartItem "GoldWandAmmo", 50;
+		Player.StartItem "HRpgMace";
+		Player.StartItem "MaceAmmo", 25;
 		Player.WeaponSlot 1, "Staff", "Gauntlets";
-		Player.WeaponSlot 2, "GoldWand";
+		Player.WeaponSlot 2, "HRpgGoldWand";
 		Player.WeaponSlot 3, "Crossbow";
 		Player.WeaponSlot 4, "Blaster";
 		Player.WeaponSlot 5, "SkullRod";
 		Player.WeaponSlot 6, "PhoenixRod";
-		Player.WeaponSlot 7, "Mace";
+		Player.WeaponSlot 7, "HRpgMace";
 
 		Player.ColorRange 225, 240;
 		Player.Colorset 0, "$TXT_COLOR_GREEN",		225, 240,  238;
