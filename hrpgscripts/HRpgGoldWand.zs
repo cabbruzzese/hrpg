@@ -88,6 +88,10 @@ class HRpgGoldWand : HereticWeapon replaces GoldWand
 		{
 			return;
 		}
+		
+		let hrpgPlayer = HRpgPlayer(player.mo);
+		if (hrpgPlayer != null)
+			damage *= hrpgPlayer.GetLevelMod();
 
 		Weapon weapon = player.ReadyWeapon;
 		if (weapon != null)

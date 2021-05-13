@@ -97,7 +97,7 @@ class HRpgMace : HereticWeapon replaces Mace
 	
 	//----------------------------------------------------------------------------
 	//
-	// PROC A_WandStaffAttackPL1
+	// PROC A_MaceMeleeAttack
 	//
 	//----------------------------------------------------------------------------
 
@@ -109,6 +109,11 @@ class HRpgMace : HereticWeapon replaces Mace
 		{
 			return;
 		}
+		
+		let hrpgPlayer = HRpgPlayer(player.mo);
+		if (hrpgPlayer != null)
+			damage *= hrpgPlayer.GetLevelMod();
+		
 
 		Weapon weapon = player.ReadyWeapon;
 		if (weapon != null)

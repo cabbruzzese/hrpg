@@ -26,9 +26,7 @@ class HRpgPlayer : HereticPlayer
 		Player.StartItem "HRpgGoldWand";
 		Player.StartItem "Staff";
 		Player.StartItem "GoldWandAmmo", 50;
-		Player.StartItem "HRpgMace";
-		Player.StartItem "MaceAmmo", 25;
-		Player.WeaponSlot 1, "Staff", "Gauntlets";
+		Player.WeaponSlot 1, "Staff", "HRpgGauntlets";
 		Player.WeaponSlot 2, "HRpgGoldWand";
 		Player.WeaponSlot 3, "Crossbow";
 		Player.WeaponSlot 4, "Blaster";
