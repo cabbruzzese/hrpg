@@ -36,10 +36,10 @@ class HRpgMace : HereticWeapon replaces Mace
 		MACE DEFB 4;
 		Goto Ready;
 	AltFire:
-		MMAC A 4;
-		MMAC B 4 A_MaceMeleeAttack(random[StaffAttack](20, 50), "StaffPuff");
-		MMAC C 4;
-		MMAC D 12;
+		MMAC A 4 Offset(120, 40);
+		MMAC B 4 Offset(100, 40) A_MaceMeleeAttack(random[StaffAttack](20, 50), "StaffPuff");
+		MMAC C 4 Offset(80, 40);
+		MMAC D 12 Offset(60, 40);
 		MMAC D 2 A_ReFire;
 		Goto Ready;
 	}
@@ -149,10 +149,10 @@ class HRpgMacePowered : HRpgMace replaces MacePowered
 		MACE A 8 A_ReFire;
 		Goto Ready;
 	AltFire:
-		MMAC A 4;
-		MMAC B 4 A_MaceMeleeAttack(random[StaffAttack](40, 81), "StaffPuff2");
-		MMAC C 4;
-		MMAC D 12;
+		MMAC A 4 Offset(120, 40);
+		MMAC B 4 Offset(100, 40) A_MaceMeleeAttack(random[StaffAttack](40, 81), "StaffPuff2");
+		MMAC C 4 Offset(80, 40);
+		MMAC D 12 Offset(60, 40);
 		MMAC D 2 A_ReFire;
 		Goto Ready;
 	}
