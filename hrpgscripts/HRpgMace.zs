@@ -37,7 +37,7 @@ class HRpgMace : HereticWeapon replaces Mace
 		Goto Ready;
 	AltFire:
 		MMAC A 4 Offset(120, 40);
-		MMAC B 4 Offset(100, 40) A_MaceMeleeAttack(random[StaffAttack](20, 50), "StaffPuff");
+		MMAC B 4 Offset(100, 40) A_MaceMeleeAttack(random[StaffAttack](25, 60), "StaffPuff", 150);
 		MMAC C 4 Offset(80, 40);
 		MMAC D 12 Offset(60, 40);
 		MMAC D 2 A_ReFire;
@@ -101,19 +101,20 @@ class HRpgMace : HereticWeapon replaces Mace
 	//
 	//----------------------------------------------------------------------------
 
-	action void A_MaceMeleeAttack (int damage, class<Actor> puff)
+	action void A_MaceMeleeAttack (int damage, class<Actor> puff, int kickback)
 	{
 		FTranslatedLineTarget t;
+		int kickbackSave;
 
 		if (player == null)
 		{
 			return;
 		}
 		
+		//Scale up damage with level
 		let hrpgPlayer = HRpgPlayer(player.mo);
 		if (hrpgPlayer != null)
-			damage *= hrpgPlayer.GetLevelMod();
-		
+			damage *= hrpgPlayer.GetLevelMod();		
 
 		Weapon weapon = player.ReadyWeapon;
 		if (weapon != null)
@@ -123,7 +124,12 @@ class HRpgMace : HereticWeapon replaces Mace
 		}
 		double ang = angle + Random2[StaffAtk]() * (5.625 / 256);
 		double slope = AimLineAttack (ang, DEFMELEERANGE);
+		
+		kickbackSave = weapon.Kickback;
+		weapon.Kickback = kickback;
 		LineAttack (ang, DEFMELEERANGE, slope, damage, 'Melee', puff, true, t);
+		weapon.Kickback = kickbackSave;
+		
 		if (t.linetarget)
 		{
 			//S_StartSound(player.mo, sfx_stfhit);
@@ -155,7 +161,7 @@ class HRpgMacePowered : HRpgMace replaces MacePowered
 		Goto Ready;
 	AltFire:
 		MMAC A 4 Offset(120, 40);
-		MMAC B 4 Offset(100, 40) A_MaceMeleeAttack(random[StaffAttack](40, 81), "StaffPuff2");
+		MMAC B 4 Offset(100, 40) A_MaceMeleeAttack(random[StaffAttack](40, 90), "StaffPuff2", 250);
 		MMAC C 4 Offset(80, 40);
 		MMAC D 12 Offset(60, 40);
 		MMAC D 2 A_ReFire;

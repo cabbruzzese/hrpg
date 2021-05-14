@@ -1,5 +1,5 @@
 const XPMULTI = 1000;
-const HEALTHBASE = 100;
+const HEALTHBASE = 80;
 
 class HRpgPlayer : HereticPlayer
 {
@@ -24,11 +24,11 @@ class HRpgPlayer : HereticPlayer
 		Speed 1;
 		Player.DisplayName "Corvus";
 		Player.StartItem "HRpgGoldWand";
-		Player.StartItem "Staff";
+		Player.StartItem "HRpgStaff";
 		Player.StartItem "GoldWandAmmo", 50;
-		Player.WeaponSlot 1, "Staff", "HRpgGauntlets";
+		Player.WeaponSlot 1, "HRpgStaff", "HRpgGauntlets";
 		Player.WeaponSlot 2, "HRpgGoldWand";
-		Player.WeaponSlot 3, "Crossbow";
+		Player.WeaponSlot 3, "HRpgCrossbow";
 		Player.WeaponSlot 4, "Blaster";
 		Player.WeaponSlot 5, "SkullRod";
 		Player.WeaponSlot 6, "PhoenixRod";
@@ -133,21 +133,24 @@ class HRpgPlayer : HereticPlayer
 		}
 	}
 	
+	//Damage is scaled at 70% at start and raises back up with levels
 	double GetLevelMod()
 	{
-		return 0.9 + (ExpLevel * 0.1); //level 1 = 1, level 2 = 1.1, level 3 = 1.2, etc.
+		return 0.6 + (ExpLevel * 0.1); //level 1 = 1, level 2 = 1.1, level 3 = 1.2, etc.
 	}
 	
+	//Gain a level
 	void GainLevel()
 	{
 		if (Exp < ExpNext)
 			return;
 
 		ExpLevel++;
-		Exp = 0;
+		Exp = Exp - ExpNext;
 		ExpNext = CalcXpNeeded();
-		
-		int newHealth = HEALTHBASE * GetLevelMod();
+
+		//health resets to 80 (base) + 10 for every level above 1
+		int newHealth = HEALTHBASE + (10 * (ExpLevel - 1));
 		MaxHealth = newHealth;
 		if (Health < MaxHealth);
 			A_SetHealth(MaxHealth);

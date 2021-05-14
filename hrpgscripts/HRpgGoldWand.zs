@@ -38,7 +38,7 @@ class HRpgGoldWand : HereticWeapon replaces GoldWand
 		Goto Ready;
 	AltFire:
 		STFF B 6;
-		STFF C 8 A_WandStaffAttack(random[StaffAttack](5, 20), "StaffPuff");
+		STFF C 8 A_WandStaffAttack(random[StaffAttack](5, 20), "StaffPuff", 100);
 		STFF B 8 A_ReFire;
 		Goto Ready;
 	}
@@ -80,15 +80,17 @@ class HRpgGoldWand : HereticWeapon replaces GoldWand
 	//
 	//----------------------------------------------------------------------------
 
-	action void A_WandStaffAttack (int damage, class<Actor> puff)
+	action void A_WandStaffAttack (int damage, class<Actor> puff, int kickback)
 	{
 		FTranslatedLineTarget t;
+		int kickbackSave;
 
 		if (player == null)
 		{
 			return;
 		}
 		
+		//Scale up damage with level
 		let hrpgPlayer = HRpgPlayer(player.mo);
 		if (hrpgPlayer != null)
 			damage *= hrpgPlayer.GetLevelMod();
@@ -101,7 +103,12 @@ class HRpgGoldWand : HereticWeapon replaces GoldWand
 		}
 		double ang = angle + Random2[StaffAtk]() * (5.625 / 256);
 		double slope = AimLineAttack (ang, DEFMELEERANGE);
+		
+		kickbackSave = weapon.Kickback;
+		weapon.Kickback = kickback;
 		LineAttack (ang, DEFMELEERANGE, slope, damage, 'Melee', puff, true, t);
+		weapon.Kickback = kickbackSave;
+		
 		if (t.linetarget)
 		{
 			//S_StartSound(player.mo, sfx_stfhit);
@@ -133,7 +140,7 @@ class HRpgGoldWandPowered : HRpgGoldWand replaces GoldWandPowered
 		Goto Ready;
 	AltFire:
 		STFF G 6;
-		STFF H 8 A_WandStaffAttack(random[StaffAttack](18, 81), "StaffPuff2");
+		STFF H 8 A_WandStaffAttack(random[StaffAttack](18, 81), "StaffPuff2", 100);
 		STFF G 8 A_ReFire;
 		Goto Ready;
 	}
