@@ -38,7 +38,7 @@ class HRpgCrossbow : HereticWeapon replaces Crossbow
 		CRBW C 4 Offset(-40, 40);
 		CRBW C 4 Offset(-60, 50);
 		CRBW C 4 Offset(-80, 60);
-		CRBW C 12 Offset(-80, 60) A_FireBowAxe();
+		CRBW C 12 Offset(-80, 60) A_FireBowAxe(false);
 		CRBW C 4 Offset(-60, 50);
 		CRBW C 4 Offset(-40, 40);
 		CRBW C 4 Offset(-20, 40) A_ReFire;
@@ -75,7 +75,7 @@ class HRpgCrossbow : HereticWeapon replaces Crossbow
 	//
 	//----------------------------------------------------------------------------
 
-	action void A_FireBowAxe ()
+	action void A_FireBowAxe (bool powered)
 	{
 		if (player == null)
 		{
@@ -88,7 +88,11 @@ class HRpgCrossbow : HereticWeapon replaces Crossbow
 			if (!weapon.DepleteAmmo (false))
 				return;
 		}
-		SpawnPlayerMissile ("BowAxe");
+		
+		if (powered)
+			SpawnPlayerMissile ("BowRedAxe");
+		else
+			SpawnPlayerMissile ("BowAxe");
 	}
 }
 
@@ -114,6 +118,15 @@ class HRpgCrossbowPowered : HRpgCrossbow replaces CrossbowPowered
 		CRBW A 3;
 		CRBW B 3;
 		CRBW C 4 A_ReFire;
+		Goto Ready;
+	AltFire:
+		CRBW C 4 Offset(-40, 40);
+		CRBW C 4 Offset(-60, 50);
+		CRBW C 4 Offset(-80, 60);
+		CRBW C 12 Offset(-80, 60) A_FireBowAxe(true);
+		CRBW C 4 Offset(-60, 50);
+		CRBW C 4 Offset(-40, 40);
+		CRBW C 4 Offset(-20, 40) A_ReFire;
 		Goto Ready;
 	}
 	
@@ -150,8 +163,8 @@ class BowAxe : Actor
 	{
 		Radius 11;
 		Height 8;
-		Speed 9;
-		Damage 13;
+		Speed 10;
+		Damage 12;
 		Projectile;
 		DeathSound "hknight/hit";
 		Obituary "$OB_MPCROSSBOW";
@@ -166,5 +179,43 @@ class BowAxe : Actor
 	Death:
 		SPAX DEF 6 BRIGHT;
 		Stop;
+	}
+}
+
+class BowRedAxe : BowAxe 
+{
+	Default
+	{
+		Damage 20;
+		Speed 16;
+	}
+
+	States
+	{
+	Spawn:
+		RAXE AB 5 BRIGHT A_DripBlood;
+		Loop;
+	Death:
+		RAXE CDE 6 BRIGHT;
+		Stop;
+	}
+	
+	//----------------------------------------------------------------------------
+	//
+	// PROC A_DripBlood
+	//
+	//----------------------------------------------------------------------------
+	
+	void A_DripBlood ()
+	{
+		double xo = random2[DripBlood]() / 32.0;
+		double yo = random2[DripBlood]() / 32.0;
+		Actor mo = Spawn ("Blood", Vec3Offset(xo, yo, 0.), ALLOW_REPLACE);
+		if (mo != null)
+		{
+			mo.Vel.X = random2[DripBlood]() / 64.0;
+			mo.Vel.Y = random2[DripBlood]() / 64.0;
+			mo.Gravity = 1./8;
+		}
 	}
 }

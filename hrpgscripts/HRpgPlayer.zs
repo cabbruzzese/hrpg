@@ -29,7 +29,7 @@ class HRpgPlayer : HereticPlayer
 		Player.WeaponSlot 1, "HRpgStaff", "HRpgGauntlets";
 		Player.WeaponSlot 2, "HRpgGoldWand";
 		Player.WeaponSlot 3, "HRpgCrossbow";
-		Player.WeaponSlot 4, "Blaster";
+		Player.WeaponSlot 4, "HRpgBlaster";
 		Player.WeaponSlot 5, "SkullRod";
 		Player.WeaponSlot 6, "PhoenixRod";
 		Player.WeaponSlot 7, "HRpgMace";
@@ -152,7 +152,7 @@ class HRpgPlayer : HereticPlayer
 		//health resets to 80 (base) + 10 for every level above 1
 		int newHealth = HEALTHBASE + (10 * (ExpLevel - 1));
 		MaxHealth = newHealth;
-		if (Health < MaxHealth);
+		if (Health < MaxHealth)
 			A_SetHealth(MaxHealth);
 	}
 }
