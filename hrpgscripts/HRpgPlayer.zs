@@ -30,8 +30,8 @@ class HRpgPlayer : HereticPlayer
 		Player.WeaponSlot 2, "HRpgGoldWand";
 		Player.WeaponSlot 3, "HRpgCrossbow";
 		Player.WeaponSlot 4, "HRpgBlaster";
-		Player.WeaponSlot 5, "SkullRod";
-		Player.WeaponSlot 6, "PhoenixRod";
+		Player.WeaponSlot 5, "HRpgSkullRod";
+		Player.WeaponSlot 6, "HRpgPhoenixRod";
 		Player.WeaponSlot 7, "HRpgMace";
 
 		Player.ColorRange 225, 240;

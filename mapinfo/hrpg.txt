@@ -33,8 +33,8 @@ gameinfo
 	weaponslot = 2, "HRpgGoldWand"
 	weaponslot = 3, "HRpgCrossbow"
 	weaponslot = 4, "HRpgBlaster"
-	weaponslot = 5, "SkullRod"
-	weaponslot = 6, "PhoenixRod"
+	weaponslot = 5, "HRpgSkullRod"
+	weaponslot = 6, "HRpgPhoenixRod"
 	weaponslot = 7, "HRpgMace"
 	dimcolor = "00 00 40"
 	dimamount = 0.5

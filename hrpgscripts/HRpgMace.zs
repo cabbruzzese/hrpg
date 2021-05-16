@@ -37,7 +37,7 @@ class HRpgMace : HereticWeapon replaces Mace
 		Goto Ready;
 	AltFire:
 		MMAC A 4 Offset(120, 40);
-		MMAC B 4 Offset(100, 40) A_MaceMeleeAttack(random[StaffAttack](25, 60), "StaffPuff", 150);
+		MMAC B 4 Offset(100, 40) A_MaceMeleeAttack(random(35, 75), "MacePuff1", 150);
 		MMAC C 4 Offset(80, 40);
 		MMAC D 12 Offset(60, 40);
 		MMAC D 2 A_ReFire;
@@ -117,17 +117,13 @@ class HRpgMace : HereticWeapon replaces Mace
 			damage *= hrpgPlayer.GetLevelMod();		
 
 		Weapon weapon = player.ReadyWeapon;
-		if (weapon != null)
-		{
-			if (!weapon.DepleteAmmo (weapon.bAltFire))
-				return;
-		}
+
 		double ang = angle + Random2[StaffAtk]() * (5.625 / 256);
-		double slope = AimLineAttack (ang, DEFMELEERANGE);
+		double slope = AimLineAttack (ang, DEFMELEERANGE * 1.3);
 		
 		kickbackSave = weapon.Kickback;
 		weapon.Kickback = kickback;
-		LineAttack (ang, DEFMELEERANGE, slope, damage, 'Melee', puff, true, t);
+		LineAttack (ang, DEFMELEERANGE * 1.3, slope, damage, 'Melee', puff, true, t);
 		weapon.Kickback = kickbackSave;
 		
 		if (t.linetarget)
@@ -161,7 +157,7 @@ class HRpgMacePowered : HRpgMace replaces MacePowered
 		Goto Ready;
 	AltFire:
 		MMAC A 4 Offset(120, 40);
-		MMAC B 4 Offset(100, 40) A_MaceMeleeAttack(random[StaffAttack](40, 90), "StaffPuff2", 250);
+		MMAC B 4 Offset(100, 40) A_MaceMeleeAttack(random(55, 95), "MacePuff2", 250);
 		MMAC C 4 Offset(80, 40);
 		MMAC D 12 Offset(60, 40);
 		MMAC D 2 A_ReFire;
@@ -200,5 +196,46 @@ class HRpgMacePowered : HRpgMace replaces MacePowered
 			}
 		}
 		A_StartSound ("weapons/maceshoot", CHAN_WEAPON);
+	}
+}
+
+class MacePuff1 : Actor
+{
+	Default
+	{
+		RenderStyle "Add";
+		+NOBLOCKMAP
+		+NOGRAVITY
+		+PUFFONACTORS
+		+ZDOOMTRANS
+		AttackSound "weapons/phoenixhit";
+		Scale 0.5;
+	}
+
+	States
+	{
+	Spawn:
+		FX06 DEFG 4 BRIGHT;
+		Stop;
+	}
+}
+
+class MacePuff2 : Actor
+{
+	Default
+	{
+		RenderStyle "Add";
+		+NOBLOCKMAP
+		+NOGRAVITY
+		+PUFFONACTORS
+		+ZDOOMTRANS
+		AttackSound "weapons/staffpowerhit";
+	}
+
+	States
+	{
+	Spawn:
+		FX14 DEFGH 4 BRIGHT;
+		Stop;
 	}
 }

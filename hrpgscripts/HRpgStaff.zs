@@ -72,11 +72,11 @@ class HRpgStaff : HereticWeapon replaces Staff
 		}
 		
 		double ang = angle + Random2[StaffAtk]() * (5.625 / 256);
-		double slope = AimLineAttack (ang, DEFMELEERANGE);
+		double slope = AimLineAttack (ang, DEFMELEERANGE * 1.25);
 
 		kickbackSave = weapon.Kickback;
 		weapon.Kickback = kickback;
-		LineAttack (ang, DEFMELEERANGE, slope, damage, 'Melee', puff, true, t);
+		LineAttack (ang, DEFMELEERANGE * 1.25, slope, damage, 'Melee', puff, true, t);
 		weapon.Kickback = kickbackSave;
 		if (t.linetarget)
 		{
