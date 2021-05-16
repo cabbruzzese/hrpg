@@ -1,4 +1,4 @@
-// MAPINFO for Heretic (Shareware and Retail)
+// MAPINFO for Heretic RPG v0.1
 include "mapinfo/common.txt"
 
 gameinfo
