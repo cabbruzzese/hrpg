@@ -98,6 +98,14 @@ class HRpgBlaster : HereticWeapon replaces Blaster
 			clawChain = Actor(SpawnPlayerMissile ("RedClawChain", angle));
 		else
 			clawChain = Actor(SpawnPlayerMissile ("ClawChain", angle));
+			
+		//Scale up damage with level
+		let hrpgPlayer = HRpgPlayer(player.mo);
+		if (hrpgPlayer != null && clawChain != null)
+		{
+			let newDamage = hrpgPlayer.GetProjectileDamage(clawChain.Damage);
+			clawChain.SetDamage (newDamage);
+		}
 		
 		if (tracker == null)
 			tracker = ClawChainTracker(GiveInventoryType("ClawChainTracker"));
@@ -153,16 +161,35 @@ class ClawChain : Actor
 		DeathSound "weapons/blasterpowhit";
 		Obituary "$OB_MPPBLASTER";
 		Scale 1.5;
+		+BOUNCEONFLOORS;
+		+BOUNCEONCEILINGS;
+		+USEBOUNCESTATE;
+		+BOUNCEONWALLS;
+		+CANBOUNCEWATER;
 	}
 
 	States
 	{
 	Spawn:
-		FX18 M 2 A_MoveClawChain();
+		FX18 M 2 A_MoveClawChain;
 		Loop;
-	Death:
-		FX18 M 3;
+	Bounce:
+		FX18 M 1 A_MaceBallImpact;
 		Goto Spawn;
+	Death:
+		FX18 M 1;
+		Goto Spawn;
+	}
+	
+	//Bounce
+	void A_MaceBallImpact()
+	{
+		A_StartSound ("weapons/macebounce", CHAN_BODY);
+	}
+	
+	override void Die(Actor source, Actor inflictor, int dmgflags, Name MeansOfDeath)
+	{
+		A_MaceBallImpact();
 	}
 	
 	//----------------------------------------------------------------------------

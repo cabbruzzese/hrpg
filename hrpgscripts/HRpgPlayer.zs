@@ -133,10 +133,21 @@ class HRpgPlayer : HereticPlayer
 		}
 	}
 	
-	//Damage is scaled at 70% at start and raises back up with levels
+	//Melee Damage is scaled at 90% at start and raises back up with levels
 	double GetLevelMod()
 	{
-		return 0.6 + (ExpLevel * 0.1); //level 1 = 1, level 2 = 1.1, level 3 = 1.2, etc.
+		return 0.8 + (ExpLevel * 0.1); //level 1 = .9, level 2 = 1, level 3 = 1.1, etc.
+	}
+	
+	//Projectile damage scaled by level mod, minimum of 1
+	int GetProjectileDamage(double damage)
+	{
+		let newDamage = damage * GetLevelMod();
+		
+		if (newDamage < 1)
+			return 1;
+			
+		return newDamage;
 	}
 	
 	//Gain a level

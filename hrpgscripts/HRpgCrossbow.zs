@@ -81,18 +81,31 @@ class HRpgCrossbow : HereticWeapon replaces Crossbow
 		{
 			return;
 		}
-
-		Weapon weapon = player.ReadyWeapon;
-		if (weapon != null)
-		{
-			if (!weapon.DepleteAmmo (false))
-				return;
-		}
 		
+		if (powered)
+		{
+			Weapon weapon = player.ReadyWeapon;
+			if (weapon != null)
+			{
+				if (!weapon.DepleteAmmo (false))
+					return;
+			}
+		}
+
 		if (powered)
 			SpawnPlayerMissile ("BowRedAxe");
 		else
-			SpawnPlayerMissile ("BowAxe");
+		{
+			let mo = SpawnPlayerMissile ("BowAxe");
+			
+			//Scale up damage with level
+			let hrpgPlayer = HRpgPlayer(player.mo);
+			if (hrpgPlayer != null)
+			{
+				let newDamage = hrpgPlayer.GetProjectileDamage(mo.Damage);
+				mo.SetDamage (newDamage);
+			}
+		}
 	}
 }
 
@@ -163,8 +176,8 @@ class BowAxe : Actor
 	{
 		Radius 11;
 		Height 8;
-		Speed 10;
-		Damage 12;
+		Speed 9;
+		Damage 4;
 		Projectile;
 		DeathSound "hknight/hit";
 		Obituary "$OB_MPCROSSBOW";
@@ -175,9 +188,14 @@ class BowAxe : Actor
 	Spawn:
 		SPAX A 3 BRIGHT A_StartSound("hknight/axewhoosh");
 		SPAX BC 3 BRIGHT;
-		Loop;
+		SPAX A 3 BRIGHT A_StartSound("hknight/axewhoosh");
+		SPAX BC 3 BRIGHT;
+		SPAX A 3 BRIGHT A_StartSound("hknight/axewhoosh");
+		SPAX BC 3 BRIGHT;
+		Goto Death;
 	Death:
-		SPAX DEF 6 BRIGHT;
+		SPAX D 4 A_ChangeVelocity(0,0,0, CVF_REPLACE);
+		SPAX EF 4 BRIGHT;
 		Stop;
 	}
 }
@@ -187,14 +205,18 @@ class BowRedAxe : BowAxe
 	Default
 	{
 		Damage 20;
-		Speed 16;
+		Speed 9;
+		Health 0;
 	}
 
 	States
 	{
 	Spawn:
-		RAXE AB 5 BRIGHT A_DripBlood;
-		Loop;
+		RAXE AB 5 BRIGHT;
+		RAXE AB 5 BRIGHT;
+		RAXE A 5 BRIGHT A_DripBlood;
+		RAXE B 5 BRIGHT;
+		RAXE A 5 BRIGHT A_SplitAxe;
 	Death:
 		RAXE CDE 6 BRIGHT;
 		Stop;
@@ -216,6 +238,45 @@ class BowRedAxe : BowAxe
 			mo.Vel.X = random2[DripBlood]() / 64.0;
 			mo.Vel.Y = random2[DripBlood]() / 64.0;
 			mo.Gravity = 1./8;
+		}
+	}
+	
+	//----------------------------------------------------------------------------
+	//
+	// PROC A_SplitAxe
+	//
+	//----------------------------------------------------------------------------
+
+	action void A_SplitAxe ()
+	{
+		if (target == null)
+		{
+			return;
+		}
+		
+		//Maximum of 5 splits
+		if (Health > 4)
+			return;
+
+		A_SplitAxeFire(angle + 7);
+		A_SplitAxeFire(angle - 7);
+	}
+	
+	action void A_SplitAxeFire(double angle)
+	{
+		if (target == null)
+		{
+			return;
+		}
+		
+		let mo = target.SpawnPlayerMissile ("BowRedAxe", angle);
+		if (mo != null)
+		{
+			mo.SetOrigin(Pos, false);
+			mo.target = target;
+			mo.A_SetPitch(pitch);
+			mo.Vel.Z = Vel.Z;
+			mo.A_SetHealth(Health + 1);
 		}
 	}
 }

@@ -343,6 +343,14 @@ class PhoenixFloorFireFX2 : PhoenixFloorFireFX1
 			mo.target = target;
 			mo.Vel.X = MinVel; // Force block checking
 			mo.CheckMissileSpawn (radius);
+			
+			//Scale up damage with level
+			let hrpgPlayer = HRpgPlayer(target);
+			if (hrpgPlayer != null)
+			{
+				let newDamage = hrpgPlayer.GetProjectileDamage(mo.Damage);
+				mo.SetDamage (newDamage);
+			}
 		}
 	}
 }
