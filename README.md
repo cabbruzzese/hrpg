@@ -26,7 +26,7 @@ A single blast of red lightning that pushes monsters back.
 Turns that badboy around and makes an offhand staff thrust attack.
 
 ### Ethereal Crossbow
-Whips out one of those knight axes and chucks it at foes. (Consumes ammo)
+Whips out one of those knight axes and chucks it at foes.
 
 ### Dragon Claw
 Swings a mourning star on a chain that follows your view. Swing horizontally this for maximum effect.
