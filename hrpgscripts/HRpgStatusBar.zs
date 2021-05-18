@@ -60,14 +60,16 @@ class HRpgStatusBar : HereticStatusBar
 		{
 			BeginStatusBar();
 			DrawMainBar (TicFrac);
+			
+			DrawExpStuff(0);
 		}
 		else if (state == HUD_Fullscreen)
 		{
 			BeginHUD();
 			DrawFullScreenStuff ();
+			
+			DrawExpStuff(1);
 		}
-		
-		DrawExpStuff();
 	}
 
 	protected void DrawMainBar (double TicFrac)
@@ -222,19 +224,28 @@ class HRpgStatusBar : HereticStatusBar
 		}
 	}
 	
-	protected void DrawExpStuff ()
+	protected void DrawExpStuff (int isFullscreen)
 	{
-		let xPos = HorizontalResolution  / 2;
-		let yPos = 146;
+		let xPos = 0;
+		let yPos = 126;
+		let yStep = 8;
+		
+		if (isFullscreen)
+		{
+			xPos = 8;
+			yPos = 346;
+		}
 
 		let hrpgPlayer = HRpgPlayer(CPlayer.mo);
 		if (!hrpgPlayer)
 			return;
 
-		let text = String.Format("Level: %s XP: %s / %s", FormatNumber(hrpgPlayer.ExpLevel, 0), FormatNumber(hrpgPlayer.Exp, 0), FormatNumber(hrpgPlayer.ExpNext, 0));
+		let text1 = String.Format("Level: %s", FormatNumber(hrpgPlayer.ExpLevel, 0));
+		let text2 = String.Format("XP: %s / %s", FormatNumber(hrpgPlayer.Exp, 0), FormatNumber(hrpgPlayer.ExpNext, 0));
 		
 		
 		//Exp
-		DrawString(mSmallFont, text, (xPos, yPos), DI_TEXT_ALIGN_CENTER);
+		DrawString(mSmallFont, text1, (xPos, yPos), DI_TEXT_ALIGN_LEFT);
+		DrawString(mSmallFont, text2, (xPos, yPos + yStep), DI_TEXT_ALIGN_LEFT);
 	}
 }

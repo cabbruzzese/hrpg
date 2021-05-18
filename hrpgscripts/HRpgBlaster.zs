@@ -151,6 +151,7 @@ class ClawChain : Actor
 	
 	Default
 	{
+		Radius 10;
 		Height 6;
 		Speed 0;
 		Damage 1;
