@@ -17,10 +17,10 @@ class HRpgBlasphemerPlayer : HRpgPlayer
 		Painchance 255;
 		Speed 0.9;
 		Player.DisplayName "Blasphemer";
+		Player.StartItem "HRpgSpellBook";
 		Player.StartItem "HRpgGoldWand";
-		Player.StartItem "HRpgStaff";
 		Player.StartItem "GoldWandAmmo", 50;
-		Player.WeaponSlot 1, "HRpgStaff", "HRpgGauntlets";
+		Player.WeaponSlot 1, "HRpgGauntlets", "HRpgSpellBook";
 		Player.WeaponSlot 2, "HRpgGoldWand";
 		Player.WeaponSlot 3, "HRpgCrossbow";
 		Player.WeaponSlot 4, "HRpgBlaster";

@@ -284,8 +284,9 @@ class HRpgGauntletsPowered : HRpgGauntlets replaces GauntletsPowered
 		let hrpgPlayer = HRpgPlayer(player.mo);
 		if (hrpgPlayer != null)
 		{
-			if (hrpgPlayer.ExpLevel > magicMissileCount)
-				magicMissileCount = hrpgPlayer.ExpLevel;
+			int spellLevel = hrpgPlayer.Crp / 5;
+			if (spellLevel > magicMissileCount)
+				magicMissileCount = spellLevel;
 			
 			if (magicMissileCount > MAXMAGICMISSILES)
 				magicMissileCount = MAXMAGICMISSILES;

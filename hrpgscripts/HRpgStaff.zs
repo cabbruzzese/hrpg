@@ -12,7 +12,8 @@ class HRpgStaff : HereticWeapon replaces Staff
 		Obituary "$OB_MPSTAFF";
 		Tag "$TAG_STAFF";
 	}
-
+	//VFBLA - VFBLB
+	//FX10A - FX10G
 
 	States
 	{

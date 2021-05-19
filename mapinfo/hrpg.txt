@@ -26,7 +26,7 @@ gameinfo
 	statusbarclass = "HRpgStatusBar"
 	intermissionmusic = "mus_intr"
 	intermissioncounter = false
-	weaponslot = 1, "HRpgHammer", "HRpgStaff", "HRpgGauntlets"
+	weaponslot = 1, "HRpgStaff", "HRpgGauntlets", "HRpgSpellBook", "HRpgHammer"
 	weaponslot = 2, "HRpgGoldWand"
 	weaponslot = 3, "HRpgCrossbow"
 	weaponslot = 4, "HRpgBlaster"
