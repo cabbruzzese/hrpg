@@ -70,6 +70,11 @@ class HRpgGoldWand : HereticWeapon replaces GoldWand
 		{
 			ang += Random2[FireGoldWand]() * (5.625 / 256);
 		}
+		
+		let hrpgPlayer = HRpgPlayer(player.mo);
+		if (hrpgPlayer != null)
+			damage = hrpgPlayer.GetDamageForMagic(damage);
+		
 		LineAttack(ang, PLAYERMISSILERANGE, pitch, damage, 'Hitscan', "GoldWandPuff1");
 		A_StartSound("weapons/wandhit", CHAN_WEAPON);
 	}
@@ -93,7 +98,7 @@ class HRpgGoldWand : HereticWeapon replaces GoldWand
 		//Scale up damage with level
 		let hrpgPlayer = HRpgPlayer(player.mo);
 		if (hrpgPlayer != null)
-			damage *= hrpgPlayer.GetLevelMod();
+			damage = hrpgPlayer.GetDamageForMelee(damage);
 
 		Weapon weapon = player.ReadyWeapon;
 		if (weapon != null)
@@ -157,7 +162,7 @@ class HRpgGoldWandPowered : HRpgGoldWand replaces GoldWandPowered
 		{
 			return;
 		}
-
+		
 		Weapon weapon = player.ReadyWeapon;
 		if (weapon != null)
 		{
@@ -167,17 +172,28 @@ class HRpgGoldWandPowered : HRpgGoldWand replaces GoldWandPowered
 		double pitch = BulletSlope();
 
 		double vz = -GetDefaultByType("GoldWandFX2").Speed * clamp(tan(pitch), -5, 5);
-		SpawnMissileAngle("GoldWandFX2", angle - (45. / 8), vz);
-		SpawnMissileAngle("GoldWandFX2", angle + (45. / 8), vz);
+		
+		let mo1 = SpawnMissileAngle("GoldWandFX2", angle - (45. / 8), vz);
+		let mo2 = SpawnMissileAngle("GoldWandFX2", angle + (45. / 8), vz);
+		
+		//Scale up damage with level
+		let hrpgPlayer = HRpgPlayer(player.mo);
+		if (hrpgPlayer != null)
+		{
+			hrpgPlayer.SetProjectileDamageForMagic(mo1);
+		}
+		
 		double ang = angle - (45. / 8);
 		for(int i = 0; i < 5; i++)
 		{
 			int damage = random[FireGoldWand](1, 8);
+			
+			if (hrpgPlayer != null)
+				damage = hrpgPlayer.GetDamageForMagic(damage);
+			
 			LineAttack (ang, PLAYERMISSILERANGE, pitch, damage, 'Hitscan', "GoldWandPuff2");
 			ang += ((45. / 8) * 2) / 4;
 		}
 		A_StartSound("weapons/wandhit", CHAN_WEAPON);
 	}
-
-	
 }

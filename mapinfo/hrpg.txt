@@ -1,6 +1,3 @@
-// MAPINFO for Heretic RPG v0.2
-include "mapinfo/common.txt"
-
 gameinfo
 {
 	titlepage = "TITLE"
@@ -29,7 +26,7 @@ gameinfo
 	statusbarclass = "HRpgStatusBar"
 	intermissionmusic = "mus_intr"
 	intermissioncounter = false
-	weaponslot = 1, "HRpgStaff", "HRpgGauntlets"
+	weaponslot = 1, "HRpgHammer", "HRpgStaff", "HRpgGauntlets"
 	weaponslot = 2, "HRpgGoldWand"
 	weaponslot = 3, "HRpgCrossbow"
 	weaponslot = 4, "HRpgBlaster"
@@ -54,7 +51,7 @@ gameinfo
 	menufontcolor_highlight = "YELLOW"
 	menufontcolor_selection = "DARKGREEN"
 	menubackbutton = "M_BACK_H"
-	playerclasses = "HRpgPlayer"
+	playerclasses = "HRpgHereticPlayer", "HRpgHeathenPlayer", "HRpgBlasphemerPlayer"
 	nightmarefast = true
 	pausesign = "PAUSED"
 	gibfactor = 0.5

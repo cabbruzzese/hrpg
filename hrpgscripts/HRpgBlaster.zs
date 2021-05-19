@@ -73,6 +73,12 @@ class HRpgBlaster : HereticWeapon replaces Blaster
 		{
 			ang += Random2[FireBlaster]() * (5.625 / 256);
 		}
+		
+		//Scale up damage with level
+		let hrpgPlayer = HRpgPlayer(player.mo);
+		if (hrpgPlayer != null)
+			damage = hrpgPlayer.GetDamageForMagic(damage);
+		
 		LineAttack (ang, PLAYERMISSILERANGE, pitch, damage, 'Hitscan', "BlasterPuff");
 		A_StartSound ("weapons/blastershoot", CHAN_WEAPON);
 	}
@@ -103,7 +109,11 @@ class HRpgBlaster : HereticWeapon replaces Blaster
 		let hrpgPlayer = HRpgPlayer(player.mo);
 		if (hrpgPlayer != null && clawChain != null)
 		{
-			let newDamage = hrpgPlayer.GetProjectileDamage(clawChain.Damage);
+			let newDamage = hrpgPlayer.GetDamageForMelee(clawChain.Damage);
+			
+			if (powered)
+				newDamage = hrpgPlayer.GetDamageForMagic(clawChain.Damage);
+				
 			clawChain.SetDamage (newDamage);
 		}
 		

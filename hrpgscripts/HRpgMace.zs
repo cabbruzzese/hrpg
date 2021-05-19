@@ -64,6 +64,9 @@ class HRpgMace : HereticWeapon replaces Mace
 				return;
 		}
 
+		//Scale up damage with level
+		let hrpgPlayer = HRpgPlayer(player.mo);
+
 		if (random[MaceAtk]() < 28)
 		{
 			Actor ball = Spawn("MaceFX2", Pos + (0, 0, 28 - Floorclip), ALLOW_REPLACE);
@@ -77,6 +80,8 @@ class HRpgMace : HereticWeapon replaces Mace
 				ball.Vel += Vel.xy / 2;
 				ball.A_StartSound ("weapons/maceshoot", CHAN_BODY);
 				ball.CheckMissileSpawn (radius);
+				
+				hrpgPlayer.SetProjectileDamageForWeapon(ball);
 			}
 		}
 		else
@@ -91,6 +96,8 @@ class HRpgMace : HereticWeapon replaces Mace
 			if (ball)
 			{
 				ball.special1 = 16; // tics till dropoff
+				
+				hrpgPlayer.SetProjectileDamageForWeapon(ball);
 			}
 		}
 	}
@@ -114,7 +121,7 @@ class HRpgMace : HereticWeapon replaces Mace
 		//Scale up damage with level
 		let hrpgPlayer = HRpgPlayer(player.mo);
 		if (hrpgPlayer != null)
-			damage *= hrpgPlayer.GetLevelMod();		
+			damage = hrpgPlayer.GetDamageForMelee(damage);
 
 		Weapon weapon = player.ReadyWeapon;
 

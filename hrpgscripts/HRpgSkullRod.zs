@@ -35,9 +35,9 @@ class HRpgSkullRod : HereticWeapon replaces SkullRod
 	AltFire:
 		HROD C 4 Offset(0, 80) A_ChargeForward(0, 0, 0, 5);
 		HROD D 4 Offset(0, 60) A_ChargeForward(0, 0, 0, 15);
-		HROD E 4 Offset(0, 40) A_ChargeForward(1, 500, random(5,10), 10);
-		HROD F 4 Offset(0, 0) A_ChargeForward(1, 500, random(10,15), 5);
-		HROD G 4 Offset(0, 0) A_ChargeForward(1, 500, random(15,20), 5);
+		HROD E 4 Offset(0, 40) A_ChargeForward(1, 500, random(8,13), 10);
+		HROD F 4 Offset(0, 0) A_ChargeForward(1, 500, random(13,18), 5);
+		HROD G 4 Offset(0, 0) A_ChargeForward(1, 500, random(18,23), 5);
 		HROD FED 2;
 		HROD C 2 A_ReFire;
 		Goto Ready;
@@ -68,6 +68,13 @@ class HRpgSkullRod : HereticWeapon replaces SkullRod
 		{
 			mo.SetState (mo.CurState.NextState);
 		}
+		
+		//Scale up damage with level
+		let hrpgPlayer = HRpgPlayer(player.mo);
+		if (hrpgPlayer != null)
+		{
+			hrpgPlayer.SetProjectileDamageForMagic(mo);
+		}
 	}
 	
 	action void A_ChargeForward(int attack, int kickback, int damage, int thrust)
@@ -88,7 +95,7 @@ class HRpgSkullRod : HereticWeapon replaces SkullRod
 			//Scale up damage with level
 			let hrpgPlayer = HRpgPlayer(player.mo);
 			if (hrpgPlayer != null)
-				damage *= hrpgPlayer.GetLevelMod();
+				damage = hrpgPlayer.GetDamageForMelee(damage);
 
 			Weapon weapon = player.ReadyWeapon;
 

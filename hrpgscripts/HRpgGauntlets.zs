@@ -104,7 +104,7 @@ class HRpgGauntlets : Weapon replaces Gauntlets
 		//Scale up damage with level
 		let hrpgPlayer = HRpgPlayer(player.mo);
 		if (hrpgPlayer != null)
-			damage *= hrpgPlayer.GetLevelMod();
+			damage = hrpgPlayer.GetDamageForMelee(damage);
 
 		double slope = AimLineAttack (ang, dist);
 		
@@ -188,7 +188,7 @@ class HRpgGauntlets : Weapon replaces Gauntlets
 		//Scale up damage with level
 		let hrpgPlayer = HRpgPlayer(player.mo);
 		if (hrpgPlayer != null)
-			damage *= hrpgPlayer.GetLevelMod();
+			damage = hrpgPlayer.GetDamageForMelee(damage);
 
 		Weapon weapon = player.ReadyWeapon;
 		if (weapon != null)
@@ -262,7 +262,13 @@ class HRpgGauntletsPowered : HRpgGauntlets replaces GauntletsPowered
 		}
 		
 		let rangle = random[GauntletAtk](spread * -1, spread);
-		SpawnPlayerMissile ("CrossbowFX3", angle + rangle);
+		let mo = SpawnPlayerMissile ("CrossbowFX3", angle + rangle);
+		
+		let hrpgPlayer = HRpgPlayer(player.mo);
+		if (hrpgPlayer != null)
+		{
+			hrpgPlayer.SetProjectileDamageForMagic(mo);
+		}
 	}
 	
 	action void A_GauntletFireBolts ()

@@ -230,10 +230,13 @@ class HRpgStatusBar : HereticStatusBar
 		let yPos = 126;
 		let yStep = 8;
 		
+		let xPosStats = 320;
+		
 		if (isFullscreen)
 		{
 			xPos = 8;
 			yPos = 346;
+			xPosStats = 740;
 		}
 
 		let hrpgPlayer = HRpgPlayer(CPlayer.mo);
@@ -242,10 +245,18 @@ class HRpgStatusBar : HereticStatusBar
 
 		let text1 = String.Format("Level: %s", FormatNumber(hrpgPlayer.ExpLevel, 0));
 		let text2 = String.Format("XP: %s / %s", FormatNumber(hrpgPlayer.Exp, 0), FormatNumber(hrpgPlayer.ExpNext, 0));
-		
-		
+				
 		//Exp
 		DrawString(mSmallFont, text1, (xPos, yPos), DI_TEXT_ALIGN_LEFT);
 		DrawString(mSmallFont, text2, (xPos, yPos + yStep), DI_TEXT_ALIGN_LEFT);
+		
+		let statText1 = String.Format("Brutality: %s", FormatNumber(hrpgPlayer.Brt, 0));
+		let statText2 = String.Format("Trickery: %s", FormatNumber(hrpgPlayer.Trk, 0));
+		let statText3 = String.Format("Corruption: %s", FormatNumber(hrpgPlayer.Crp, 0));
+
+		//Stats
+		DrawString(mSmallFont, statText1, (xPosStats, yPos - yStep), DI_TEXT_ALIGN_RIGHT);
+		DrawString(mSmallFont, statText2, (xPosStats, yPos), DI_TEXT_ALIGN_RIGHT);
+		DrawString(mSmallFont, statText3, (xPosStats, yPos + yStep), DI_TEXT_ALIGN_RIGHT);
 	}
 }

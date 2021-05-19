@@ -64,9 +64,18 @@ class HRpgCrossbow : HereticWeapon replaces Crossbow
 			if (!weapon.DepleteAmmo (weapon.bAltFire))
 				return;
 		}
-		SpawnPlayerMissile ("CrossbowFX1");
-		SpawnPlayerMissile ("CrossbowFX3", angle - 4.5);
-		SpawnPlayerMissile ("CrossbowFX3", angle + 4.5);
+
+		let mo1 = SpawnPlayerMissile ("CrossbowFX1");
+		let mo2 = SpawnPlayerMissile ("CrossbowFX3", angle - 4.5);
+		let mo3 = SpawnPlayerMissile ("CrossbowFX3", angle + 4.5);
+		
+		let hrpgPlayer = HRpgPlayer(player.mo);
+		if (hrpgPlayer != null)
+		{
+			hrpgPlayer.SetProjectileDamageForMagic(mo1);
+			hrpgPlayer.SetProjectileDamageForWeapon(mo2);
+			hrpgPlayer.SetProjectileDamageForWeapon(mo3);
+		}
 	}
 	
 	//----------------------------------------------------------------------------
@@ -92,18 +101,25 @@ class HRpgCrossbow : HereticWeapon replaces Crossbow
 			}
 		}
 
+		let hrpgPlayer = HRpgPlayer(player.mo);
 		if (powered)
-			SpawnPlayerMissile ("BowRedAxe");
+		{
+			let mo = SpawnPlayerMissile ("BowRedAxe");
+			
+			//Scale up damage with level
+			if (hrpgPlayer != null)
+			{
+				hrpgPlayer.SetProjectileDamageForMagic(mo);
+			}
+		}
 		else
 		{
 			let mo = SpawnPlayerMissile ("BowAxe");
 			
 			//Scale up damage with level
-			let hrpgPlayer = HRpgPlayer(player.mo);
-			if (hrpgPlayer != null)
+			if (hrpgPlayer != null && mo)
 			{
-				let newDamage = hrpgPlayer.GetProjectileDamage(mo.Damage);
-				mo.SetDamage (newDamage);
+				hrpgPlayer.SetProjectileDamageForWeapon(mo);
 			}
 		}
 	}
@@ -162,11 +178,23 @@ class HRpgCrossbowPowered : HRpgCrossbow replaces CrossbowPowered
 			if (!weapon.DepleteAmmo (weapon.bAltFire))
 				return;
 		}
-		SpawnPlayerMissile ("CrossbowFX2");
-		SpawnPlayerMissile ("CrossbowFX2", angle - 4.5);
-		SpawnPlayerMissile ("CrossbowFX2", angle + 4.5);
-		SpawnPlayerMissile ("CrossbowFX3", angle - 9.);
-		SpawnPlayerMissile ("CrossbowFX3", angle + 9.);
+		
+		let mo1 = SpawnPlayerMissile ("CrossbowFX2");
+		let mo2 = SpawnPlayerMissile ("CrossbowFX2", angle - 4.5);
+		let mo3 = SpawnPlayerMissile ("CrossbowFX2", angle + 4.5);
+		let mo4 = SpawnPlayerMissile ("CrossbowFX3", angle - 9.);
+		let mo5 = SpawnPlayerMissile ("CrossbowFX3", angle + 9.);
+		
+		let hrpgPlayer = HRpgPlayer(player.mo);
+		if (hrpgPlayer != null && mo1)
+		{
+			hrpgPlayer.SetProjectileDamageForMagic(mo1);
+			hrpgPlayer.SetProjectileDamageForMagic(mo2);
+			hrpgPlayer.SetProjectileDamageForMagic(mo3);
+
+			hrpgPlayer.SetProjectileDamageForWeapon(mo4);
+			hrpgPlayer.SetProjectileDamageForWeapon(mo5);
+		}
 	}
 }
 
@@ -277,6 +305,7 @@ class BowRedAxe : BowAxe
 			mo.A_SetPitch(pitch);
 			mo.Vel.Z = Vel.Z;
 			mo.A_SetHealth(Health + 1);
+			mo.SetDamage(Damage);
 		}
 	}
 }

@@ -62,7 +62,7 @@ class HRpgStaff : HereticWeapon replaces Staff
 		//Scale up damage with level
 		let hrpgPlayer = HRpgPlayer(player.mo);
 		if (hrpgPlayer != null)
-			damage *= hrpgPlayer.GetLevelMod();
+			damage = hrpgPlayer.GetDamageForMelee(damage);
 			
 		Weapon weapon = player.ReadyWeapon;
 		if (weapon != null)

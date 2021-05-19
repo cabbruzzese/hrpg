@@ -1,35 +1,22 @@
-const XPMULTI = 1000;
-const HEALTHBASE = 80;
-const STATNUM = 4;
-
-class HRpgPlayer : HereticPlayer
+class HRpgBlasphemerPlayer : HRpgPlayer
 {
-	int expLevel;
-	int exp;
-	int expNext;
-	int brt;
-	int trk;
-	int crp;
-	property ExpLevel : expLevel;
-	property Exp : exp;
-	property ExpNext : expNext;
-	property Brt : brt;
-	property Trk : trk;
-	property Crp : crp;
-	
 	Default
 	{
 		HRpgPlayer.ExpLevel 1;
 		HRpgPlayer.Exp 0;
 		HRpgPlayer.ExpNext XPMULTI;
-		Player.MaxHealth HEALTHBASE;
-		Health HEALTHBASE;
+		HRpgPlayer.Brt 5;
+		HRpgPlayer.Trk 10;
+		HRpgPlayer.Crp 15;
+		
+		Player.MaxHealth HEALTHBASE + 5;
+		Health HEALTHBASE + 5;
 		Radius 16;
 		Height 56;
 		Mass 100;
 		Painchance 255;
-		Speed 1;
-		Player.DisplayName "Corvus";
+		Speed 0.9;
+		Player.DisplayName "Blasphemer";
 		Player.StartItem "HRpgGoldWand";
 		Player.StartItem "HRpgStaff";
 		Player.StartItem "GoldWandAmmo", 50;
@@ -123,115 +110,5 @@ class HRpgPlayer : HereticPlayer
 		PLAY RSTUV 5;
 		PLAY W -1;
 		Stop;
-	}
-	
-	int GetModDamage(int damage, int stat)
-	{
-		double mod = stat / 10.0;
-		let damageMod = damage * mod;
-		
-		if (damageMod < 1)
-			return 1;
-
-		return damageMod;
-	}
-	
-	int GetDamageForMelee(int damage)
-	{
-		return GetModDamage(damage, Brt);
-	}
-	
-	int GetDamageForWeapon(int damage)
-	{
-		return GetModDamage(damage, Trk);
-	}
-	
-	int GetDamageForMagic(int damage)
-	{
-		return GetModDamage(damage, Crp);
-	}
-
-	void SetProjectileDamage(Actor proj, int stat)
-	{
-		if (!proj)
-			return;
-		
-		let newDamage = GetModDamage(proj.Damage, stat);
-		
-		proj.SetDamage(newDamage);
-	}
-	
-	void SetProjectileDamageForMelee(Actor proj)
-	{
-		SetProjectileDamage(proj, Brt);
-	}
-
-	void SetProjectileDamageForWeapon(Actor proj)
-	{
-		SetProjectileDamage(proj, Trk);
-	}
-
-	void SetProjectileDamageForMagic(Actor proj)
-	{
-		SetProjectileDamage(proj, Crp);
-	}
-	
-	int CalcXPNeeded()
-	{
-		return ExpLevel * XPMULTI;
-	}
-	
-	void GiveXP (int expEarned)
-	{
-		Exp += expEarned;
-		
-		while (Exp >= ExpNext)
-		{
-			GainLevel();
-		}
-	}
-	
-	//Gain a level
-	void GainLevel()
-	{
-		if (Exp < ExpNext)
-			return;
-
-		ExpLevel++;
-		Exp = Exp - ExpNext;
-		ExpNext = CalcXpNeeded();
-		
-		//Distribute points randomly, giving weight to highest stats
-		int statPoints = STATNUM;
-		while (statPoints > 0)
-		{
-			int statStack = Brt + Trk + Crp;
-			
-			double rand = random(1, statStack);
-			if (rand <= Brt)
-			{
-				Brt += 1;
-			}
-			else if (rand <= Brt + Trk)
-			{
-				Trk += 1;
-			}
-			else
-			{
-				Crp += 1;
-			}
-			statPoints--;
-		}
-		
-		//All stats increase by 1
-		Brt += 1;
-		Trk += 1;
-		Crp += 1;
-
-		//health increases by Brutality
-		int newHealth = MaxHealth + Brt;
-		MaxHealth = newHealth;
-		if (Health < MaxHealth)
-			A_SetHealth(MaxHealth);
 	}
 }

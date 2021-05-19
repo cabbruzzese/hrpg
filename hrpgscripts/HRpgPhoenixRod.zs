@@ -63,7 +63,16 @@ class HRpgPhoenixRod : Weapon replaces PhoenixRod
 			if (!weapon.DepleteAmmo (weapon.bAltFire))
 				return;
 		}
-		SpawnPlayerMissile ("PhoenixFX1");
+		
+		let mo = SpawnPlayerMissile ("PhoenixFX1");
+		
+		//Scale up damage with level
+		let hrpgPlayer = HRpgPlayer(player.mo);
+		if (hrpgPlayer != null)
+		{
+			hrpgPlayer.SetProjectileDamageForMagic(mo);
+		}
+		
 		Thrust(4, angle + 180);
 	}
 
@@ -194,6 +203,13 @@ class HRpgPhoenixRodPowered : HRpgPhoenixRod replaces PhoenixRodPowered
 			mo.Vel.XY += Vel.XY;
 			mo.Vel.Z = mo.Speed * slope;
 			mo.CheckMissileSpawn (radius);
+			
+			//Scale damage for level
+			let hrpgPlayer = HRpgPlayer(player.mo);
+			if (hrpgPlayer != null)
+			{
+				hrpgPlayer.SetProjectileDamageForMagic(mo);
+			}
 		}
 		if (!player.refire)
 		{
@@ -240,7 +256,14 @@ class HRpgPhoenixRodPowered : HRpgPhoenixRod replaces PhoenixRodPowered
 			if (!weapon.DepleteAmmo (false))
 				return;
 		}
-		SpawnPlayerMissile ("PhoenixFireballFX1", angle + angleMod);
+		let mo = SpawnPlayerMissile ("PhoenixFireballFX1", angle + angleMod);
+		
+		//Scale up damage with level
+		let hrpgPlayer = HRpgPlayer(player.mo);
+		if (hrpgPlayer != null)
+		{
+			hrpgPlayer.SetProjectileDamageForMagic(mo);
+		}
 	}
 }
 
@@ -348,8 +371,7 @@ class PhoenixFloorFireFX2 : PhoenixFloorFireFX1
 			let hrpgPlayer = HRpgPlayer(target);
 			if (hrpgPlayer != null)
 			{
-				let newDamage = hrpgPlayer.GetProjectileDamage(mo.Damage);
-				mo.SetDamage (newDamage);
+				hrpgPlayer.SetProjectileDamageForMagic(mo);
 			}
 		}
 	}

@@ -1,4 +1,4 @@
-const MAXXPHIT = 200;
+const MAXXPHIT = 75;
 class ExpSquishbag : Actor
 {
 	override int TakeSpecialDamage(Actor inflictor, Actor source, int damage, Name damagetype)
