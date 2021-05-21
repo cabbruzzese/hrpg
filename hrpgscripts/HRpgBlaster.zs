@@ -77,7 +77,7 @@ class HRpgBlaster : HereticWeapon replaces Blaster
 		//Scale up damage with level
 		let hrpgPlayer = HRpgPlayer(player.mo);
 		if (hrpgPlayer != null)
-			damage = hrpgPlayer.GetDamageForMagic(damage);
+			damage = hrpgPlayer.GetDamageForWeapon(damage);
 		
 		LineAttack (ang, PLAYERMISSILERANGE, pitch, damage, 'Hitscan', "BlasterPuff");
 		A_StartSound ("weapons/blastershoot", CHAN_WEAPON);

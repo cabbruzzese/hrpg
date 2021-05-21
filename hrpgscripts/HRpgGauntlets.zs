@@ -104,7 +104,7 @@ class HRpgGauntlets : Weapon replaces Gauntlets
 		//Scale up damage with level
 		let hrpgPlayer = HRpgPlayer(player.mo);
 		if (hrpgPlayer != null)
-			damage = hrpgPlayer.GetDamageForMelee(damage);
+			damage = hrpgPlayer.GetDamageForMagic(damage);
 
 		double slope = AimLineAttack (ang, dist);
 		
@@ -188,7 +188,7 @@ class HRpgGauntlets : Weapon replaces Gauntlets
 		//Scale up damage with level
 		let hrpgPlayer = HRpgPlayer(player.mo);
 		if (hrpgPlayer != null)
-			damage = hrpgPlayer.GetDamageForMelee(damage);
+			damage = hrpgPlayer.GetDamageForMagic(damage);
 
 		Weapon weapon = player.ReadyWeapon;
 		if (weapon != null)

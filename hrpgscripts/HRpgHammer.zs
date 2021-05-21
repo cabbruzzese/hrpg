@@ -24,22 +24,23 @@ class HRpgHammer : HereticWeapon
 		WARH D 1 A_Raise;
 		Loop;
 	Fire:
-		WARH B 4 Offset(170, 1);
-		WARH C 4 Offset(90, 0);
-		WARH D 4 Offset(10, 0) A_HammerAttack(random(20, 35), "WarhammerPuff", 175, 0);
-		WARH E 2 Offset(-30, 0);
-		WARH F 2 Offset(-50, 0);
-		WARH G 10 Offset(-60, 0);
-		WARH G 2 Offset(-60, 0) A_ReFire;
+		WARH A 3;
+		WARH B 3;
+		WARH C 3;
+		WARH D 3 A_HammerAttack(random(20, 35), "WarhammerPuff", 175, 0);
+		WARH E 2;
+		WARH F 2;
+		WARH G 10;
+		WARH G 2 A_ReFire;
 		Goto Ready;
 	AltFire:
-		WARH A 2 Offset(200, 1);
+		WARH A 2 Offset(200, 40);
 		WARH B 2 Offset(150, 0);
-		WARH C 2 Offset(100, 0) A_HammerAttack(random(5, 15), "WarhammerPuff", 125, -20);
+		WARH C 2 Offset(100, 0) A_HammerAttack(random(5, 15), "WarhammerPuff", 125, -30);
 		WARH C 2 Offset(50, 0);
 		WARH C 2 Offset(1, 0) A_HammerAttack(random(5, 20), "WarhammerPuff", 125, 0);
 		WARH C 2 Offset(-50, 0);
-		WARH C 2 Offset(-100, 0) A_HammerAttack(random(5, 15), "WarhammerPuff", 125, 20);
+		WARH C 2 Offset(-100, 0) A_HammerAttack(random(5, 15), "WarhammerPuff", 125, 30);
 		WARH D 2 Offset(-150, 0);
 		WARH D 2 Offset(-200, 0);
 		WARH E 14 Offset(-225, 0);
@@ -109,16 +110,17 @@ class HRpgHammerPowered : HRpgHammer
 		WARH K 1 A_Raise;
 		Loop;
 	Fire:
-		WARH I 4 Offset(170, 1);
-		WARH J 4 Offset(90, 0);
-		WARH K 4 Offset(10, 0) A_HammerAttack(random(45, 70), "WarhammerPuff2", 175, 0);
-		WARH L 2 Offset(-30, 0);
-		WARH M 2 Offset(-50, 0);
-		WARH N 10 Offset(-60, 0);
-		WARH N 2 Offset(-60, 0) A_ReFire;
+		WARH H 3;
+		WARH I 3;
+		WARH J 3;
+		WARH K 3 A_HammerAttack(random(45, 70), "WarhammerPuff2", 175, 0);
+		WARH L 2;
+		WARH M 2;
+		WARH N 10;
+		WARH N 2 A_ReFire;
 		Goto Ready;
 	AltFire:
-		WARH H 2 Offset(200, 1);
+		WARH H 2 Offset(200, 40);
 		WARH I 2 Offset(150, 0);
 		WARH J 2 Offset(100, 0) A_HammerFire(-20);
 		WARH J 2 Offset(50, 0);

@@ -45,24 +45,24 @@ class HRpgHeathenPlayer : HRpgPlayer
 	States
 	{
 	Spawn:
-		PLAY A -1;
+		PLAH A -1;
 		Stop;
 	See:
-		PLAY ABCD 4;
+		PLAH ABCD 4;
 		Loop;
 	Melee:
 	Missile:
-		PLAY F 6 BRIGHT;
-		PLAY E 12;
+		PLAH F 6 BRIGHT;
+		PLAH E 12;
 		Goto Spawn;
 	Pain:
-		PLAY G 4;
-		PLAY G 4 A_Pain;
+		PLAH G 4;
+		PLAH G 4 A_Pain;
 		Goto Spawn;
 	Death:
-		PLAY H 6 A_PlayerSkinCheck("AltSkinDeath");
-		PLAY I 6 A_PlayerScream;
-		PLAY JK 6;
+		PLAH H 6 A_PlayerSkinCheck("AltSkinDeath");
+		PLAH I 6 A_PlayerScream;
+		PLAH JK 6;
 		PLAY L 6 A_NoBlocking;
 		PLAY MNO 6;
 		PLAY P -1;
@@ -97,10 +97,11 @@ class HRpgHeathenPlayer : HRpgPlayer
 		ACLO E 35 A_CheckPlayerDone;
 		Wait;
 	AltSkinDeath:	
-		PLAY H 10;
-		PLAY I 10 A_PlayerScream;
-		PLAY J 10 A_NoBlocking;
-		PLAY KLM 10;
+		PLAH H 10;
+		PLAH I 10 A_PlayerScream;
+		PLAH J 10 A_NoBlocking;
+		PLAH K 10;
+		PLAY LM 10;
 		PLAY N -1;
 		Stop;
 	AltSkinXDeath:

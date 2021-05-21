@@ -72,7 +72,7 @@ class HRpgCrossbow : HereticWeapon replaces Crossbow
 		let hrpgPlayer = HRpgPlayer(player.mo);
 		if (hrpgPlayer != null)
 		{
-			hrpgPlayer.SetProjectileDamageForMagic(mo1);
+			hrpgPlayer.SetProjectileDamageForWeapon(mo1);
 			hrpgPlayer.SetProjectileDamageForWeapon(mo2);
 			hrpgPlayer.SetProjectileDamageForWeapon(mo3);
 		}
@@ -188,10 +188,9 @@ class HRpgCrossbowPowered : HRpgCrossbow replaces CrossbowPowered
 		let hrpgPlayer = HRpgPlayer(player.mo);
 		if (hrpgPlayer != null && mo1)
 		{
-			hrpgPlayer.SetProjectileDamageForMagic(mo1);
-			hrpgPlayer.SetProjectileDamageForMagic(mo2);
-			hrpgPlayer.SetProjectileDamageForMagic(mo3);
-
+			hrpgPlayer.SetProjectileDamageForWeapon(mo1);
+			hrpgPlayer.SetProjectileDamageForWeapon(mo2);
+			hrpgPlayer.SetProjectileDamageForWeapon(mo3);
 			hrpgPlayer.SetProjectileDamageForWeapon(mo4);
 			hrpgPlayer.SetProjectileDamageForWeapon(mo5);
 		}

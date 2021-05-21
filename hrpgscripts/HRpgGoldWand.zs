@@ -98,7 +98,7 @@ class HRpgGoldWand : HereticWeapon replaces GoldWand
 		//Scale up damage with level
 		let hrpgPlayer = HRpgPlayer(player.mo);
 		if (hrpgPlayer != null)
-			damage = hrpgPlayer.GetDamageForMelee(damage);
+			damage = hrpgPlayer.GetDamageForWeapon(damage);
 
 		Weapon weapon = player.ReadyWeapon;
 		if (weapon != null)
