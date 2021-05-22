@@ -12,6 +12,7 @@ class HRpgSkullRod : HereticWeapon replaces SkullRod
 		Weapon.SisterWeapon "HRpgSkullRodPowered";
 		Inventory.PickupMessage "$TXT_WPNSKULLROD";
 		Tag "$TAG_SKULLROD";
+		Obituary "$OB_MPSKULLBASH";
 	}
 
 	States
@@ -248,6 +249,7 @@ class HornBallFX1 : Actor
 		-ACTIVATEPCROSS
 		+ZDOOMTRANS
 		RenderStyle "Add";
+		Obituary "$OB_MPPHORNBALL";
 	}
 
 	States

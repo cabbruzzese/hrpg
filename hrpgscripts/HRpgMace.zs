@@ -12,6 +12,7 @@ class HRpgMace : HereticWeapon replaces Mace
 		Weapon.SisterWeapon "HRpgMacePowered";
 		Inventory.PickupMessage "$TXT_WPNMACE";
 		Tag "$TAG_MACE";
+		Obituary "$OB_MPMACEHIT";
 	}
 
 	States
@@ -151,6 +152,7 @@ class HRpgMacePowered : HRpgMace replaces MacePowered
 		Weapon.AmmoGive 0;
 		Weapon.SisterWeapon "HRpgMace";
 		Tag "$TAG_MACEP";
+		Obituary "$OB_MPPMACEHIT";
 	}
 
 	States

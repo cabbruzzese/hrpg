@@ -284,6 +284,7 @@ class PhoenixFireballFX1 : Actor
 		RenderStyle "Add";
 		ExplosionDamage 30;
 		DeathSound "minotaur/fx2hit";
+		Obituary "$OB_MPPPHOENIXFIREBALL";
 	}
 	States
 	{
@@ -312,6 +313,7 @@ class PhoenixFloorFireFX1 : Actor
 		-ACTIVATEPCROSS
 		+ZDOOMTRANS
 		RenderStyle "Add";
+		Obituary "$OB_MPPHOENIXFLOORFIRE";
 	}
 	States
 	{

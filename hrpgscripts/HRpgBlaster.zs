@@ -170,7 +170,7 @@ class ClawChain : Actor
 		+RIPPER
 		+ZDOOMTRANS
 		DeathSound "weapons/blasterpowhit";
-		Obituary "$OB_MPPBLASTER";
+		Obituary "$OB_MPCLAWCHAIN";
 		Scale 1.5;
 		+BOUNCEONFLOORS;
 		+BOUNCEONCEILINGS;
@@ -327,7 +327,7 @@ class RedClawChain : ClawChain
 		+RIPPER
 		+ZDOOMTRANS
 		DeathSound "weapons/blasterpowhit";
-		Obituary "$OB_MPPBLASTER";
+		Obituary "$OB_MPPCLAWCHAIN";
 		Scale 1.5;
 	}
 

@@ -207,7 +207,7 @@ class BowAxe : Actor
 		Damage 4;
 		Projectile;
 		DeathSound "hknight/hit";
-		Obituary "$OB_MPCROSSBOW";
+		Obituary "$OB_MPBOWAXE";
 	}
 
 	States
@@ -234,6 +234,7 @@ class BowRedAxe : BowAxe
 		Damage 20;
 		Speed 9;
 		Health 0;
+		Obituary "$OB_MPPBOWAXE";
 	}
 
 	States

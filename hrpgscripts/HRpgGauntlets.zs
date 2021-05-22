@@ -262,7 +262,7 @@ class HRpgGauntletsPowered : HRpgGauntlets replaces GauntletsPowered
 		}
 		
 		let rangle = random[GauntletAtk](spread * -1, spread);
-		let mo = SpawnPlayerMissile ("CrossbowFX3", angle + rangle);
+		let mo = SpawnPlayerMissile ("GauntletFX3", angle + rangle);
 		
 		let hrpgPlayer = HRpgPlayer(player.mo);
 		if (hrpgPlayer != null)
@@ -315,6 +315,32 @@ class GauntletPuff3 : Actor
 	{
 	Spawn:
 		FX00 HIJKLM 4 BRIGHT;
+		Stop;
+	}
+}
+
+// Crossbow FX3 -------------------------------------------------------------
+
+class GauntletFX3 : CrossbowFX1
+{
+	Default
+	{
+		Speed 20;
+		Damage 2;
+		SeeSound "";
+		-NOBLOCKMAP
+		+WINDTHRUST
+		+THRUGHOST
+		Obituary "$OB_MPPMAGICMISSILE";
+	}
+
+	States
+	{
+	Spawn:
+		FX03 A 1 BRIGHT;
+		Loop;
+	Death:
+		FX03 CDE 8 BRIGHT;
 		Stop;
 	}
 }

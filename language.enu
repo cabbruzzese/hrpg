@@ -1,3 +1,24 @@
 [enu default]
 
 TXT_ARTSKULLITEM = "You have collected a Soul Essence.";
+
+TAG_HAMMER = "War Hammer";
+TAG_SPELLBOOK = "Spell Book";
+
+OB_MPHAMMER = "%o stopped, for it was %k's hammer time.";
+OB_MPSPELLBOOKFIRE = "%o has a burning question about %k's spell book.";
+OB_MPSPELLBOOKICE = "%o got shiveres from %k's scary spell book.";
+OB_MPBOWAXE = "%o was axe'd a question by %k.";
+OB_MPCLAWCHAIN = "%o was smashed to bits by %k's morning star.";
+OB_MPSKULLBASH = "%o didn't dodge %k's ram attack.";
+OB_MPMACEHIT = "%o was bashed mercilessly by %k's firemace.";
+OB_MPPHOENIXFLOORFIRE = "%o got hot feet from %k's inferno.";
+
+OB_MPPHAMMER = "%o went out for drinks with %k and got hammered.";
+OB_MPPHAMMERMAGIC = "%o got nailed by %k's magic hammer.";
+OB_MPPMAGICMISSILE = "%o was slain by %k's magic missiles.";
+OB_MPPBOWAXE = "%o got a splitting headache from %k's axe.";
+OB_MPPCLAWCHAIN = "%o was destroyed by %k's magic morning star.";
+OB_MPPHORNBALL = "%o was melted by %k's magic blast.";
+OB_MPPMACEHIT = "%o was immolate by %k's firemace.";
+OB_MPPPHOENIXFIREBALL = "%o was singed by %k's fire balls.";

@@ -13,8 +13,7 @@ class HRpgSpellBook : HereticWeapon
 		Weapon.SisterWeapon "HRpgSpellBookPowered";
 		Weapon.YAdjust 5;
 		Inventory.PickupMessage "$TXT_WPNGOLDWAND";
-		Obituary "$OB_MPGOLDWAND";
-		Tag "$TAG_GOLDWAND";
+		Tag "$TAG_SPELLBOOK";
 	}
 
 	States
@@ -254,6 +253,7 @@ class SpellbookFx1 : Actor
 		-ACTIVATEPCROSS
 		-ACTIVATEIMPACT
 		RenderStyle "Add";
+		Obituary "$OB_MPSPELLBOOKICE";
 	}
 	States
 	{
@@ -282,6 +282,7 @@ class SpellbookFx2 : Actor
 		+RIPPER
 		+ZDOOMTRANS
 		RenderStyle "Add";
+		Obituary "$OB_MPSPELLBOOKFIRE";
 	}
 	States
 	{

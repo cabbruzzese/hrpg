@@ -7,8 +7,8 @@ class HRpgHammer : HereticWeapon
 		Weapon.SelectionOrder 3800;
 		+WEAPON.MELEEWEAPON
 		Weapon.sisterweapon "HRpgHammerPowered";
-		Obituary "$OB_MPSTAFF";
-		Tag "$TAG_STAFF";
+		Obituary "$OB_MPHAMMER";
+		Tag "$TAG_HAMMER";
 		Scale 1.4;
 	}
 
@@ -101,7 +101,7 @@ class HRpgHammerPowered : HRpgHammer
 		+WEAPON.POWERED_UP
 		+WEAPON.READYSNDHALF
 		+WEAPON.STAFF2_KICKBACK
-		Obituary "$OB_MPPSTAFF";
+		Obituary "$OB_MPPHAMMER";
 		Tag "$TAG_STAFFP";
 	}
 
@@ -176,7 +176,7 @@ class WarhammerFx1 : Actor
 		Damage 18;
 		Projectile;
 		DeathSound "weapons/staffpowerhit";
-		Obituary "$OB_MPCROSSBOW";
+		Obituary "$OB_MPPHAMMERMAGIC";
 	}
 
 	States
