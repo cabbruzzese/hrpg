@@ -15,4 +15,10 @@ class ExpSquishbag : Actor
 		
 		return Super.TakeSpecialDamage(inflictor, source, damage, damagetype);
 	}
+	
+	override void Die(Actor source, Actor inflictor, int dmgflags, Name MeansOfDeath)
+	{
+		A_DropItem("HRpgSkullItem", 1, 35);
+		Super.Die(source, inflictor, dmflags, MeansOfDeath);
+	}
 }
