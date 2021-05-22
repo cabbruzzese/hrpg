@@ -6,8 +6,8 @@ class HRpgHereticPlayer : HRpgPlayer
 		HRpgPlayer.Exp 0;
 		HRpgPlayer.ExpNext XPMULTI;
 		HRpgPlayer.Brt 5;
-		HRpgPlayer.Trk 15;
-		HRpgPlayer.Crp 10;
+		HRpgPlayer.Trk 10;
+		HRpgPlayer.Crp 7;
 		
 		Player.MaxHealth HEALTHBASE + 5;
 		Health HEALTHBASE + 5;

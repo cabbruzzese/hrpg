@@ -6,8 +6,8 @@ class HRpgBlasphemerPlayer : HRpgPlayer
 		HRpgPlayer.Exp 0;
 		HRpgPlayer.ExpNext XPMULTI;
 		HRpgPlayer.Brt 5;
-		HRpgPlayer.Trk 10;
-		HRpgPlayer.Crp 15;
+		HRpgPlayer.Trk 7;
+		HRpgPlayer.Crp 10;
 		
 		Player.MaxHealth HEALTHBASE + 5;
 		Health HEALTHBASE + 5;
@@ -45,27 +45,27 @@ class HRpgBlasphemerPlayer : HRpgPlayer
 	States
 	{
 	Spawn:
-		PLAY A -1;
+		PLAB A -1;
 		Stop;
 	See:
-		PLAY ABCD 4;
+		PLAB ABCD 4;
 		Loop;
 	Melee:
 	Missile:
-		PLAY F 6 BRIGHT;
-		PLAY E 12;
+		PLAB F 6 BRIGHT;
+		PLAB E 12;
 		Goto Spawn;
 	Pain:
-		PLAY G 4;
-		PLAY G 4 A_Pain;
+		PLAB G 4;
+		PLAB G 4 A_Pain;
 		Goto Spawn;
 	Death:
-		PLAY H 6 A_PlayerSkinCheck("AltSkinDeath");
-		PLAY I 6 A_PlayerScream;
-		PLAY JK 6;
-		PLAY L 6 A_NoBlocking;
-		PLAY MNO 6;
-		PLAY P -1;
+		PLAB H 6 A_PlayerSkinCheck("AltSkinDeath");
+		PLAB I 6 A_PlayerScream;
+		PLAB JK 6;
+		PLAB L 6 A_NoBlocking;
+		PLAB MNO 6;
+		PLAB P -1;
 		Stop;
 	XDeath:
 		PLAY Q 0 A_PlayerSkinCheck("AltSkinXDeath");
@@ -97,15 +97,15 @@ class HRpgBlasphemerPlayer : HRpgPlayer
 		ACLO E 35 A_CheckPlayerDone;
 		Wait;
 	AltSkinDeath:	
-		PLAY H 10;
-		PLAY I 10 A_PlayerScream;
-		PLAY J 10 A_NoBlocking;
-		PLAY KLM 10;
-		PLAY N -1;
+		PLAB H 10;
+		PLAB I 10 A_PlayerScream;
+		PLAB J 10 A_NoBlocking;
+		PLAB KLM 10;
+		PLAB N -1;
 		Stop;
 	AltSkinXDeath:
-		PLAY O 5;
-		PLAY P 5 A_XScream;
+		PLAB O 5;
+		PLAB P 5 A_XScream;
 		PLAY Q 5 A_NoBlocking;
 		PLAY RSTUV 5;
 		PLAY W -1;

@@ -1,6 +1,6 @@
 const XPMULTI = 1000;
 const HEALTHBASE = 80;
-const STATNUM = 4;
+const STATNUM = 3;
 
 class HRpgPlayer : HereticPlayer
 {

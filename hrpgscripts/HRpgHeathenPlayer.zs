@@ -5,11 +5,11 @@ class HRpgHeathenPlayer : HRpgPlayer
 		HRpgPlayer.ExpLevel 1;
 		HRpgPlayer.Exp 0;
 		HRpgPlayer.ExpNext XPMULTI;
-		HRpgPlayer.Brt 15;
-		HRpgPlayer.Trk 10;
+		HRpgPlayer.Brt 10;
+		HRpgPlayer.Trk 7;
 		HRpgPlayer.Crp 5;
 		
-		Player.MaxHealth HEALTHBASE + 15;
+		Player.MaxHealth HEALTHBASE + 10;
 		Health HEALTHBASE + 15;
 		Radius 16;
 		Height 56;
