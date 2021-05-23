@@ -75,3 +75,30 @@ class HRpgMummyLeader : HRpgMummy replaces MummyLeader
 		Goto See;
 	}
 }
+
+// Mummy ghost --------------------------------------------------------------
+
+class HRpgMummyGhost : HRpgMummy replaces MummyGhost
+{
+	Default
+	{
+		+SHADOW
+		+GHOST
+		RenderStyle "Translucent";
+		Alpha 0.4;
+	}
+}
+
+// Mummy leader ghost -------------------------------------------------------
+
+class HRpgMummyLeaderGhost : HRpgMummyLeader replaces MummyLeaderGhost
+{
+	Default
+	{
+		Species "MummyLeaderGhost";
+		+SHADOW
+		+GHOST
+		RenderStyle "Translucent";
+		Alpha 0.4;
+	}
+}

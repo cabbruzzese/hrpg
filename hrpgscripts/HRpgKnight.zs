@@ -85,3 +85,16 @@ class HRpgKnight : ExpSquishbag replaces Knight
 		}
 	}
 }
+
+// Knight ghost -------------------------------------------------------------
+
+class HRpgKnightGhost : HRpgKnight replaces KnightGhost
+{
+	Default
+	{
+		+SHADOW
+		+GHOST
+		RenderStyle "Translucent";
+		Alpha 0.4;
+	}
+}
