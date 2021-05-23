@@ -169,20 +169,21 @@ class ClawChain : Actor
 		Projectile;
 		+RIPPER
 		+ZDOOMTRANS
-		DeathSound "weapons/blasterpowhit";
+		DeathSound "weapons/macebounce";
 		Obituary "$OB_MPCLAWCHAIN";
 		Scale 1.5;
-		+BOUNCEONFLOORS;
-		+BOUNCEONCEILINGS;
-		+USEBOUNCESTATE;
-		+BOUNCEONWALLS;
-		+CANBOUNCEWATER;
+		+BOUNCEONFLOORS
+		+BOUNCEONCEILINGS
+		+USEBOUNCESTATE
+		+BOUNCEONWALLS
+		+CANBOUNCEWATER
+		+FORCEXYBILLBOARD
 	}
 
 	States
 	{
 	Spawn:
-		FX18 M 2 A_MoveClawChain;
+		FX18 M 2 A_MoveClawChain(0);
 		Loop;
 	Bounce:
 		FX18 M 1 A_MaceBallImpact;
@@ -208,7 +209,7 @@ class ClawChain : Actor
 	// PROC A_MoveClawChain
 	//
 	//----------------------------------------------------------------------------
-	action void A_MoveClawChain()
+	action void A_MoveClawChain(int powered)
 	{
 		if (target == null || target.health <= 0)
 		{ // Shooter is dead or nonexistent
@@ -236,7 +237,7 @@ class ClawChain : Actor
 			let clawChain = ClawChain(self);
 			if (clawChain.Links[i-1] == null)
 			{
-				if (Damage == 3)
+				if (powered)
 					clawChain.Links[i-1] = Spawn ("ClawChainLink2", (mox, moy, moz), ALLOW_REPLACE);
 				else
 					clawChain.Links[i-1] = Spawn ("ClawChainLink", (mox, moy, moz), ALLOW_REPLACE);
@@ -326,7 +327,7 @@ class RedClawChain : ClawChain
 		Projectile;
 		+RIPPER
 		+ZDOOMTRANS
-		DeathSound "weapons/blasterpowhit";
+		DeathSound "weapons/macebounce";
 		Obituary "$OB_MPPCLAWCHAIN";
 		Scale 1.5;
 	}
@@ -334,8 +335,11 @@ class RedClawChain : ClawChain
 	States
 	{
 	Spawn:
-		FX15 E 2 A_MoveClawChain();
+		FX15 E 2 A_MoveClawChain(1);
 		Loop;
+	Bounce:
+		FX15 E 1 A_MaceBallImpact;
+		Goto Spawn;
 	Death:
 		FX15 EFG 2;
 		Goto Spawn;
@@ -360,6 +364,7 @@ class ClawChainLink : Actor
 		+NOGRAVITY
 		+NOTELEPORT
 		+CANNOTPUSH
+		+FORCEXYBILLBOARD
 		Scale 0.33;
 	}
 
