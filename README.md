@@ -22,7 +22,7 @@ A brute who likes to get up close and personal. Starts with a warhammer and the 
 
 Best at melee and has the most heath.
 
-Soul Essences give armor and makes the Heathen go berserk, greatly increases warhammer damage.
+Soul Essences give armor and makes the Heathen go berserk, greatly increases melee damage with strength weapons.
 
 ### Blasphemer
 A magician who excells at magical staffs and wands. Starts with a spellbook and is the slowest.
@@ -41,20 +41,24 @@ Stat increases are randomized, but weighted to give more points to the highest s
 ### Stats
 There are 3 stats. Brutality, Trickery, and Corruption.
 
+Each level increases stats. Each level the player increases 5 stat points, awarded randomly, weighted to go to the highest stat.
+
 #### Brutality
 Brute force and might.
 
 Determines health increases at levels and increases melee damage with strength weapons. (War hammer, morning star, battering ram, firemace melee attack)
 
+Health increases are randomized up to Brutality, with a minimum increase of 5 per level.
+
 #### Trickery
 Speed and cunning.
 
-Determines damage with dexterity based weapons. (Staff, Crossbow, Dragon Claw, Mace)
+Determines damage with dexterity based weapons. (Staff, Crossbow, Dragon Claw, Fire Mace)
 
 #### Corruption
 Megic and raw power.
 
-Determines damage with magic wands and staffs (Spellbook, wand, hellstaff, pheonix staff)
+Determines damage with magic wands and staffs (Spellbook, Gold Wand, Hellstaff, Pheonix staff)
 
 ## Monster Soul Essence
 Monsters sometimes drop soul essences which power the player. Their effect is based on class.
@@ -62,7 +66,7 @@ Monsters sometimes drop soul essences which power the player. Their effect is ba
 Every class gains some health back.
 
 - Heretic becomes invisible for a short time
-- Heathen gains armor and goes berserk, giving a damage bonus to the Warhammer.
+- Heathen gains armor and goes berserk, giving a damage bonus to the melee weapons.
 - Blasphemer gains some ammo.
 
 ## Melee Alt Fires
