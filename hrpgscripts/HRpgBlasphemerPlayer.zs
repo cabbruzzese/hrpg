@@ -9,8 +9,8 @@ class HRpgBlasphemerPlayer : HRpgPlayer
 		HRpgPlayer.Trk 7;
 		HRpgPlayer.Crp 10;
 		
-		Player.MaxHealth HEALTHBASE + 5;
-		Health HEALTHBASE + 5;
+		Player.MaxHealth HEALTHBASE - 25;
+		Health HEALTHBASE - 25;
 		Radius 16;
 		Height 56;
 		Mass 100;
@@ -110,5 +110,10 @@ class HRpgBlasphemerPlayer : HRpgPlayer
 		PLAY RSTUV 5;
 		PLAY W -1;
 		Stop;
+	}
+	
+	override void BasicStatIncrease()
+	{
+		Crp += 1;
 	}
 }

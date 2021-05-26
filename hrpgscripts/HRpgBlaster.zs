@@ -114,6 +114,13 @@ class HRpgBlaster : HereticWeapon replaces Blaster
 			if (powered)
 				newDamage = hrpgPlayer.GetDamageForMagic(clawChain.Damage);
 				
+			//Scale up damage with berserk
+			let berserk = Powerup(FindInventory("PowerStrength2"));
+			if (berserk)
+			{
+				newDamage *= 2;
+			}
+				
 			clawChain.SetDamage (newDamage);
 		}
 		

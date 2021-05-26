@@ -97,6 +97,13 @@ class HRpgSkullRod : HereticWeapon replaces SkullRod
 			let hrpgPlayer = HRpgPlayer(player.mo);
 			if (hrpgPlayer != null)
 				damage = hrpgPlayer.GetDamageForMelee(damage);
+				
+			//Scale up damage with berserk
+			let berserk = Powerup(FindInventory("PowerStrength2"));
+			if (berserk)
+			{
+				damage *= 2;
+			}
 
 			Weapon weapon = player.ReadyWeapon;
 

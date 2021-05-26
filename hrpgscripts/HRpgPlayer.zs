@@ -1,6 +1,6 @@
 const XPMULTI = 1000;
-const HEALTHBASE = 80;
-const STATNUM = 3;
+const HEALTHBASE = 100;
+const STATNUM = 4;
 
 class HRpgPlayer : HereticPlayer
 {
@@ -125,30 +125,43 @@ class HRpgPlayer : HereticPlayer
 		Stop;
 	}
 	
-	int GetModDamage(int damage, int stat)
+	double GetScaledMod(int stat)
+	{
+		//First 10 scales to 1 by 10% increments
+		if (stat <= 10)
+			return stat * 0.1;
+		
+		//Remaining scales at 5% increments. 30 = double damage
+		return 1 + ((stat - 10) * 0.05);
+	}
+	
+	int GetModDamage(int damage, int stat, int scaled)
 	{
 		double mod = stat / 10.0;
-		let damageMod = damage * mod;
+		if (scaled)
+			mod = GetScaledMod(stat);
+
+		let modDamage = damage * mod;
 		
-		if (damageMod < 1)
+		if (modDamage < 1)
 			return 1;
 
-		return damageMod;
+		return modDamage;
 	}
 	
 	int GetDamageForMelee(int damage)
 	{
-		return GetModDamage(damage, Brt);
+		return GetModDamage(damage, Brt, 0);
 	}
 	
 	int GetDamageForWeapon(int damage)
 	{
-		return GetModDamage(damage, Trk);
+		return GetModDamage(damage, Trk, 1);
 	}
 	
 	int GetDamageForMagic(int damage)
 	{
-		return GetModDamage(damage, Crp);
+		return GetModDamage(damage, Crp, 1);
 	}
 
 	void SetProjectileDamage(Actor proj, int stat)
@@ -156,7 +169,7 @@ class HRpgPlayer : HereticPlayer
 		if (!proj)
 			return;
 		
-		let newDamage = GetModDamage(proj.Damage, stat);
+		let newDamage = GetModDamage(proj.Damage, stat, 1);
 		
 		proj.SetDamage(newDamage);
 	}
@@ -191,6 +204,10 @@ class HRpgPlayer : HereticPlayer
 		}
 	}
 	
+	virtual void BasicStatIncrease()
+	{
+	}
+	
 	//Gain a level
 	void GainLevel()
 	{
@@ -223,13 +240,15 @@ class HRpgPlayer : HereticPlayer
 			statPoints--;
 		}
 		
-		//All stats increase by 1
-		Brt += 1;
-		Trk += 1;
-		Crp += 1;
+		//BasicStatIncrease to call overrides in classes
+		BasicStatIncrease();
 
-		//health increases by Brutality
-		int newHealth = MaxHealth + Brt;
+		//health increases by random up to Brutality, min 5 (weighted for low end of flat scale)
+		int healthBonus = random(1, Brt);
+		if (healthBonus < 5)
+			healthbonus = 5;
+
+		int newHealth = MaxHealth + healthBonus;
 		MaxHealth = newHealth;
 		if (Health < MaxHealth)
 			A_SetHealth(MaxHealth);

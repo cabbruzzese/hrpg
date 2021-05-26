@@ -9,8 +9,8 @@ class HRpgHereticPlayer : HRpgPlayer
 		HRpgPlayer.Trk 10;
 		HRpgPlayer.Crp 7;
 		
-		Player.MaxHealth HEALTHBASE + 5;
-		Health HEALTHBASE + 5;
+		Player.MaxHealth HEALTHBASE;
+		Health HEALTHBASE;
 		Radius 16;
 		Height 56;
 		Mass 100;
@@ -110,5 +110,10 @@ class HRpgHereticPlayer : HRpgPlayer
 		PLAY RSTUV 5;
 		PLAY W -1;
 		Stop;
+	}
+	
+	override void BasicStatIncrease()
+	{
+		Trk += 1;
 	}
 }
