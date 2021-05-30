@@ -35,7 +35,7 @@ class HRpgStaff : HereticWeapon replaces Staff
 		STFF B 2 Offset(140, 60);
 		STFF B 2 Offset(100, 40);
 		STFF B 2 Offset(60, 20);
-		STFF B 2 Offset(20, 0) A_StaffAttack(random[StaffAttack](10, 25), "StaffPuff", 200);
+		STFF B 2 Offset(20, 0) A_StaffAttack(random[StaffAttack](10, 30), "StaffPuff", 200);
 		STFF B 2 Offset(-20, 20);
 		STFF B 2 Offset(-60, 40);
 		STFF B 2 Offset(-100, 60);

@@ -25,6 +25,9 @@ class HRpgWizard : ExpSquishbag replaces Wizard
 		Tag "$FN_WIZARD";
 		DropItem "BlasterAmmo", 84, 10;
 		DropItem "ArtiTomeOfPower", 4, 0;
+		
+		ExpSquishbag.IsRespawnable false;
+		ExpSquishbag.IsSpectreable false;
 	}
 
 	States

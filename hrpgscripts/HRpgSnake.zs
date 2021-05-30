@@ -18,6 +18,9 @@ class HRpgSnake : ExpSquishbag replaces Snake
 		Obituary "$OB_SNAKE";
 		Tag "$FN_SNAKE";
 		DropItem "PhoenixRodAmmo", 84, 5;
+		
+		ExpSquishbag.IsRespawnable true;
+		ExpSquishbag.RespawnWaitBonus 2400;
 	}
 	States
 	{

@@ -21,6 +21,9 @@ class HRpgBeast : ExpSquishbag replaces Beast
 		Obituary "$OB_BEAST";
 		Tag "$FN_BEAST";
 		DropItem "CrossbowAmmo", 84, 10;
+		
+		ExpSquishbag.IsRespawnable true;
+		ExpSquishbag.RespawnWaitBonus 2400;
 	}
 	States
 	{

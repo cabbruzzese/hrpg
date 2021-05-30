@@ -151,7 +151,7 @@ class HRpgPlayer : HereticPlayer
 	
 	int GetDamageForMelee(int damage)
 	{
-		return GetModDamage(damage, Brt, 0);
+		return GetModDamage(damage, Brt, 1);
 	}
 	
 	int GetDamageForWeapon(int damage)

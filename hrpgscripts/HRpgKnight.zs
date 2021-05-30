@@ -22,6 +22,9 @@ class HRpgKnight : ExpSquishbag replaces Knight
 		HitObituary "$OB_BONEKNIGHTHIT";
 		Tag "$FN_BONEKNIGHT";
 		DropItem "CrossbowAmmo", 84, 5;
+		
+		ExpSquishbag.IsRespawnable true;
+		ExpSquishbag.RespawnWaitBonus 1200;
 	}
 	
 	States
@@ -96,5 +99,9 @@ class HRpgKnightGhost : HRpgKnight replaces KnightGhost
 		+GHOST
 		RenderStyle "Translucent";
 		Alpha 0.4;
+
+		ExpSquishbag.IsRespawnable true;
+		ExpSquishbag.RespawnWaitBonus 2400;
+		ExpSquishbag.IsSpectreable false;
 	}
 }

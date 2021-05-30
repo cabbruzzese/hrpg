@@ -334,7 +334,7 @@ class PhoenixFloorFireFX2 : PhoenixFloorFireFX1
 		Height 12;
 		Speed 14;
 		FastSpeed 20;
-		Damage 1;
+		Damage 2;
 		+FLOORHUGGER
 		RenderStyle "Add";
 	}

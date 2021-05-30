@@ -26,6 +26,9 @@ class HrpgIronlich : ExpSquishbag replaces Ironlich
 		Tag "$FN_IRONLICH";
 		DropItem "BlasterAmmo", 84, 10;
 		DropItem "ArtiEgg", 51, 0;
+		
+		ExpSquishbag.IsRespawnable false;
+		ExpSquishbag.IsSpectreable false;
 	}
 
 	

@@ -173,7 +173,7 @@ class WarhammerFx1 : Actor
 		Radius 11;
 		Height 8;
 		Speed 14;
-		Damage 18;
+		Damage 12;
 		Projectile;
 		DeathSound "weapons/staffpowerhit";
 		Obituary "$OB_MPPHAMMERMAGIC";

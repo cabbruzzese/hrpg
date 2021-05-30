@@ -19,6 +19,8 @@ class HRpgClink : ExpSquishbag replaces Clink
 		Obituary "$OB_CLINK";
 		Tag "$FN_CLINK";
 		DropItem "SkullRodAmmo", 84, 20;
+		
+		ExpSquishbag.IsRespawnable true;
 	}
 	States
 	{

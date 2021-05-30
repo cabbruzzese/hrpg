@@ -27,6 +27,8 @@ class HRpgImp : ExpSquishbag replaces HereticImp
 		Obituary "$OB_HERETICIMP";
 		HitObituary "$OB_HERETICIMPHIT";
 		Tag "$FN_HERETICIMP";
+		
+		ExpSquishbag.IsRespawnable true;
 	}
 	
 	States

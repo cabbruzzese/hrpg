@@ -246,7 +246,7 @@ class SpellbookFx1 : Actor
 		Radius 8;
 		Height 8;
 		Speed 8;
-		Damage 1;
+		Damage 2;
 		Projectile;
 		SeeSound "himp/leaderattack";
 		+SPAWNSOUNDSOURCE
@@ -273,7 +273,7 @@ class SpellbookFx2 : Actor
 		Radius 12;
 		Height 8;
 		Speed 24;
-		Damage 1;
+		Damage 2;
 		Projectile;
 		SeeSound "himp/leaderattack";
 		+SPAWNSOUNDSOURCE
@@ -287,11 +287,11 @@ class SpellbookFx2 : Actor
 	States
 	{
 	Spawn:
-		FX14 DE 8;
-		FX14 FGH 4;
+		FX14 DE 8 Bright;
+		FX14 FGH 4 Bright;
 		Stop;
 	Death:
-		FX14 FGH 2;
+		FX14 FGH 2 Bright;
 		Stop;
 	}
 }

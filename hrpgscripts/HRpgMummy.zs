@@ -21,6 +21,8 @@ class HRpgMummy : ExpSquishbag replaces Mummy
 		HitObituary "$OB_MUMMY";
 		Tag "$FN_MUMMY";
 		DropItem "GoldWandAmmo", 84, 3;
+		
+		ExpSquishbag.IsRespawnable true;
 	}
 	States
 	{
@@ -62,6 +64,9 @@ class HRpgMummyLeader : HRpgMummy replaces MummyLeader
 		Painchance 64;
 		Obituary "$OB_MUMMYLEADER";
 		Tag "$FN_MUMMYLEADER";
+		
+		ExpSquishbag.IsRespawnable true;
+		ExpSquishbag.RespawnWaitBonus 1200;
 	}
 	States
 	{
@@ -86,6 +91,10 @@ class HRpgMummyGhost : HRpgMummy replaces MummyGhost
 		+GHOST
 		RenderStyle "Translucent";
 		Alpha 0.4;
+
+		ExpSquishbag.IsRespawnable true;
+		ExpSquishbag.RespawnWaitBonus 1200;
+		ExpSquishbag.IsSpectreable false;
 	}
 }
 
@@ -100,5 +109,9 @@ class HRpgMummyLeaderGhost : HRpgMummyLeader replaces MummyLeaderGhost
 		+GHOST
 		RenderStyle "Translucent";
 		Alpha 0.4;
+		
+		ExpSquishbag.IsRespawnable true;
+		ExpSquishbag.RespawnWaitBonus 2400;
+		ExpSquishbag.IsSpectreable false;
 	}
 }

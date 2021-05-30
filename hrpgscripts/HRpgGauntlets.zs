@@ -196,7 +196,7 @@ class HRpgGauntlets : Weapon replaces Gauntlets
 			if (!weapon.DepleteAmmo (weapon.bAltFire))
 				return;
 		}
-		double ang = angle + Random2[StaffAtk]() * (5.625 / 256);
+		double ang = angle + Random2[GauntletAtk]() * (5.625 / 256);
 		double slope = AimLineAttack (ang, DEFMELEERANGE);
 
 		kickbackSave = weapon.Kickback;
