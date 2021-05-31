@@ -35,7 +35,7 @@ class HRpgBeast : ExpSquishbag replaces Beast
 		Loop;
 	Missile:
 		BEAS H 10 A_FaceTarget;
-		BEAS I 10 A_CustomComboAttack("BeastBall", 32, random[BeastAttack](1,8)*3, "beast/attack");
+		BEAS I 10 A_CustomComboAttack2("BeastBall", 32, random[BeastAttack](1,8)*3, "beast/attack");
 		Goto See;
 	Pain:
 		BEAS G 3;

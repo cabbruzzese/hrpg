@@ -76,7 +76,7 @@ class HRpgMummyLeader : HRpgMummy replaces MummyLeader
 		MUMM X 5 A_FaceTarget;
 		MUMM Y 5 Bright A_FaceTarget;
 		MUMM X 5 A_FaceTarget;
-		MUMM Y 5 Bright A_CustomComboAttack("MummyFX1", 32, random[MummyAttack2](1,8)*2, "mummy/attack2");
+		MUMM Y 5 Bright A_CustomComboAttack2("MummyFX1", 32, random[MummyAttack2](1,8)*2, "mummy/attack2");
 		Goto See;
 	}
 }

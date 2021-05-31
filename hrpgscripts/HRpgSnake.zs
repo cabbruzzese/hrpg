@@ -34,7 +34,7 @@ class HRpgSnake : ExpSquishbag replaces Snake
 		SNKE FF 5 A_FaceTarget;
 		SNKE FFF 4 A_SpawnProjectile("SnakeProjA", 32, 0, 0, CMF_CHECKTARGETDEAD);
 		SNKE FFF 5 A_FaceTarget;
-		SNKE F 4 A_SpawnProjectile("SnakeProjB", 32, 0, 0, CMF_CHECKTARGETDEAD);
+		SNKE F 4 A_SnakeAttackBig;
 		Goto See;
 	Pain:
 		SNKE E 3;
@@ -48,5 +48,17 @@ class HRpgSnake : ExpSquishbag replaces Snake
 		SNKE NO 5;
 		SNKE P -1;
 		Stop;
+	}
+	
+	void A_SnakeAttackBig()
+	{
+		if (BossType & WMF_POISON)
+		{
+			A_SpawnProjectile("PoisonBall", 32, 0, 0, CMF_CHECKTARGETDEAD);
+		}
+		else
+		{
+			A_SpawnProjectile("SnakeProjB", 32, 0, 0, CMF_CHECKTARGETDEAD);
+		}
 	}
 }

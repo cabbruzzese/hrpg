@@ -170,7 +170,7 @@ class HRpgImpLeader : HRpgImp replaces HereticImpLeader
 		Stop;
 	Missile:
 		IMPX DE 6 A_FaceTarget;
-		IMPX F 6 A_CustomComboAttack("HereticImpBall", 32, random[ImpMsAttack2](5,12), "himp/leaderattack");
+		IMPX F 6 A_CustomComboAttack2("HereticImpBall", 32, random[ImpMsAttack2](5,12), "himp/leaderattack");
 		Goto See;
 	}
 }
