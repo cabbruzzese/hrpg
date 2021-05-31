@@ -105,6 +105,33 @@ A swift smash with this makes brings the wrath of crucible fires down upon your 
 ### Tome Alt Fire
 Experiment and enjoy.
 
+## New Monsters
+
+Most monsters respawn as wandering monsters. (Randomly between a few minutes and 20 minutes). Respawning monsters have a chance to come back stronger. As players level, the monsters they kill have a higher chance of respawning as special monsters.
+
+There are 4 monster types, and many of them can combine to make even stronger mini-bosses. As the spawn chance increases, so does the chance they will combine. The higher level, the more challenging monsters that respawn.
+
+### Brute
+Bigger and tougher with more health.
+
+### Spectre
+A vengful spirit that packs a stronger punch.
+
+### Miniboss
+A beefed up monster made of one of 3 elements.
+
+#### Stone
+Hard as stone, really hard to kill.
+
+#### Poison
+Leaves a sting with ranged attacks.
+
+#### Ice
+Dodging their shots may still leave you with a cold reception.
+
+### Runt
+Weee!!!!
+
 # Contributing
 
 This mod is entirely just putzing around with ZScript while trying to make a better COOP experience for local LAN play. If you have any suggestions, drop a line on the [ZDOOM forums thread](https://forum.zdoom.org/viewtopic.php?f=43&t=72263).

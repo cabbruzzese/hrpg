@@ -4,7 +4,7 @@ class HRpgHammer : HereticWeapon
 {
 	Default
 	{
-		Weapon.SelectionOrder 3800;
+		Weapon.SelectionOrder 2100;
 		+WEAPON.MELEEWEAPON
 		Weapon.sisterweapon "HRpgHammerPowered";
 		Obituary "$OB_MPHAMMER";

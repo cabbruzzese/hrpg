@@ -1,6 +1,6 @@
 const MAXXPHIT = 75;
 
-const RESPAWN_TICS_MIN = 1200; //1 minute
+const RESPAWN_TICS_MIN = 1800; //1.5 minute
 const RESPAWN_TICS_MAX = 24000; //20 minutes
 
 const BOSSTYPE_CHANCE_BRUTE = 10;
@@ -8,14 +8,21 @@ const BOSSTYPE_CHANCE_SPECTRE = 4;
 const BOSSTYPE_CHANCE_LEADER = 2;
 const BOSSTYPE_CHANCE_RUNT = 6;
 const BOSSTYPE_SUBCHANCE_POISON = 25;
+const BOSSTYPE_SUBCHANCE_ICE = 25;
 
 enum EWanderingMonsterFlags
 {
 	WMF_BRUTE = 1,
 	WMF_SPECTRE = 2,
 	WMF_LEADER = 4,
-	WMF_RUNT = 8,
-	WMF_POISON = 16
+	WMF_RUNT = 8
+};
+
+enum ELeaderTypeFlags
+{
+	WML_STONE = 1,
+	WML_POISON = 2,
+	WML_ICE = 4
 };
 
 class ExpSquishbag : Actor
@@ -26,14 +33,14 @@ class ExpSquishbag : Actor
 	bool isRespawnable;
 	bool IsSpectreable;
 	int baseSpeed;
-	int bossType;
+	int leaderType;
 	property RespawnWaitTics : respawnWaitTics;
 	property RespawnWaitBonus : respawnWaitBonus;
 	property RespawnLevel : respawnLevel;
 	property IsRespawnable : isRespawnable;
 	property IsSpectreable : isSpectreable;
 	property BaseSpeed : baseSpeed;
-	property BossType : bossType;
+	property LeaderType : leaderType;
 	
 	
 	Default
@@ -44,13 +51,15 @@ class ExpSquishbag : Actor
 		ExpSquishbag.IsRespawnable false;
 		ExpSquishbag.IsSpectreable true;
 		ExpSquishbag.BaseSpeed -1;
-		ExpSquishbag.BossType 0;
+		ExpSquishbag.LeaderType 0;
 	}
 	
 	void A_CustomComboAttack2(class<Actor> missiletype, double spawnheight, int damage, sound meleesound = "", name damagetype = "none", bool bleed = true)
 	{
-		if (BossType & WMF_POISON)
+		if (LeaderType & WML_POISON)
 			missileType = "PoisonBall";
+		else if (LeaderType & WML_ICE)
+			missileType = "HeadFX1";
 			
 		A_CustomComboAttack(missiletype, spawnheight, damage, meleesound, damagetype, bleed);
 	}
@@ -107,7 +116,7 @@ class ExpSquishbag : Actor
 		DamageMultiply = 1;
 		Translation = 0;
 		bALWAYSFAST = false;
-		BossType = 0;
+		LeaderType = 0;
 		
 		if (isSpectreable)
 			A_SetRenderStyle(1.0, STYLE_Normal);
@@ -136,7 +145,12 @@ class ExpSquishbag : Actor
 	
 	void SetLeader()
 	{
-		if (BossType & WMF_POISON)
+		if (LeaderType & WML_ICE)
+		{
+			A_SetTranslation("Ice");
+			Health *= 2;
+		}
+		else if (LeaderType & WML_POISON)
 		{
 			A_SetTranslation("GreenSkin");
 			Health *= 2;
@@ -160,14 +174,14 @@ class ExpSquishbag : Actor
 		Health *= 0.5;
 		bALWAYSFAST = true;
 		
-		BossType = 0; // Clear special damage
+		LeaderType = 0; // Clear special damage
 	}
 	
-	void ApplyRespawnBoss(int bossFlag)
+	void ApplyRespawnBoss(int bossFlag, int leaderFlag)
 	{
 		SetNormal();
 		
-		BossType = bossFlag;
+		LeaderType = leaderFlag;
 
 		//Runt cannot combine
 		if (bossFlag & WMF_RUNT)
@@ -191,6 +205,7 @@ class ExpSquishbag : Actor
 	void WanderingMonsterRespawn()
 	{
 		int bossFlag = 0;
+		int leaderFlag = 0;
 		if ((random(1,100) - RespawnLevel) < BOSSTYPE_CHANCE_BRUTE)
 			bossFlag |= WMF_BRUTE;
 		if ((random(1,100) - RespawnLevel) < BOSSTYPE_CHANCE_SPECTRE)
@@ -200,18 +215,22 @@ class ExpSquishbag : Actor
 			bossFlag |= WMF_LEADER;
 			
 			if (random(1,100) < BOSSTYPE_SUBCHANCE_POISON)
-				bossFlag |= WMF_POISON;
+				leaderFlag = WML_POISON;
+			else if (random(1,100) < BOSSTYPE_SUBCHANCE_ICE)
+				leaderFlag = WML_ICE;
+			else
+				leaderFlag = WML_STONE;
 		}
 			
 		if ((random(1,100)) < BOSSTYPE_CHANCE_RUNT) //since runts override all, do not scale their spawn chance with leveling
-			bossFlag |= WMF_RUNT;
+			bossFlag = WMF_RUNT;
 		
 		RespawnWaitTics = 0;
 		RespawnLevel = 1;
 
 		A_Respawn(false);
 		
-		ApplyRespawnBoss(bossFlag);
+		ApplyRespawnBoss(bossFlag, leaderFlag);
 	}
 }
 

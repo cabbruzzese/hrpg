@@ -78,11 +78,15 @@ class HRpgKnight : ExpSquishbag replaces Knight
 		}
 		// Throw axe
 		A_StartSound (AttackSound, CHAN_BODY);
-		if (BossType & WMF_POISON)
+		if (LeaderType & WML_POISON)
 		{ // poison
 			SpawnMissileZ (pos.Z + 36, targ, "PoisonBall");
 		}
-		else if (self.bShadow || random[KnightAttack]() < 40 || BossType & WMF_LEADER)
+		else if (LeaderType & WML_ICE)
+		{ // poison
+			SpawnMissileZ (pos.Z + 36, targ, "HeadFX1");
+		}
+		else if (self.bShadow || random[KnightAttack]() < 40 || LeaderType & WML_STONE)
 		{ // Red axe
 			SpawnMissileZ (pos.Z + 36, targ, "RedAxe");
 		}

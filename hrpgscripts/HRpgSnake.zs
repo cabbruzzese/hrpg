@@ -52,9 +52,13 @@ class HRpgSnake : ExpSquishbag replaces Snake
 	
 	void A_SnakeAttackBig()
 	{
-		if (BossType & WMF_POISON)
+		if (LeaderType & WML_POISON)
 		{
 			A_SpawnProjectile("PoisonBall", 32, 0, 0, CMF_CHECKTARGETDEAD);
+		}
+		else if (LeaderType & WML_ICE)
+		{
+			A_SpawnProjectile("HeadFX1", 32, 0, 0, CMF_CHECKTARGETDEAD);
 		}
 		else
 		{

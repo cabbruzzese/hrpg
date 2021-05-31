@@ -6,10 +6,7 @@ class HRpgSpellBook : HereticWeapon
 	Default
 	{
 		+BLOODSPLATTER
-		Weapon.SelectionOrder 2000;
-		Weapon.AmmoGive 25;
-		Weapon.AmmoUse 1;
-		Weapon.AmmoType "GoldWandAmmo";
+		Weapon.SelectionOrder 2100;
 		Weapon.SisterWeapon "HRpgSpellBookPowered";
 		Weapon.YAdjust 5;
 		Inventory.PickupMessage "$TXT_WPNGOLDWAND";
@@ -148,7 +145,6 @@ class HRpgSpellBookPowered : HRpgSpellBook
 	Default
 	{
 		+WEAPON.POWERED_UP
-		Weapon.AmmoGive 0;
 		Weapon.SisterWeapon "HRpgSpellBook";
 		Obituary "$OB_MPPGOLDWAND";
 		Tag "$TAG_GOLDWANDP";
