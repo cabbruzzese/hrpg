@@ -24,7 +24,6 @@ class HRpgKnight : ExpSquishbag replaces Knight
 		DropItem "CrossbowAmmo", 84, 5;
 		
 		ExpSquishbag.IsRespawnable true;
-		ExpSquishbag.RespawnWaitBonus 1200;
 	}
 	
 	States
@@ -83,8 +82,12 @@ class HRpgKnight : ExpSquishbag replaces Knight
 			SpawnMissileZ (pos.Z + 36, targ, "PoisonBall");
 		}
 		else if (LeaderType & WML_ICE)
-		{ // poison
+		{ // Ice
 			SpawnMissileZ (pos.Z + 36, targ, "HeadFX1");
+		}
+		else if (LeaderType & WML_FIRE)
+		{ // Fire
+			A_FireVolcanoShot(targ);
 		}
 		else if (self.bShadow || random[KnightAttack]() < 40 || LeaderType & WML_STONE)
 		{ // Red axe
@@ -109,7 +112,7 @@ class HRpgKnightGhost : HRpgKnight replaces KnightGhost
 		Alpha 0.4;
 
 		ExpSquishbag.IsRespawnable true;
-		ExpSquishbag.RespawnWaitBonus 2400;
+		ExpSquishbag.RespawnWaitBonus 1200;
 		ExpSquishbag.IsSpectreable false;
 	}
 }

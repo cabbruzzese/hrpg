@@ -20,7 +20,7 @@ class HRpgSnake : ExpSquishbag replaces Snake
 		DropItem "PhoenixRodAmmo", 84, 5;
 		
 		ExpSquishbag.IsRespawnable true;
-		ExpSquishbag.RespawnWaitBonus 2400;
+		ExpSquishbag.IsBossOnly true;
 	}
 	States
 	{
@@ -59,6 +59,10 @@ class HRpgSnake : ExpSquishbag replaces Snake
 		else if (LeaderType & WML_ICE)
 		{
 			A_SpawnProjectile("HeadFX1", 32, 0, 0, CMF_CHECKTARGETDEAD);
+		}
+		else if (LeaderType & WML_FIRE)
+		{
+			A_FireVolcanoShot(target);
 		}
 		else
 		{

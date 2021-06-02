@@ -66,7 +66,6 @@ class HRpgMummyLeader : HRpgMummy replaces MummyLeader
 		Tag "$FN_MUMMYLEADER";
 		
 		ExpSquishbag.IsRespawnable true;
-		ExpSquishbag.RespawnWaitBonus 1200;
 	}
 	States
 	{
@@ -93,7 +92,6 @@ class HRpgMummyGhost : HRpgMummy replaces MummyGhost
 		Alpha 0.4;
 
 		ExpSquishbag.IsRespawnable true;
-		ExpSquishbag.RespawnWaitBonus 1200;
 		ExpSquishbag.IsSpectreable false;
 	}
 }
@@ -111,7 +109,7 @@ class HRpgMummyLeaderGhost : HRpgMummyLeader replaces MummyLeaderGhost
 		Alpha 0.4;
 		
 		ExpSquishbag.IsRespawnable true;
-		ExpSquishbag.RespawnWaitBonus 2400;
+		ExpSquishbag.RespawnWaitBonus 1200;
 		ExpSquishbag.IsSpectreable false;
 	}
 }

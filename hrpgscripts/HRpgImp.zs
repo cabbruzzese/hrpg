@@ -29,6 +29,7 @@ class HRpgImp : ExpSquishbag replaces HereticImp
 		Tag "$FN_HERETICIMP";
 		
 		ExpSquishbag.IsRespawnable true;
+		ExpSquishbag.IsBossOnly true;
 	}
 	
 	States
@@ -163,6 +164,9 @@ class HRpgImpLeader : HRpgImp replaces HereticImpLeader
 		Health 80;
 		-MISSILEMORE
 		AttackSound "himp/leaderattack";
+		
+		ExpSquishbag.IsRespawnable true;
+		ExpSquishbag.IsBossOnly true;
 	}
 	States
 	{

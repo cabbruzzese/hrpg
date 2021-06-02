@@ -36,11 +36,11 @@ class HRpgHammer : HereticWeapon
 	AltFire:
 		WARH A 2 Offset(200, 40);
 		WARH B 2 Offset(150, 0);
-		WARH C 2 Offset(100, 0) A_HammerAttack(random(5, 15), "WarhammerPuff", 125, -30);
+		WARH C 2 Offset(100, 0) A_HammerAttack(random(8, 15), "WarhammerPuff", 125, -30);
 		WARH C 2 Offset(50, 0);
-		WARH C 2 Offset(1, 0) A_HammerAttack(random(5, 20), "WarhammerPuff", 125, 0);
+		WARH C 2 Offset(1, 0) A_HammerAttack(random(8, 20), "WarhammerPuff", 125, 0);
 		WARH C 2 Offset(-50, 0);
-		WARH C 2 Offset(-100, 0) A_HammerAttack(random(5, 15), "WarhammerPuff", 125, 30);
+		WARH C 2 Offset(-100, 0) A_HammerAttack(random(8, 15), "WarhammerPuff", 125, 30);
 		WARH D 2 Offset(-150, 0);
 		WARH D 2 Offset(-200, 0);
 		WARH E 14 Offset(-225, 0);

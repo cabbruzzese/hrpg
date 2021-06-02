@@ -1,7 +1,7 @@
 const MAXXPHIT = 75;
 
-const RESPAWN_TICS_MIN = 1800; //1.5 minute
-const RESPAWN_TICS_MAX = 24000; //20 minutes
+const RESPAWN_TICS_MIN = 1200; //1 minute
+const RESPAWN_TICS_MAX = 18000; //15 minutes
 
 const BOSSTYPE_CHANCE_BRUTE = 10;
 const BOSSTYPE_CHANCE_SPECTRE = 4;
@@ -9,6 +9,7 @@ const BOSSTYPE_CHANCE_LEADER = 2;
 const BOSSTYPE_CHANCE_RUNT = 6;
 const BOSSTYPE_SUBCHANCE_POISON = 25;
 const BOSSTYPE_SUBCHANCE_ICE = 25;
+const BOSSTYPE_SUBCHANCE_FIRE = 25;
 
 enum EWanderingMonsterFlags
 {
@@ -22,7 +23,8 @@ enum ELeaderTypeFlags
 {
 	WML_STONE = 1,
 	WML_POISON = 2,
-	WML_ICE = 4
+	WML_ICE = 4,
+	WML_FIRE = 8
 };
 
 class ExpSquishbag : Actor
@@ -31,7 +33,8 @@ class ExpSquishbag : Actor
 	int respawnWaitBonus;
 	int respawnLevel;
 	bool isRespawnable;
-	bool IsSpectreable;
+	bool isSpectreable;
+	bool isBossOnly;
 	int baseSpeed;
 	int leaderType;
 	property RespawnWaitTics : respawnWaitTics;
@@ -41,6 +44,7 @@ class ExpSquishbag : Actor
 	property IsSpectreable : isSpectreable;
 	property BaseSpeed : baseSpeed;
 	property LeaderType : leaderType;
+	property IsBossOnly : isBossOnly;
 	
 	
 	Default
@@ -52,6 +56,7 @@ class ExpSquishbag : Actor
 		ExpSquishbag.IsSpectreable true;
 		ExpSquishbag.BaseSpeed -1;
 		ExpSquishbag.LeaderType 0;
+		ExpSquishbag.IsBossOnly false;
 	}
 	
 	void A_CustomComboAttack2(class<Actor> missiletype, double spawnheight, int damage, sound meleesound = "", name damagetype = "none", bool bleed = true)
@@ -60,8 +65,20 @@ class ExpSquishbag : Actor
 			missileType = "PoisonBall";
 		else if (LeaderType & WML_ICE)
 			missileType = "HeadFX1";
+		else if (LeaderType & WML_FIRE)
+		{			
+			A_FireVolcanoShot(target);
+			return;
+		}
 			
 		A_CustomComboAttack(missiletype, spawnheight, damage, meleesound, damagetype, bleed);
+	}
+	
+	void A_FireVolcanoShot(Actor targ)
+	{
+		SpawnMissileAngleZSpeed(pos.Z + 36, "VolcanoMonsterBlast", angle + 0, 1, 12, self);
+		SpawnMissileAngleZSpeed(pos.Z + 36, "VolcanoMonsterBlast", angle + 6, 1, 10, self);
+		SpawnMissileAngleZSpeed(pos.Z + 36, "VolcanoMonsterBlast", angle - 6, 1, 10, self);
 	}
 	
 	override int TakeSpecialDamage(Actor inflictor, Actor source, int damage, Name damagetype)
@@ -155,6 +172,11 @@ class ExpSquishbag : Actor
 			A_SetTranslation("GreenSkin");
 			Health *= 2;
 		}
+		else if (LeaderType & WML_FIRE)
+		{
+			A_SetTranslation("RedSkin");
+			Health *= 2;
+		}
 		else
 		{
 			A_SetTranslation("StoneSkin");
@@ -197,9 +219,6 @@ class ExpSquishbag : Actor
 			if (bossFlag & WMF_LEADER)
 				SetLeader();
 		}
-
-		//string msg = string.Format("Health %f, Damage Buff %f, Translation %d, Speed %d", Health, DamageMultiply, Translation, Speed);
-		//Console.MidPrint (null, msg, true);
 	}
 	
 	void WanderingMonsterRespawn()
@@ -210,20 +229,30 @@ class ExpSquishbag : Actor
 			bossFlag |= WMF_BRUTE;
 		if ((random(1,100) - RespawnLevel) < BOSSTYPE_CHANCE_SPECTRE)
 			bossFlag |= WMF_SPECTRE;
-		if ((random(1,100) - (RespawnLevel / 2)) < BOSSTYPE_CHANCE_LEADER)
+		if ((random(1,100) - RespawnLevel) < BOSSTYPE_CHANCE_LEADER)
 		{
 			bossFlag |= WMF_LEADER;
 			
-			if (random(1,100) < BOSSTYPE_SUBCHANCE_POISON)
+			let bossRoll = random(1,100);
+			if (bossRoll < BOSSTYPE_SUBCHANCE_POISON)
 				leaderFlag = WML_POISON;
-			else if (random(1,100) < BOSSTYPE_SUBCHANCE_ICE)
+			else if (bossRoll < BOSSTYPE_SUBCHANCE_POISON + BOSSTYPE_SUBCHANCE_ICE)
 				leaderFlag = WML_ICE;
+			else if (bossRoll < BOSSTYPE_SUBCHANCE_POISON + BOSSTYPE_SUBCHANCE_ICE + BOSSTYPE_SUBCHANCE_FIRE)
+				leaderFlag = WML_FIRE;
 			else
 				leaderFlag = WML_STONE;
 		}
 			
 		if ((random(1,100)) < BOSSTYPE_CHANCE_RUNT) //since runts override all, do not scale their spawn chance with leveling
 			bossFlag = WMF_RUNT;
+
+		//If only respawns bosses, reset timer and try again later
+		if (IsBossOnly && leaderFlag == 0)
+		{
+			RespawnWaitTics = random(RESPAWN_TICS_MIN, RESPAWN_TICS_MAX);//no bonus for this respawnLevel
+			return;
+		}
 		
 		RespawnWaitTics = 0;
 		RespawnLevel = 1;
@@ -288,5 +317,63 @@ class PoisonPuffy : Actor
 	Spawn:
 		FRB1 DEFGH 4;
 		Stop;
+	}
+}
+
+class VolcanoMonsterBlast : Actor
+{
+	Default
+	{
+		Radius 8;
+		Height 8;
+		Speed 10;
+		Damage 4;
+		DamageType "Fire";
+		Gravity 0.125;
+		+NOBLOCKMAP +MISSILE +DROPOFF
+		+NOTELEPORT
+		DeathSound "world/volcano/blast";
+	}
+
+	States
+	{
+	Spawn:
+		VFBL AB 4 BRIGHT A_SpawnItemEx("Puffy", random2[BeastPuff]()*0.015625, random2[BeastPuff]()*0.015625, random2[BeastPuff]()*0.015625, 
+									0,0,0,0,SXF_ABSOLUTEPOSITION, 64);
+		Loop;
+
+	Death:
+		XPL1 A 4 BRIGHT A_VolcBallImpact;
+		XPL1 BCDEF 4 BRIGHT;
+		Stop;
+	}
+	
+	//----------------------------------------------------------------------------
+	//
+	// PROC A_VolcBallImpact
+	//
+	//----------------------------------------------------------------------------
+
+	void A_VolcBallImpact ()
+	{
+		if (pos.Z <= floorz)
+		{
+			bNoGravity = true;
+			Gravity = 1;
+			AddZ(28);
+		}
+		A_Explode(25, 25, XF_NOSPLASH|XF_HURTSOURCE, false, 0, 0, 0, "BulletPuff", 'Fire');
+		for (int i = 0; i < 4; i++)
+		{
+			Actor tiny = Spawn("VolcanoTBlast", Pos, ALLOW_REPLACE);
+			if (tiny)
+			{
+				tiny.target = self;
+				tiny.Angle = 90.*i;
+				tiny.VelFromAngle(0.7);
+				tiny.Vel.Z = 1. + random[VolcBallImpact]() / 128.;
+				tiny.CheckMissileSpawn (radius);
+			}
+		}
 	}
 }
