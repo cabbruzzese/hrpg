@@ -87,7 +87,18 @@ class HRpgStatusBar : HereticStatusBar
 		DrawImage("CHAINBAC", (0, 190), DI_ITEM_OFFSETS);
 		// wiggle the chain if it moves
 		int inthealth =  mHealthInterpolator.GetValue();
-		DrawGem("CHAIN", "LIFEGEM2",inthealth, CPlayer.mo.GetMaxHealth(true), (2, 191 + wiggle), 15, 25, 16, (multiplayer? DI_TRANSLATABLE : 0) | DI_ITEM_LEFT_TOP); 
+		
+		let bPlayer = HRpgBlasphemerPlayer(CPlayer.mo);
+		if (bPlayer)
+		{
+			DrawGemSmall("CHAIN", "LIFEGEM2",inthealth, CPlayer.mo.GetMaxHealth(true), (2, 191 + wiggle), 15, 25, 16, (multiplayer? DI_TRANSLATABLE : 0) | DI_ITEM_LEFT_TOP); 
+			DrawGemSmall("CHAIN", "LIFEGEM3",bPlayer.Mana, bPlayer.MaxMana, (2, 195), 15, 25, 16, (multiplayer? DI_TRANSLATABLE : 0) | DI_ITEM_LEFT_TOP); 
+		}
+		else
+		{
+			DrawGem("CHAIN", "LIFEGEM2",inthealth, CPlayer.mo.GetMaxHealth(true), (2, 191 + wiggle), 15, 25, 16, (multiplayer? DI_TRANSLATABLE : 0) | DI_ITEM_LEFT_TOP); 
+		}
+		
 		DrawImage("LTFACE", (0, 190), DI_ITEM_OFFSETS);
 		DrawImage("RTFACE", (276, 190), DI_ITEM_OFFSETS);
 		DrawShader(SHADER_HORZ, (19, 190), (16, 10));
@@ -258,5 +269,19 @@ class HRpgStatusBar : HereticStatusBar
 		DrawString(mSmallFont, statText1, (xPosStats, yPos - yStep), DI_TEXT_ALIGN_RIGHT);
 		DrawString(mSmallFont, statText2, (xPosStats, yPos), DI_TEXT_ALIGN_RIGHT);
 		DrawString(mSmallFont, statText3, (xPosStats, yPos + yStep), DI_TEXT_ALIGN_RIGHT);
+	}
+	
+	void DrawGemSmall(String chain, String gem, int displayvalue, int maxrange, Vector2 pos, int leftpadding, int rightpadding, int chainmod, int flags = 0)
+	{
+		TextureID chaintex = TexMan.CheckForTexture(chain, TexMan.TYPE_MiscPatch);
+		if (!chaintex.IsValid()) return;
+		Vector2 chainsize = TexMan.GetScaledSize(chaintex);
+		[pos, flags] = AdjustPosition(pos, flags, chainsize.X, chainsize.Y);
+
+		displayvalue = clamp(displayvalue, 0, maxrange);
+		int offset = int(double(chainsize.X - leftpadding - rightpadding) * displayvalue / maxrange);
+	
+		DrawTexture(chaintex, pos + (offset % chainmod, 0), flags | DI_ITEM_LEFT_TOP, 1.0, (-1, -1), (1, 0.5));
+		DrawImage(gem, pos + (offset + leftPadding, 0), flags | DI_ITEM_LEFT_TOP, 1.0, (-1, -1), (1, 0.5));
 	}
 }

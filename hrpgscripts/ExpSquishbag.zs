@@ -11,6 +11,9 @@ const BOSSTYPE_SUBCHANCE_POISON = 25;
 const BOSSTYPE_SUBCHANCE_ICE = 25;
 const BOSSTYPE_SUBCHANCE_FIRE = 25;
 
+const SNEAK_ATTACK_BONUS = 3.0;
+const SNEAK_DELAY_TIME = 20;
+
 enum EWanderingMonsterFlags
 {
 	WMF_BRUTE = 1,
@@ -37,6 +40,7 @@ class ExpSquishbag : Actor
 	bool isBossOnly;
 	int baseSpeed;
 	int leaderType;
+	int sneakDelay;
 	property RespawnWaitTics : respawnWaitTics;
 	property RespawnWaitBonus : respawnWaitBonus;
 	property RespawnLevel : respawnLevel;
@@ -45,7 +49,7 @@ class ExpSquishbag : Actor
 	property BaseSpeed : baseSpeed;
 	property LeaderType : leaderType;
 	property IsBossOnly : isBossOnly;
-	
+	property SneakDelay : sneakDelay;
 	
 	Default
 	{
@@ -57,6 +61,7 @@ class ExpSquishbag : Actor
 		ExpSquishbag.BaseSpeed -1;
 		ExpSquishbag.LeaderType 0;
 		ExpSquishbag.IsBossOnly false;
+		ExpSquishbag.SneakDelay 0;
 	}
 	
 	void A_CustomComboAttack2(class<Actor> missiletype, double spawnheight, int damage, sound meleesound = "", name damagetype = "none", bool bleed = true)
@@ -91,6 +96,19 @@ class ExpSquishbag : Actor
 		if (hrpgPlayer)
 		{
 			hrpgPlayer.GiveXP(xp);
+			
+			let hereticPlayer = HRpgHereticPlayer(hrpgPlayer);
+			if (hereticPlayer)
+			{
+				//Sneak attack
+				if (target != hereticPlayer || sneakDelay > 0)
+				{
+					damage *= SNEAK_ATTACK_BONUS;
+					Console.Printf("Surprise Attack!");
+					
+					sneakDelay = 0;
+				}
+			}
 		}
 		
 		return Super.TakeSpecialDamage(inflictor, source, damage, damagetype);
@@ -123,6 +141,13 @@ class ExpSquishbag : Actor
 				WanderingMonsterRespawn();
 			}
 		}
+		
+		if (!target)
+		{
+			SneakDelay = SNEAK_DELAY_TIME;
+		}
+		if (sneakDelay > 0)
+			sneakDelay--;
 		
 		Super.Tick();
 	}

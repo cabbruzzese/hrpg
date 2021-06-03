@@ -1,5 +1,13 @@
+const MANA_SCALE_MOD = 5;
+
 class HRpgBlasphemerPlayer : HRpgPlayer
 {
+	int maxMana;
+	int mana;
+	int manaTicks;
+	property MaxMana : maxMana;
+	property Mana : mana;
+	
 	Default
 	{
 		HRpgPlayer.ExpLevel 1;
@@ -8,6 +16,9 @@ class HRpgBlasphemerPlayer : HRpgPlayer
 		HRpgPlayer.Brt 5;
 		HRpgPlayer.Trk 7;
 		HRpgPlayer.Crp 10;
+		
+		HRpgBlasphemerPlayer.MaxMana 100 * MANA_SCALE_MOD;
+		HRpgBlasphemerPlayer.Mana 100 * MANA_SCALE_MOD;
 		
 		Player.MaxHealth HEALTHBASE - 25;
 		Health HEALTHBASE - 25;
@@ -19,6 +30,7 @@ class HRpgBlasphemerPlayer : HRpgPlayer
 		Player.DisplayName "Blasphemer";
 		Player.StartItem "HRpgSpellBook";
 		Player.StartItem "HRpgGoldWand";
+		Player.StartItem "FireBallSpell";
 		Player.StartItem "GoldWandAmmo", 50;
 		Player.WeaponSlot 1, "HRpgGauntlets", "HRpgSpellBook";
 		Player.WeaponSlot 2, "HRpgGoldWand";
@@ -115,5 +127,24 @@ class HRpgBlasphemerPlayer : HRpgPlayer
 	override void BasicStatIncrease()
 	{
 		Crp += 1;
+		
+		int manaBonus = random(1, Crp);
+		if (manaBonus < 5)
+			manaBonus = 5;
+
+		manaBonus *= MANA_SCALE_MOD;
+		MaxMana += manaBonus;
+		if (Mana < MaxMana)
+			Mana = MaxMana;
+	}
+	
+	override void Tick()
+	{
+		if (Mana < MaxMana)
+		{
+			Mana++;
+		}
+		
+		Super.Tick();
 	}
 }

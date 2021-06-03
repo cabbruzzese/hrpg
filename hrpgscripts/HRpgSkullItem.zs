@@ -1,9 +1,18 @@
 const SKULLITEM_HEALTH = 30;
 const SKULLITEM_ARMOR = 50;
 const SKULLITEM_ARMORSAVE = 50;
-const SKULLITEM_BESERK_TICKS = 500;
-const SKULLITEM_INVIS_TICKS = 400;
 const SKULLITEM_AMMO = 10;
+
+const SKULLITEM_TICKS_BESERK = 500;
+const SKULLITEM_TICKS_INVIS = 700;
+const SKULLITEM_TICKS_TORCH = 1200;
+const SKULLITEM_TICKS_TOME = 300;
+const SKULLITEM_TICKS_FLY = 300;
+
+const SKULLITEM_LEVEL_INVIS = 1;
+const SKULLITEM_LEVEL_TORCH = 5;
+const SKULLITEM_LEVEL_TOME = 10;
+const SKULLITEM_LEVEL_FLY = 15;
 
 class HRpgSkullItem : Inventory
 {
@@ -159,12 +168,33 @@ class HRpgSkullItem : Inventory
 	}
 	
 	//Only give invisible to heretic
-	bool TryGiveInvisible (Actor other)
+	bool TryGiveArtifacts (Actor other)
 	{
 		let hereticPlayer = HRpgHereticPlayer(other.player.mo);
 		if (hereticPlayer)
 		{
-			return TryUsePowerup(other, "PowerGhost", SKULLITEM_INVIS_TICKS);
+			bool result = false;
+			if (hereticPlayer.ExpLevel >= SKULLITEM_LEVEL_INVIS)
+			{
+				result |= TryUsePowerup(other, "PowerGhost", SKULLITEM_TICKS_INVIS);
+			}
+			
+			if (hereticPlayer.ExpLevel >= SKULLITEM_LEVEL_TORCH)
+			{
+				result |= TryUsePowerup(other, "PowerTorch", SKULLITEM_TICKS_TORCH);
+			}
+
+			if (hereticPlayer.ExpLevel >= SKULLITEM_LEVEL_TOME)
+			{
+				result |= TryUsePowerup(other, "PowerWeaponlevel2", SKULLITEM_TICKS_TOME);
+			}
+			
+			if (hereticPlayer.ExpLevel >= SKULLITEM_LEVEL_FLY)
+			{
+				result |= TryUsePowerup(other, "PowerFlight", SKULLITEM_TICKS_FLY);
+			}
+			
+			return result;
 		}
 		return false;
 	}
@@ -175,7 +205,7 @@ class HRpgSkullItem : Inventory
 		let heathenPlayer = HRpgHeathenPlayer(other.player.mo);
 		if (heathenPlayer)
 		{
-			return TryUsePowerup(other, "PowerStrength2", SKULLITEM_BESERK_TICKS);
+			return TryUsePowerup(other, "PowerStrength2", SKULLITEM_TICKS_BESERK);
 		}
 		return false;		
 	}
@@ -217,7 +247,7 @@ class HRpgSkullItem : Inventory
 	{
 		TryGiveArmor(other);
 		TryGiveHealth(other);
-		TryGiveInvisible(other);
+		TryGiveArtifacts(other);
 		TryGiveBerserk(other);
 		TryGiveAmmo(other);
 	}

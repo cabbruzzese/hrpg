@@ -208,6 +208,14 @@ class HRpgPlayer : HereticPlayer
 	{
 	}
 	
+	void DoLevelGainBlend()
+	{
+		let blendColor = Color(122,	122, 122, 122);
+		A_SetBlend(blendColor, 0.8, 40);
+		
+		Console.Printf("You are now level %d", ExpLevel);
+	}
+	
 	//Gain a level
 	void GainLevel()
 	{
@@ -252,5 +260,7 @@ class HRpgPlayer : HereticPlayer
 		MaxHealth = newHealth;
 		if (Health < MaxHealth)
 			A_SetHealth(MaxHealth);
+			
+		DoLevelGainBlend();
 	}
 }

@@ -203,7 +203,7 @@ class BowAxe : Actor
 	{
 		Radius 11;
 		Height 8;
-		Speed 9;
+		Speed 11;
 		Damage 5;
 		Projectile;
 		DeathSound "hknight/hit";
