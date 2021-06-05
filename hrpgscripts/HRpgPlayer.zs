@@ -213,7 +213,8 @@ class HRpgPlayer : HereticPlayer
 		let blendColor = Color(122,	122, 122, 122);
 		A_SetBlend(blendColor, 0.8, 40);
 		
-		Console.Printf("You are now level %d", ExpLevel);
+		string lvlMsg = String.Format("You are now level %d", ExpLevel);
+		A_Print(lvlMsg);
 	}
 	
 	//Gain a level

@@ -104,7 +104,7 @@ class ExpSquishbag : Actor
 				if (target != hereticPlayer || sneakDelay > 0)
 				{
 					damage *= SNEAK_ATTACK_BONUS;
-					Console.Printf("Surprise Attack!");
+					hereticPlayer.A_Print("Surprise Attack!");
 					
 					sneakDelay = 0;
 				}

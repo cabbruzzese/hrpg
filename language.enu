@@ -1,9 +1,19 @@
 [enu default]
 
 TXT_ARTSKULLITEM = "You have collected a Soul Essence.";
+TXT_FIREBALLSPELL = "You have learned the Fireball Spell.";
+TXT_ICESPELL = "You have learned the Ice Spell.";
+TXT_VAMPIRESPELL = "You have learned the Vampire Spell.";
+TXT_VOLCANOSPELL = "You have learned the Volcano Spell.";
+TXT_LIGHTNINGSPELL = "You have learned the Lightning Spell.";
 
 TAG_HAMMER = "War Hammer";
 TAG_SPELLBOOK = "Spell Book";
+TAG_FIREBALLSPELL = "Fireball Spell";
+TAG_ICESPELL = "Ice Spell";
+TAG_VAMPIRESPELL = "Vampire Spell";
+TAG_VOLCANOSPELL = "Volcano Spell";
+TAG_LIGHTNINGSPELL = "Lightning Spell";
 
 OB_MPHAMMER = "%o stopped, for it was %k's hammer time.";
 OB_MPSPELLBOOKFIRE = "%o has a burning question about %k's spell book.";
@@ -22,3 +32,9 @@ OB_MPPCLAWCHAIN = "%o was destroyed by %k's magic morning star.";
 OB_MPPHORNBALL = "%o was melted by %k's magic blast.";
 OB_MPPMACEHIT = "%o was immolate by %k's firemace.";
 OB_MPPPHOENIXFIREBALL = "%o was singed by %k's fire balls.";
+
+OB_FIREBALLSPELL = "%o was burned out on %k's Fireball.";
+OB_ICESPELL = "%o is now vanilla flavored from %k's Ice Ice, baby.";
+OB_VAMPIRESPELL = "Life sucks and then %o dies from %k's Vampire spell.";
+OB_VOLCANOSPELL = "%o did not live long or prosper from %k's Volcano spell.";
+OB_LIGHTNINGSPELL = "%o was shocked to see %k casting lightning.";

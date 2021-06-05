@@ -1,12 +1,20 @@
 const MANA_SCALE_MOD = 5;
 
+const SPELL_LEVEL_FIREBALL = 1;
+const SPELL_LEVEL_ICE = 4;
+const SPELL_LEVEL_VAMPIRE = 8;
+const SPELL_LEVEL_VOLCANO = 12;
+const SPELL_LEVEL_LIGHTNING = 16;
+
 class HRpgBlasphemerPlayer : HRpgPlayer
 {
 	int maxMana;
 	int mana;
 	int manaTicks;
+	int spellLock;
 	property MaxMana : maxMana;
 	property Mana : mana;
+	property SpellLock : spellLock;
 	
 	Default
 	{
@@ -19,6 +27,7 @@ class HRpgBlasphemerPlayer : HRpgPlayer
 		
 		HRpgBlasphemerPlayer.MaxMana 100 * MANA_SCALE_MOD;
 		HRpgBlasphemerPlayer.Mana 100 * MANA_SCALE_MOD;
+		HRpgBlasphemerPlayer.SpellLock 0;
 		
 		Player.MaxHealth HEALTHBASE - 25;
 		Health HEALTHBASE - 25;
@@ -30,7 +39,7 @@ class HRpgBlasphemerPlayer : HRpgPlayer
 		Player.DisplayName "Blasphemer";
 		Player.StartItem "HRpgSpellBook";
 		Player.StartItem "HRpgGoldWand";
-		Player.StartItem "FireBallSpell";
+		Player.StartItem "FireballSpell";
 		Player.StartItem "GoldWandAmmo", 50;
 		Player.WeaponSlot 1, "HRpgGauntlets", "HRpgSpellBook";
 		Player.WeaponSlot 2, "HRpgGoldWand";
@@ -124,6 +133,28 @@ class HRpgBlasphemerPlayer : HRpgPlayer
 		Stop;
 	}
 	
+	void GiveSpell(class<Inventory> itemtype)
+	{
+		let spell = GiveInventoryType(itemtype);
+
+		if (spell)
+			A_Print(spell.PickupMessage());
+	}
+	
+	void GiveSpellsByLevel()
+	{
+		if (ExpLevel >= SPELL_LEVEL_FIREBALL)
+			GiveSpell("FireballSpell");
+		if (ExpLevel >= SPELL_LEVEL_ICE)
+			GiveSpell("IceSpell");
+		if (ExpLevel >= SPELL_LEVEL_VAMPIRE)
+			GiveSpell("VampireSpell");
+		if (ExpLevel >= SPELL_LEVEL_VOLCANO)
+			GiveSpell("VolcanoSpell");
+		if (ExpLevel >= SPELL_LEVEL_LIGHTNING)
+			GiveSpell("LightningSpell");
+	}
+	
 	override void BasicStatIncrease()
 	{
 		Crp += 1;
@@ -136,15 +167,32 @@ class HRpgBlasphemerPlayer : HRpgPlayer
 		MaxMana += manaBonus;
 		if (Mana < MaxMana)
 			Mana = MaxMana;
+
+		GiveSpellsByLevel();
 	}
 	
 	override void Tick()
 	{
 		if (Mana < MaxMana)
 		{
-			Mana++;
+			int manaHeal = Crp / 10;
+			if (manaHeal < 1)
+				manaHeal = 1;
+				
+			Mana += manaHeal;
+		}
+		
+		if (SpellLock > 0)
+		{
+			SpellLock--;
 		}
 		
 		Super.Tick();
+	}
+	
+	override void BeginPlay()
+	{
+		GiveSpellsByLevel();
+		Super.BeginPlay();
 	}
 }

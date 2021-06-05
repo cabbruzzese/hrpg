@@ -269,6 +269,13 @@ class HRpgStatusBar : HereticStatusBar
 		DrawString(mSmallFont, statText1, (xPosStats, yPos - yStep), DI_TEXT_ALIGN_RIGHT);
 		DrawString(mSmallFont, statText2, (xPosStats, yPos), DI_TEXT_ALIGN_RIGHT);
 		DrawString(mSmallFont, statText3, (xPosStats, yPos + yStep), DI_TEXT_ALIGN_RIGHT);
+		
+		let bPlayer = HRpgBlasphemerPlayer(CPlayer.mo);
+		if (bPlayer && isFullscreen)
+		{
+			let text3 = String.Format("Mana: %s / %s", FormatNumber(bPlayer.Mana / MANA_SCALE_MOD, 0), FormatNumber(bPlayer.MaxMana / MANA_SCALE_MOD, 0));
+			DrawString(mSmallFont, text3, (xPos, yPos - yStep), DI_TEXT_ALIGN_LEFT);
+		}
 	}
 	
 	void DrawGemSmall(String chain, String gem, int displayvalue, int maxrange, Vector2 pos, int leftpadding, int rightpadding, int chainmod, int flags = 0)
@@ -281,7 +288,7 @@ class HRpgStatusBar : HereticStatusBar
 		displayvalue = clamp(displayvalue, 0, maxrange);
 		int offset = int(double(chainsize.X - leftpadding - rightpadding) * displayvalue / maxrange);
 	
-		DrawTexture(chaintex, pos + (offset % chainmod, 0), flags | DI_ITEM_LEFT_TOP, 1.0, (-1, -1), (1, 0.5));
-		DrawImage(gem, pos + (offset + leftPadding, 0), flags | DI_ITEM_LEFT_TOP, 1.0, (-1, -1), (1, 0.5));
+		DrawTexture(chaintex, pos + (offset % chainmod, 0), flags | DI_ITEM_LEFT_TOP, 1.0, (-1, -1), (1.0, 0.5));
+		DrawImage(gem, pos + (offset + leftPadding, 0), flags | DI_ITEM_LEFT_TOP, 1.0, (-1, -1), (0.5, 0.5));
 	}
 }

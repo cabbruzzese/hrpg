@@ -61,7 +61,7 @@ class HRpgSpellBook : HereticWeapon
 		
 		if (mo != null)
 		{
-			Mo.Vel.Z += velZ;
+			mo.Vel.Z += velZ;
 		}
 
 		let hrpgPlayer = HRpgPlayer(player.mo);

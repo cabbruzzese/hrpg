@@ -285,6 +285,7 @@ class PhoenixFireballFX1 : Actor
 		ExplosionDamage 30;
 		DeathSound "minotaur/fx2hit";
 		Obituary "$OB_MPPPHOENIXFIREBALL";
+		Scale 2.0;
 	}
 	States
 	{
@@ -292,8 +293,8 @@ class PhoenixFireballFX1 : Actor
 		FX12 AB 6 Bright;
 		Loop;
 	Death:
-		FX13 I 4 Bright A_Explode;
-		FX13 JKLM 4 Bright;
+		FX06 D 4 Bright A_Explode;
+		FX06 EFG 4 Bright;
 		Stop;
 	}
 }
