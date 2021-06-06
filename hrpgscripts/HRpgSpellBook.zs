@@ -1,7 +1,7 @@
 const FIREBALLSPREAD_X = 4;
 const FIREBALLSPREAD_Y = 0.3;
 
-class HRpgSpellBook : HereticWeapon
+class HRpgSpellBook : BlasphemerWeapon
 {
 	Default
 	{
@@ -146,8 +146,7 @@ class HRpgSpellBookPowered : HRpgSpellBook
 	{
 		+WEAPON.POWERED_UP
 		Weapon.SisterWeapon "HRpgSpellBook";
-		Obituary "$OB_MPPGOLDWAND";
-		Tag "$TAG_GOLDWANDP";
+		Tag "$TAG_SPELLBOOK";
 	}
 
 	States

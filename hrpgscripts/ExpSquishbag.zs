@@ -12,7 +12,7 @@ const BOSSTYPE_SUBCHANCE_ICE = 25;
 const BOSSTYPE_SUBCHANCE_FIRE = 25;
 
 const SNEAK_ATTACK_BONUS = 3.0;
-const SNEAK_DELAY_TIME = 20;
+const SNEAK_DELAY_TIME = 30;
 
 enum EWanderingMonsterFlags
 {

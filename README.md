@@ -17,6 +17,8 @@ Best at movement and stealth.
 
 Soul Essences give temporary invisibility.
 
+When the heretic attacks an unsuspecting foe, or one engaged in another fight, he deals a big surprise attack bonus. Be quick to catch the monsters off guard.
+
 ### Heathen
 A brute who likes to get up close and personal. Starts with a warhammer and the most health.
 
@@ -24,12 +26,16 @@ Best at melee and has the most heath.
 
 Soul Essences give armor and makes the Heathen go berserk, greatly increases melee damage with strength weapons.
 
+The Heathen cannot use all of the classic heretic weapons, but gains new martial weapons to shed some blood and take some names.
+
 ### Blasphemer
 A magician who excells at magical staffs and wands. Starts with a spellbook and is the slowest.
 
 Best at ranged magical weapons. By far the biggest damage dealer at range.
 
 Soul Essences give a small amount of ammo.
+
+The Blasphemer learns spells at level 1, 4, 8, 12, and 16 which are usable in the inventory.
 
 ## Leveling
 Players now have XP and gain XP when damaging a monster.
@@ -131,6 +137,10 @@ Dodging their shots may still leave you with a cold reception.
 
 ### Runt
 Weee!!!!
+
+#Credits
+
+Heretic is a product of Raven Software and id Software.
 
 # Contributing
 

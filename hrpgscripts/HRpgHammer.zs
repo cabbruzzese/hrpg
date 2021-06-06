@@ -1,6 +1,6 @@
 // Staff --------------------------------------------------------------------
 
-class HRpgHammer : HereticWeapon
+class HRpgHammer : HeathenWeapon
 {
 	Default
 	{
@@ -27,7 +27,7 @@ class HRpgHammer : HereticWeapon
 		WARH A 3;
 		WARH B 3;
 		WARH C 3;
-		WARH D 3 A_HammerAttack(random(20, 35), "WarhammerPuff", 175, 0);
+		WARH D 3 A_HammerAttack(random(15, 35), "WarhammerPuff", 125, 0);
 		WARH E 2;
 		WARH F 2;
 		WARH G 10;
@@ -36,11 +36,11 @@ class HRpgHammer : HereticWeapon
 	AltFire:
 		WARH A 2 Offset(200, 40);
 		WARH B 2 Offset(150, 0);
-		WARH C 2 Offset(100, 0) A_HammerAttack(random(8, 15), "WarhammerPuff", 125, -30);
+		WARH C 2 Offset(100, 0);
 		WARH C 2 Offset(50, 0);
-		WARH C 2 Offset(1, 0) A_HammerAttack(random(8, 20), "WarhammerPuff", 125, 0);
+		WARH C 2 Offset(1, 0) A_HammerAttack(random(25, 40), "WarhammerPuff", 200, 0);
 		WARH C 2 Offset(-50, 0);
-		WARH C 2 Offset(-100, 0) A_HammerAttack(random(8, 15), "WarhammerPuff", 125, 30);
+		WARH C 2 Offset(-100, 0);
 		WARH D 2 Offset(-150, 0);
 		WARH D 2 Offset(-200, 0);
 		WARH E 14 Offset(-225, 0);
@@ -102,7 +102,7 @@ class HRpgHammerPowered : HRpgHammer
 		+WEAPON.READYSNDHALF
 		+WEAPON.STAFF2_KICKBACK
 		Obituary "$OB_MPPHAMMER";
-		Tag "$TAG_STAFFP";
+		Tag "$TAG_HAMMER";
 	}
 
 	States
@@ -129,11 +129,11 @@ class HRpgHammerPowered : HRpgHammer
 	AltFire:
 		WARH H 2 Offset(200, 40);
 		WARH I 2 Offset(150, 0);
-		WARH J 2 Offset(100, 0) A_HammerFire(-20);
-		WARH J 2 Offset(50, 0);
-		WARH J 2 Offset(1, 0) A_HammerFire(0);
-		WARH J 2 Offset(-50, 0);
-		WARH J 2 Offset(-100, 0) A_HammerFire(20);
+		WARH J 2 Offset(100, 0);
+		WARH J 2 Offset(50, 0) A_HammerFire(-10);
+		WARH J 2 Offset(1, 0);
+		WARH J 2 Offset(-50, 0) A_HammerFire(10);
+		WARH J 2 Offset(-100, 0);
 		WARH K 2 Offset(-150, 0);
 		WARH K 2 Offset(-200, 0);
 		WARH L 14 Offset(-225, 0);

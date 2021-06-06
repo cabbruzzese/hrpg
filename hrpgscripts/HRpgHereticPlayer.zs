@@ -17,6 +17,7 @@ class HRpgHereticPlayer : HRpgPlayer
 		Painchance 255;
 		Speed 1.1;
 		Player.DisplayName "Heretic";
+		Player.SpawnClass "Heretic";
 		Player.StartItem "HRpgGoldWand";
 		Player.StartItem "HRpgStaff";
 		Player.StartItem "GoldWandAmmo", 50;

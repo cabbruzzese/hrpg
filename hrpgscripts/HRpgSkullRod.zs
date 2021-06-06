@@ -210,7 +210,10 @@ class HRpgSkullRodPowered : HRpgSkullRod replaces SkullRodPowered
 		if (weapon != null)
 		{
 			if (!weapon.DepleteAmmo (false))
+			{
+				weapon.CheckAmmo(Weapon.PrimaryFire, true);
 				return;
+			}
 		}
 		SpawnPlayerMissile ("HornBallFX1", angle + 9);
 		SpawnPlayerMissile ("HornBallFX1");

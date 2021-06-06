@@ -183,7 +183,7 @@ class SpellVampireFX1 : Actor
 	{
 		Radius 12;
 		Height 8;
-		Speed 16;
+		Speed 22;
 		Damage 1;
 		Projectile;
 		SeeSound "himp/leaderattack";
@@ -198,7 +198,7 @@ class SpellVampireFX1 : Actor
 	States
 	{
 	Spawn:
-		FX00 HIJKL 4 Bright;
+		FX00 HIJKL 2 Bright;
 		Stop;
 	Death:
 		FX00 M 2 Bright;
@@ -487,7 +487,7 @@ class LightningSpell : HRpgSpellItem
 		
 		HRpgSpellItem.CooldownTicksMax 40;
 		HRpgSpellItem.ManaCost 250 * MANA_SCALE_MOD;
-		HRpgSpellItem.CastSound "beast/attack";
+		HRpgSpellItem.CastSound "dsparil/attack";
 	}
 	
 	override void CastSpell(HRpgBlasphemerPlayer bPlayer)

@@ -2,7 +2,7 @@ const MANA_SCALE_MOD = 5;
 
 const SPELL_LEVEL_FIREBALL = 1;
 const SPELL_LEVEL_ICE = 4;
-const SPELL_LEVEL_VAMPIRE = 8;
+const SPELL_LEVEL_VAMPIRE = 1;//8;
 const SPELL_LEVEL_VOLCANO = 12;
 const SPELL_LEVEL_LIGHTNING = 16;
 
@@ -37,6 +37,7 @@ class HRpgBlasphemerPlayer : HRpgPlayer
 		Painchance 255;
 		Speed 0.9;
 		Player.DisplayName "Blasphemer";
+		Player.SpawnClass "Blasphemer";
 		Player.StartItem "HRpgSpellBook";
 		Player.StartItem "HRpgGoldWand";
 		Player.StartItem "FireballSpell";

@@ -17,12 +17,13 @@ class HRpgHeathenPlayer : HRpgPlayer
 		Painchance 255;
 		Speed 1;
 		Player.DisplayName "Heathen";
+		Player.SpawnClass "Heathen";
 		Player.StartItem "HRpgHammer";
 		Player.StartItem "HRpgGoldWand";
 		Player.StartItem "GoldWandAmmo", 50;
 		Player.WeaponSlot 1, "HRpgGauntlets", "HRpgHammer";
 		Player.WeaponSlot 2, "HRpgGoldWand";
-		Player.WeaponSlot 3, "HRpgCrossbow";
+		Player.WeaponSlot 3, "HRpgWarAxe";
 		Player.WeaponSlot 4, "HRpgBlaster";
 		Player.WeaponSlot 5, "HRpgSkullRod";
 		Player.WeaponSlot 6, "HRpgPhoenixRod";
