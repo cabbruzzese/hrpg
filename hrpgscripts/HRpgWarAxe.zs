@@ -140,6 +140,7 @@ class HRpgWarAxePowered : HRpgWarAxe
 		Weapon.AmmoGive 0;
 		Weapon.SisterWeapon "HRpgWarAxe";
 		Tag "$TAG_WARAXE";
+		Obituary "$OB_MPPWARAXE";
 	}
 
 	States

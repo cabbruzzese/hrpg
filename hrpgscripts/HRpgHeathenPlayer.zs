@@ -24,7 +24,7 @@ class HRpgHeathenPlayer : HRpgPlayer
 		Player.WeaponSlot 1, "HRpgGauntlets", "HRpgHammer";
 		Player.WeaponSlot 2, "HRpgGoldWand";
 		Player.WeaponSlot 3, "HRpgWarAxe";
-		Player.WeaponSlot 4, "HRpgBlaster";
+		Player.WeaponSlot 4, "HRpgFlail";
 		Player.WeaponSlot 5, "HRpgSkullRod";
 		Player.WeaponSlot 6, "HRpgPhoenixRod";
 		Player.WeaponSlot 7, "HRpgMace";

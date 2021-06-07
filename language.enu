@@ -7,6 +7,7 @@ TXT_VAMPIRESPELL = "You have learned the Vampire Spell.";
 TXT_VOLCANOSPELL = "You have learned the Volcano Spell.";
 TXT_LIGHTNINGSPELL = "You have learned the Lightning Spell.";
 TXT_WPNWARAXE = "You have found the War Axe.";
+TXT_WPNFLAIL = "You have found the Flail.";
 
 TAG_HAMMER = "War Hammer";
 TAG_SPELLBOOK = "Spell Book";
@@ -16,6 +17,7 @@ TAG_VAMPIRESPELL = "Vampire Spell";
 TAG_VOLCANOSPELL = "Volcano Spell";
 TAG_LIGHTNINGSPELL = "Lightning Spell";
 TAG_WARAXE = "War Axe";
+TAG_FLAIL = "Flail";
 
 OB_MPHAMMER = "%o stopped, for it was %k's hammer time.";
 OB_MPSPELLBOOKFIRE = "%o has a burning question about %k's spell book.";
@@ -26,6 +28,7 @@ OB_MPSKULLBASH = "%o didn't dodge %k's ram attack.";
 OB_MPMACEHIT = "%o was bashed mercilessly by %k's firemace.";
 OB_MPPHOENIXFLOORFIRE = "%o got hot feet from %k's inferno.";
 OB_MPWARAXE = "%o was chopped in half by %k's war axe.";
+OB_MPFLAIL = "%o is mourning %k's star.";
 
 OB_MPPHAMMER = "%o went out for drinks with %k and got hammered.";
 OB_MPPHAMMERMAGIC = "%o got nailed by %k's magic hammer.";
@@ -36,6 +39,7 @@ OB_MPPHORNBALL = "%o was melted by %k's magic blast.";
 OB_MPPMACEHIT = "%o was immolate by %k's firemace.";
 OB_MPPPHOENIXFIREBALL = "%o was singed by %k's fire balls.";
 OB_MPPWARAXE = "%o got a splitting headache from %k's war axe.";
+OB_MPPFLAIL = "%o is just yanking %k's chain.";
 
 OB_FIREBALLSPELL = "%o was burned out on %k's Fireball.";
 OB_ICESPELL = "%o is now vanilla flavored from %k's Ice Ice, baby.";

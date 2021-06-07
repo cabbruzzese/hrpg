@@ -142,6 +142,10 @@ Weee!!!!
 
 Heretic is a product of Raven Software and id Software.
 
+## Special Thanks
+
+* neoworm and gerolf for base sprites for Flail
+
 # Contributing
 
 This mod is entirely just putzing around with ZScript while trying to make a better COOP experience for local LAN play. If you have any suggestions, drop a line on the [ZDOOM forums thread](https://forum.zdoom.org/viewtopic.php?f=43&t=72263).
