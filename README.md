@@ -125,7 +125,7 @@ A burning hatred coupled with volcanic retribution.
 ### Runt
 Weee!!!!
 
-#Credits
+# Credits
 
 Heretic is a product of Raven Software and id Software.
 
