@@ -112,9 +112,9 @@ class HRpgMaul : HeathenWeapon
 				return;
 		}
 		
-		A_StartSound ("weapons/phoenixpowshoot", CHAN_VOICE);
-
 		SpawnPlayerMissile ("MaulFloorFireFX2", angle + angleMod);
+		
+		A_StartSound("weapons/gauntletsuse", CHAN_WEAPON);
 	}
 }
 

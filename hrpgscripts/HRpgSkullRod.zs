@@ -112,6 +112,8 @@ class HRpgSkullRod : NonHeathenWeapon replaces SkullRod
 			FirePurpleBall(9);
 			FirePurpleBall(-9);
 		}
+		
+		A_StartSound ("weapons/hornrodpowshoot", CHAN_WEAPON);
 	}
 }
 
