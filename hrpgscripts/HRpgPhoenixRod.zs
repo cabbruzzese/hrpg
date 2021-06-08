@@ -1,6 +1,6 @@
 // Phoenix Rod --------------------------------------------------------------
 
-class HRpgPhoenixRod : Weapon replaces PhoenixRod
+class HRpgPhoenixRod : NonHeathenWeapon replaces PhoenixRod
 {
 	Default
 	{
@@ -14,6 +14,8 @@ class HRpgPhoenixRod : Weapon replaces PhoenixRod
 		Weapon.Sisterweapon "HRpgPhoenixRodPowered";
 		Inventory.PickupMessage "$TXT_WPNPHOENIXROD";
 		Tag "$TAG_PHOENIXROD";
+		
+		HRpgWeapon.ExtraSpawnItem "HRpgMaul";
 	}
 
 	States

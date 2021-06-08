@@ -1,6 +1,6 @@
 // Skull (Horn) Rod ---------------------------------------------------------
 
-class HRpgSkullRod : HereticWeapon replaces SkullRod
+class HRpgSkullRod : NonHeathenWeapon replaces SkullRod
 {
 	Default
 	{
@@ -13,6 +13,8 @@ class HRpgSkullRod : HereticWeapon replaces SkullRod
 		Inventory.PickupMessage "$TXT_WPNSKULLROD";
 		Tag "$TAG_SKULLROD";
 		Obituary "$OB_MPSKULLBASH";
+		
+		HRpgWeapon.ExtraSpawnItem "HRpgTrident";
 	}
 
 	States
@@ -34,12 +36,9 @@ class HRpgSkullRod : HereticWeapon replaces SkullRod
 		HROD B 0 A_ReFire;
 		Goto Ready;
 	AltFire:
-		HROD C 4 Offset(0, 80) A_ChargeForward(0, 0, 0, 5);
-		HROD D 4 Offset(0, 60) A_ChargeForward(0, 0, 0, 15);
-		HROD E 4 Offset(0, 40) A_ChargeForward(1, 500, random(8,13), 10);
-		HROD F 4 Offset(0, 0) A_ChargeForward(1, 500, random(13,18), 5);
-		HROD G 4 Offset(0, 0) A_ChargeForward(1, 500, random(18,23), 5);
-		HROD FED 2;
+		HROD CDEF 4;
+		HROD G 4 A_FireSkullRodPL3(0);
+		HROD FED 4;
 		HROD C 2 A_ReFire;
 		Goto Ready;
 	}
@@ -78,48 +77,40 @@ class HRpgSkullRod : HereticWeapon replaces SkullRod
 		}
 	}
 	
-	action void A_ChargeForward(int attack, int kickback, int damage, int thrust)
+	action void FirePurpleBall(double angleMod)
 	{
-		Thrust(thrust, angle);
+		let mo = SpawnPlayerMissile ("HornBallFX1", angle + angleMod);
 		
-		if (attack)
+		//Scale up damage with level
+		let hrpgPlayer = HRpgPlayer(player.mo);
+		if (hrpgPlayer != null)
 		{
-		
-			FTranslatedLineTarget t;
-			int kickbackSave;
+			hrpgPlayer.SetProjectileDamageForMagic(mo);
+		}
+	}
+	
+	action void A_FireSkullRodPL3(int powered)
+	{
+		if (player == null)
+		{
+			return;
+		}
 
-			if (player == null)
+		Weapon weapon = player.ReadyWeapon;
+		if (weapon != null)
+		{
+			if (!weapon.DepleteAmmo (false))
 			{
+				weapon.CheckAmmo(Weapon.PrimaryFire, true);
 				return;
 			}
-			
-			//Scale up damage with level
-			let hrpgPlayer = HRpgPlayer(player.mo);
-			if (hrpgPlayer != null)
-				damage = hrpgPlayer.GetDamageForMelee(damage);
-				
-			//Scale up damage with berserk
-			let berserk = Powerup(FindInventory("PowerStrength2"));
-			if (berserk)
-			{
-				damage *= 2;
-			}
-
-			Weapon weapon = player.ReadyWeapon;
-
-			double slope = AimLineAttack (angle, DEFMELEERANGE * 1.1);
-			
-			kickbackSave = weapon.Kickback;
-			weapon.Kickback = kickback;
-			LineAttack (angle, DEFMELEERANGE * 1.1, slope, damage, 'Melee', "HornRodPuff", true, t);
-			weapon.Kickback = kickbackSave;
-			
-			if (t.linetarget)
-			{
-				//S_StartSound(player.mo, sfx_stfhit);
-				// turn to face target
-				angle = t.angleFromSource;
-			}
+		}
+		
+		FirePurpleBall(0);
+		if (powered)
+		{
+			FirePurpleBall(9);
+			FirePurpleBall(-9);
 		}
 	}
 }
@@ -153,7 +144,7 @@ class HRpgSkullRodPowered : HRpgSkullRod replaces SkullRodPowered
 		HROD D 2;
 		HROD E 2;
 		HROD F 2;
-		HROD G 2 A_FireSkullRodPL3;
+		HROD G 2 A_FireSkullRodPL3(1);
 		HROD F 2;
 		HROD E 2;
 		HROD D 2;
@@ -197,27 +188,6 @@ class HRpgSkullRodPowered : HRpgSkullRod replaces SkullRodPowered
 			}
 			MissileActor.A_StartSound ("weapons/hornrodpowshoot", CHAN_WEAPON);
 		}
-	}
-	
-	action void A_FireSkullRodPL3()
-	{
-		if (player == null)
-		{
-			return;
-		}
-
-		Weapon weapon = player.ReadyWeapon;
-		if (weapon != null)
-		{
-			if (!weapon.DepleteAmmo (false))
-			{
-				weapon.CheckAmmo(Weapon.PrimaryFire, true);
-				return;
-			}
-		}
-		SpawnPlayerMissile ("HornBallFX1", angle + 9);
-		SpawnPlayerMissile ("HornBallFX1");
-		SpawnPlayerMissile ("HornBallFX1", angle - 9);
 	}
 }
 

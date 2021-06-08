@@ -15,7 +15,7 @@ The base class. Starts with the most Trickery and is the fastest. All ranged wea
 
 Best at movement and stealth.
 
-Soul Essences give temporary invisibility.
+Soul Essences give temporary invisibility. Other powerups also take effect after reaching higher levels.
 
 When the heretic attacks an unsuspecting foe, or one engaged in another fight, he deals a big surprise attack bonus. Be quick to catch the monsters off guard.
 
@@ -75,41 +75,25 @@ Every class gains some health back.
 - Heathen gains armor and goes berserk, giving a damage bonus to the melee weapons.
 - Blasphemer gains some ammo.
 
-## Melee Alt Fires
-Each weapon gains an alt fire designed to either help push away monsters, provide a big whack, or just plain give the player access to monster attacks that you've always wanted to try out.
+## Weapons
 
-### WarHammer
-Bashes foes with one single hit, or a swipe that make 3 weaker attacks in a line.
+### Blasphemer Spellbook
 
-### Spellbook
-Sends a blast of fire through enemies, or does a close up cold touch attack.
+The no-ammo weapon for this magic user is a spellbook with medium and short range spells that specialize in crowd damage.
 
-### Staff
-Swing's staff horizontally and pushes monsters back.
+In addition, there are new spells that the Blasphemer learns when leveling, usable like items.
 
-### Gauntlets
-A single blast of red lightning that pushes monsters back.
+### Heathen Melee Weapons
+The Heathen's aresenal has been replaced by melee weapons with much weaker ranged alt fires. The ranged attacks use ammo.
 
-### Gold Wand
-Turns that badboy around and makes an offhand staff thrust attack.
+ - Warhammer
+ - War Axe
+ - Flail
+ - Trident
+ - Maul
 
-### Ethereal Crossbow
-Whips out one of those knight axes and chucks it at foes.
-
-### Dragon Claw
-Swings a mourning star on a chain that follows your view. Swing horizontally this for maximum effect.
-
-### Hellstaff
-Charges, ram horns first, sending your enemies backwards and out of your way. Great for a quick get-away.
-
-### Pheonix Rod
-Sets the ground alight to trip up advancing foes.
-
-### Fire Mace
-A swift smash with this makes brings the wrath of crucible fires down upon your enemy, pushing them away. Hopefully they won't be dumb enough to come back for another.
-
-### Tome Alt Fire
-Experiment and enjoy.
+### Alt Fires
+Each weapon gains an alt fire designed to bridge some of the gaps for each weapon, such as slower and more accurate blasts for rapid fire weapons.
 
 ## New Monsters
 
@@ -135,6 +119,9 @@ Leaves a sting with ranged attacks.
 #### Ice
 Dodging their shots may still leave you with a cold reception.
 
+#### Fire
+A burning hatred coupled with volcanic retribution.
+
 ### Runt
 Weee!!!!
 
@@ -144,7 +131,8 @@ Heretic is a product of Raven Software and id Software.
 
 ## Special Thanks
 
-* neoworm and gerolf for base sprites for Flail
+* neoworm for base sprites for Flail and Trident
+* gerolf for base sprites for Flail
 
 # Contributing
 

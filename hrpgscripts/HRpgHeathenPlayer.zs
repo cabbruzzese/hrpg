@@ -25,8 +25,8 @@ class HRpgHeathenPlayer : HRpgPlayer
 		Player.WeaponSlot 2, "HRpgGoldWand";
 		Player.WeaponSlot 3, "HRpgWarAxe";
 		Player.WeaponSlot 4, "HRpgFlail";
-		Player.WeaponSlot 5, "HRpgSkullRod";
-		Player.WeaponSlot 6, "HRpgPhoenixRod";
+		Player.WeaponSlot 5, "HRpgTrident";
+		Player.WeaponSlot 6, "HRpgMaul";
 		Player.WeaponSlot 7, "HRpgMace";
 
 		Player.ColorRange 225, 240;
