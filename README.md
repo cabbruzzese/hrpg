@@ -131,7 +131,7 @@ Heretic is a product of Raven Software and id Software.
 
 ## Special Thanks
 
-* neoworm for base sprites for Flail and Trident
+* neoworm for base sprites for Flail, Trident, and Firemace
 * gerolf for base sprites for Flail
 
 # Contributing

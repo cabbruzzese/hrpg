@@ -497,7 +497,7 @@ class LightningSpell : HRpgSpellItem
 			return;
 		}
 
-		let mo = FireSpellProjectile(bPlayer, -6, "LightningFX1", false);
+		let mo = FireSpellProjectile(bPlayer, 0, "LightningFX1", false);
 		
 		//Set Timelimit by Corruption value
 		if (mo)

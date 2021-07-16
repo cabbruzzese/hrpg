@@ -21,36 +21,67 @@ class HRpgMace : HereticWeapon replaces Mace
 		WMCE A -1;
 		Stop;
 	Ready:
-		MACE A 1 A_WeaponReady;
+		HMAC A 1 A_WeaponReady;
 		Loop;
 	Deselect:
-		MACE A 1 A_Lower;
+		HMAC A 1 A_Lower;
 		Loop;
 	Select:
-		MACE A 1 A_Raise;
+		HMAC A 1 A_Raise;
 		Loop;
 	Fire:
+		HMAC A 1 A_MaceAttackRandomize;
+		HMAC G 6;
+		HMAC H 3;
+		HMAC I 3 A_MaceMeleeAttack(random(35, 75), "MacePuff1", 150);
+		HMAC J 3;
+		HMAC K 3;
+		HMAC K 10;
+		HMAC K 2 A_ReFire;
+		Goto Ready;
+	Fire2:
+		HMAC B 6;
+		HMAC C 3;
+		HMAC D 3 A_MaceMeleeAttack(random(35, 75), "MacePuff1", 150);
+		HMAC E 3;
+		HMAC F 3;
+		HMAC F 10;
+		HMAC F 2 A_ReFire;
+		Goto Ready;
+	AltFire:
 		MACE B 4;
-	Hold:
+	AltHold:
 		MACE CDEF 3 A_FireMacePL1;
 		MACE C 4 A_ReFire;
 		MACE DEFB 4;
-		Goto Ready;
-	AltFire:
-		MMAC A 4;
-		MMAC B 4 A_MaceMeleeAttack(random(35, 75), "MacePuff1", 150);
-		MMAC C 4;
-		MMAC D 12;
-		MMAC D 2 A_ReFire;
 		Goto Ready;
 	}
 	
 	//----------------------------------------------------------------------------
 	//
+	// PROC A_MaceAttackRandomize
+	//
+	//----------------------------------------------------------------------------
+	action void A_MaceAttackRandomize()
+	{
+		if (player == null)
+		{
+			return;
+		}
+
+		int attacktype = random(0, 2);
+
+		if (attacktype == 1)
+		{
+			player.SetPsprite(PSP_WEAPON, player.ReadyWeapon.FindState("Fire2"));
+		}
+	}
+
+	//----------------------------------------------------------------------------
+	//
 	// PROC A_FireMacePL1
 	//
 	//----------------------------------------------------------------------------
-
 	action void A_FireMacePL1()
 	{
 		if (player == null)
@@ -134,11 +165,11 @@ class HRpgMace : HereticWeapon replaces Mace
 		Weapon weapon = player.ReadyWeapon;
 
 		double ang = angle + Random2[StaffAtk]() * (5.625 / 256);
-		double slope = AimLineAttack (ang, DEFMELEERANGE * 1.3);
+		double slope = AimLineAttack (ang, DEFMELEERANGE * 1.2);
 		
 		kickbackSave = weapon.Kickback;
 		weapon.Kickback = kickback;
-		LineAttack (ang, DEFMELEERANGE * 1.3, slope, damage, 'Melee', puff, true, t);
+		LineAttack (ang, DEFMELEERANGE * 1.2, slope, damage, 'Melee', puff, true, t);
 		weapon.Kickback = kickbackSave;
 		
 		if (t.linetarget)
@@ -165,18 +196,30 @@ class HRpgMacePowered : HRpgMace replaces MacePowered
 	States
 	{
 	Fire:
-	Hold:	
+		HMAC A 1 A_MaceAttackRandomize;
+		HMAC G 6;
+		HMAC H 3;
+		HMAC I 3 A_MaceMeleeAttack(random(55, 95), "MacePuff2", 250);
+		HMAC J 3;
+		HMAC K 3;
+		HMAC K 10;
+		HMAC K 2 A_ReFire;
+		Goto Ready;
+	Fire2:
+		HMAC B 6;
+		HMAC C 3;
+		HMAC D 3 A_MaceMeleeAttack(random(55, 95), "MacePuff2", 250);
+		HMAC E 3;
+		HMAC F 3;
+		HMAC F 10;
+		HMAC F 2 A_ReFire;
+		Goto Ready;
+	AltFire:
+	AltHold:	
 		MACE B 4;
 		MACE D 4 A_FireMacePL2;
 		MACE B 4;
 		MACE A 8 A_ReFire;
-		Goto Ready;
-	AltFire:
-		MMAC A 4;
-		MMAC B 4 A_MaceMeleeAttack(random(55, 95), "MacePuff2", 250);
-		MMAC C 4;
-		MMAC D 12;
-		MMAC D 2 A_ReFire;
 		Goto Ready;
 	}
 	
