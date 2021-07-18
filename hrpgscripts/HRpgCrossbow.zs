@@ -90,7 +90,7 @@ class HRpgCrossbow : NonHeathenWeapon replaces Crossbow
 			Weapon weapon = player.ReadyWeapon;
 			if (weapon != null)
 			{
-				if (useammo && !weapon.DepleteAmmo (false))
+				if (!weapon.DepleteAmmo (false))
 				{
 					weapon.CheckAmmo(Weapon.PrimaryFire, true);
 					return;
