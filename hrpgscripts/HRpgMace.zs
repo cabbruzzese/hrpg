@@ -31,6 +31,13 @@ class HRpgMace : HereticWeapon replaces Mace
 		Loop;
 	Fire:
 		HMAC A 1 A_MaceAttackRandomize;
+	Hold:
+		MACE B 1 A_MaceAttackRandomize;
+		MACE CDEF 3 A_FireMacePL1(0.0, 1, 1);
+		MACE C 4 A_ReFire;
+		MACE DEFB 4;
+		Goto Ready;
+	Fire2:
 		HMAC G 6;
 		HMAC H 3;
 		HMAC I 3 A_MaceMeleeAttack(random(35, 75), "MacePuff1", 150);
@@ -39,7 +46,7 @@ class HRpgMace : HereticWeapon replaces Mace
 		HMAC K 10;
 		HMAC K 2 A_ReFire;
 		Goto Ready;
-	Fire2:
+	Fire3:
 		HMAC B 6;
 		HMAC C 3;
 		HMAC D 3 A_MaceMeleeAttack(random(35, 75), "MacePuff1", 150);
@@ -48,7 +55,7 @@ class HRpgMace : HereticWeapon replaces Mace
 		HMAC F 10;
 		HMAC F 2 A_ReFire;
 		Goto Ready;
-	Fire3:
+	AltFire:
 		HMAC G 6;
 		HMAC H 3;
 		HMAC I 3 A_MaceAttackArc(0);
@@ -57,15 +64,8 @@ class HRpgMace : HereticWeapon replaces Mace
 		HMAC K 10;
 		HMAC K 2 A_ReFire;
 		Goto Ready;
-	AltFire:
-		MACE B 4;
-	AltHold:
-		MACE CDEF 3 A_FireMacePL1(0.0, 1, 1);
-		MACE C 4 A_ReFire;
-		MACE DEFB 4;
-		Goto Ready;
 	}
-	
+
 	//----------------------------------------------------------------------------
 	//
 	// PROC A_MaceAttackRandomize
@@ -85,12 +85,12 @@ class HRpgMace : HereticWeapon replaces Mace
 
 			if (attacktype == 1)
 			{
+				player.SetPsprite(PSP_WEAPON, player.ReadyWeapon.FindState("Fire3"));
+			}
+			else
+			{
 				player.SetPsprite(PSP_WEAPON, player.ReadyWeapon.FindState("Fire2"));
 			}
-		}
-		else
-		{
-			player.SetPsprite(PSP_WEAPON, player.ReadyWeapon.FindState("Fire3"));
 		}
 	}
 
@@ -255,6 +255,14 @@ class HRpgMacePowered : HRpgMace replaces MacePowered
 	{
 	Fire:
 		HMAC A 1 A_MaceAttackRandomize;
+	Hold:	
+		MACE B 1 A_MaceAttackRandomize;
+		MACE B 3;
+		MACE D 4 A_FireMacePL2;
+		MACE B 4;
+		MACE A 8 A_ReFire;
+		Goto Ready;
+	Fire2:
 		HMAC G 6;
 		HMAC H 3;
 		HMAC I 3 A_MaceMeleeAttack(random(55, 95), "MacePuff2", 250);
@@ -263,7 +271,7 @@ class HRpgMacePowered : HRpgMace replaces MacePowered
 		HMAC K 10;
 		HMAC K 2 A_ReFire;
 		Goto Ready;
-	Fire2:
+	Fire3:
 		HMAC B 6;
 		HMAC C 3;
 		HMAC D 3 A_MaceMeleeAttack(random(55, 95), "MacePuff2", 250);
@@ -272,7 +280,7 @@ class HRpgMacePowered : HRpgMace replaces MacePowered
 		HMAC F 10;
 		HMAC F 2 A_ReFire;
 		Goto Ready;
-	Fire3:
+	AltFire:
 		HMAC G 6;
 		HMAC H 3;
 		HMAC I 3 A_MaceAttackArc(1);
@@ -280,13 +288,6 @@ class HRpgMacePowered : HRpgMace replaces MacePowered
 		HMAC K 3;
 		HMAC K 10;
 		HMAC K 2 A_ReFire;
-		Goto Ready;
-	AltFire:
-	AltHold:	
-		MACE B 4;
-		MACE D 4 A_FireMacePL2;
-		MACE B 4;
-		MACE A 8 A_ReFire;
 		Goto Ready;
 	}
 	
