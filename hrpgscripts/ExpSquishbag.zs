@@ -7,12 +7,19 @@ const BOSSTYPE_CHANCE_BRUTE = 10;
 const BOSSTYPE_CHANCE_SPECTRE = 4;
 const BOSSTYPE_CHANCE_LEADER = 2;
 const BOSSTYPE_CHANCE_RUNT = 6;
+
 const BOSSTYPE_SUBCHANCE_POISON = 25;
 const BOSSTYPE_SUBCHANCE_ICE = 25;
 const BOSSTYPE_SUBCHANCE_FIRE = 25;
+const BOSSTYPE_SUBCHANCE_LIGHTNING = 25;
+const BOSSTYPE_SUBCHANCE_DEATH = 25;
+const BOSSTYPE_SUBCHANCE_STONE = 25;
 
 const SNEAK_ATTACK_BONUS = 3.0;
 const SNEAK_DELAY_TIME = 30;
+
+const DROP_AMMO_CHANCE = 70;
+const DROP_SKULL_CHANCE = 35;
 
 enum EWanderingMonsterFlags
 {
@@ -27,8 +34,16 @@ enum ELeaderTypeFlags
 	WML_STONE = 1,
 	WML_POISON = 2,
 	WML_ICE = 4,
-	WML_FIRE = 8
+	WML_FIRE = 8,
+	WML_DEATH = 16,
+	WML_LIGHTNING = 32,
 };
+
+struct LeaderProps
+{
+	int BossFlag;
+	int LeaderFlag;
+}
 
 class ExpSquishbag : Actor
 {
@@ -70,6 +85,13 @@ class ExpSquishbag : Actor
 			missileType = "PoisonBall";
 		else if (LeaderType & WML_ICE)
 			missileType = "HeadFX1";
+		else if (LeaderType & WML_LIGHTNING)
+			missileType = "Sorcerer2FX1";
+		else if (LeaderType & WML_DEATH)
+		{
+			A_FireDeathShot(target);
+			return;
+		}
 		else if (LeaderType & WML_FIRE)
 		{			
 			A_FireVolcanoShot(target);
@@ -79,6 +101,16 @@ class ExpSquishbag : Actor
 		A_CustomComboAttack(missiletype, spawnheight, damage, meleesound, damagetype, bleed);
 	}
 	
+	void A_FireDeathShot(Actor targ)
+	{
+		Actor mo = SpawnMissile (targ, "DeathMonsterBlast");
+		if (mo != null)
+		{
+			SpawnMissileAngle("DeathMonsterBlast", mo.Angle - 6, mo.Vel.Z);
+			SpawnMissileAngle("DeathMonsterBlast", mo.Angle + 6, mo.Vel.Z);
+		}
+	}
+
 	void A_FireVolcanoShot(Actor targ)
 	{
 		SpawnMissileAngleZSpeed(pos.Z + 36, "VolcanoMonsterBlast", angle + 0, 1, 12, self);
@@ -116,7 +148,21 @@ class ExpSquishbag : Actor
 	
 	override void Die(Actor source, Actor inflictor, int dmgflags, Name MeansOfDeath)
 	{
-		A_DropItem("HRpgSkullItem", 1, 35);
+		A_DropItem("HRpgSkullItem", 1, DROP_SKULL_CHANCE);
+
+		if (LeaderType & WML_POISON)
+			A_DropItem("CrossbowHefty", 20, DROP_AMMO_CHANCE);
+		else if (LeaderType & WML_ICE)
+			A_DropItem("BlasterHefty", 25, DROP_AMMO_CHANCE);
+		else if (LeaderType & WML_FIRE)
+			A_DropItem("PhoenixRodHefty", 100, DROP_AMMO_CHANCE);
+		else if (LeaderType & WML_STONE)
+			A_DropItem("SkullRodHefty", 100, DROP_AMMO_CHANCE);
+		else if (LeaderType & WML_LIGHTNING)
+			A_DropItem("GoldWandHefty", 50, DROP_AMMO_CHANCE);
+		else if (LeaderType & WML_DEATH)
+			A_DropItem("MaceHefty", 100, DROP_AMMO_CHANCE);
+		
 		Super.Die(source, inflictor, dmflags, MeansOfDeath);
 
 		if (IsRespawnable)
@@ -127,6 +173,28 @@ class ExpSquishbag : Actor
 				RespawnLevel = hrpgPlayer.ExpLevel;
 			}
 			RespawnWaitTics = random(RESPAWN_TICS_MIN, RESPAWN_TICS_MAX) + RespawnWaitBonus;
+		}
+	}
+
+	int GetPlayerLevel()
+	{
+		let hrpgPlayer = HRpgPlayer(players[0].mo);		
+		if (hrpgPlayer == null)
+			return 1;
+
+		return hrpgPlayer.ExpLevel;
+	}
+
+	override void PostBeginPlay()
+	{
+		Super.PostBeginPlay();
+
+		if (IsRespawnable)
+		{
+			RespawnLevel = GetPlayerLevel();
+			LeaderProps props;
+			GetWanderingMonsterProperties(props);
+			ApplyLeaderProps(props);
 		}
 	}
 	
@@ -202,6 +270,16 @@ class ExpSquishbag : Actor
 			A_SetTranslation("RedSkin");
 			Health *= 2;
 		}
+		else if (LeaderType & WML_LIGHTNING)
+		{
+			A_SetTranslation("LightningSkin");
+			Health *= 2;
+		}
+		else if (LeaderType & WML_DEATH)
+		{
+			A_SetTranslation("DeathSkin");
+			Health *= 2;
+		}
 		else
 		{
 			A_SetTranslation("StoneSkin");
@@ -224,56 +302,74 @@ class ExpSquishbag : Actor
 		LeaderType = 0; // Clear special damage
 	}
 	
-	void ApplyRespawnBoss(int bossFlag, int leaderFlag)
+	void ApplyLeaderProps(LeaderProps props)
 	{
 		SetNormal();
 		
-		LeaderType = leaderFlag;
+		LeaderType = props.LeaderFlag;
 
 		//Runt cannot combine
-		if (bossFlag & WMF_RUNT)
+		if (props.BossFlag & WMF_RUNT)
 		{
 			SetRunt();
 		}
 		else
 		{
-			if (bossFlag & WMF_BRUTE)
+			if (props.BossFlag & WMF_BRUTE)
 				SetBrute();
-			if (bossFlag & WMF_SPECTRE)
+			if (props.BossFlag & WMF_SPECTRE)
 				SetSpectre();
-			if (bossFlag & WMF_LEADER)
+			if (props.BossFlag & WMF_LEADER)
 				SetLeader();
 		}
 	}
 	
-	void WanderingMonsterRespawn()
+	void GetWanderingMonsterProperties(out LeaderProps props)
 	{
-		int bossFlag = 0;
-		int leaderFlag = 0;
+		props.BossFlag = 0;
+		props.LeaderFlag = 0;
 		if ((random(1,100) - RespawnLevel) < BOSSTYPE_CHANCE_BRUTE)
-			bossFlag |= WMF_BRUTE;
+			props.BossFlag |= WMF_BRUTE;
 		if ((random(1,100) - RespawnLevel) < BOSSTYPE_CHANCE_SPECTRE)
-			bossFlag |= WMF_SPECTRE;
+			props.BossFlag |= WMF_SPECTRE;
 		if ((random(1,100) - RespawnLevel) < BOSSTYPE_CHANCE_LEADER)
 		{
-			bossFlag |= WMF_LEADER;
+			props.BossFlag |= WMF_LEADER;
 			
-			let bossRoll = random(1,100);
+			let bossMaxChance = BOSSTYPE_SUBCHANCE_POISON + 
+								BOSSTYPE_SUBCHANCE_ICE + 
+								BOSSTYPE_SUBCHANCE_FIRE + 
+								BOSSTYPE_SUBCHANCE_LIGHTNING + 
+								BOSSTYPE_SUBCHANCE_DEATH + 
+								BOSSTYPE_SUBCHANCE_STONE;
+			
+			let bossRoll = random(1,bossMaxChance);
+			
 			if (bossRoll < BOSSTYPE_SUBCHANCE_POISON)
-				leaderFlag = WML_POISON;
+				props.LeaderFlag = WML_POISON;
 			else if (bossRoll < BOSSTYPE_SUBCHANCE_POISON + BOSSTYPE_SUBCHANCE_ICE)
-				leaderFlag = WML_ICE;
+				props.LeaderFlag = WML_ICE;
 			else if (bossRoll < BOSSTYPE_SUBCHANCE_POISON + BOSSTYPE_SUBCHANCE_ICE + BOSSTYPE_SUBCHANCE_FIRE)
-				leaderFlag = WML_FIRE;
+				props.LeaderFlag = WML_FIRE;
+			else if (bossRoll < BOSSTYPE_SUBCHANCE_POISON + BOSSTYPE_SUBCHANCE_ICE + BOSSTYPE_SUBCHANCE_FIRE + BOSSTYPE_SUBCHANCE_LIGHTNING)
+				props.LeaderFlag = WML_LIGHTNING;
+			else if (bossRoll < BOSSTYPE_SUBCHANCE_POISON + BOSSTYPE_SUBCHANCE_ICE + BOSSTYPE_SUBCHANCE_FIRE + BOSSTYPE_SUBCHANCE_LIGHTNING + BOSSTYPE_SUBCHANCE_DEATH)
+				props.LeaderFlag = WML_DEATH;
 			else
-				leaderFlag = WML_STONE;
+				props.LeaderFlag = WML_STONE;
 		}
 			
 		if ((random(1,100)) < BOSSTYPE_CHANCE_RUNT) //since runts override all, do not scale their spawn chance with leveling
-			bossFlag = WMF_RUNT;
+			props.BossFlag = WMF_RUNT;
+	}
+
+	void WanderingMonsterRespawn()
+	{
+		LeaderProps props;
+		GetWanderingMonsterProperties(props);
 
 		//If only respawns bosses, reset timer and try again later
-		if (IsBossOnly && leaderFlag == 0)
+		if (IsBossOnly && props.LeaderFlag == 0)
 		{
 			RespawnWaitTics = random(RESPAWN_TICS_MIN, RESPAWN_TICS_MAX);//no bonus for this respawnLevel
 			return;
@@ -284,7 +380,7 @@ class ExpSquishbag : Actor
 
 		A_Respawn(false);
 		
-		ApplyRespawnBoss(bossFlag, leaderFlag);
+		ApplyLeaderProps(props);
 	}
 }
 
@@ -400,5 +496,37 @@ class VolcanoMonsterBlast : Actor
 				tiny.CheckMissileSpawn (radius);
 			}
 		}
+	}
+}
+
+class DeathMonsterBlast : MummyFX1
+{
+	Default
+	{
+		Radius 8;
+		Height 14;
+		Speed 10;
+		FastSpeed 12;
+		Damage 8;
+		RenderStyle "Add";
+		Projectile;
+		-ACTIVATEPCROSS
+		-ACTIVATEIMPACT
+		+SEEKERMISSILE
+		+ZDOOMTRANS
+		Translation "DeathSkin";
+		Scale 1.5;
+	}
+	States
+	{
+	Spawn:
+		FX15 A 5 Bright A_StartSound("mummy/head");
+		FX15 B 5 Bright A_SeekerMissile(10, 20, SMF_LOOK, 50, 20);
+		FX15 C 5 Bright;
+		FX15 B 5 Bright A_SeekerMissile(10, 20, SMF_LOOK, 50, 20);
+		Loop;
+	Death:
+		FX15 DEFG 5 Bright;
+		Stop;
 	}
 }
