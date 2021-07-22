@@ -180,7 +180,12 @@ class HRpgMace : HereticWeapon replaces Mace
 				psp.x = random[MaceAtk](-2, 1);
 				psp.y = WEAPONTOP + random[MaceAtk](0, 3);
 			}
-			Actor ball = SpawnPlayerMissile("MaceFX1", angle + (random[MaceAtk](-4, 3) * (360. / 256)));
+
+			let fxClass = "MaceFX1";
+			if (canEnlarge == 0)
+				fxClass = "MaceFX5";
+			
+			Actor ball = SpawnPlayerMissile(fxClass, angle + (random[MaceAtk](-4, 3) * (360. / 256)));
 			if (ball)
 			{
 				ball.special1 = 16; // tics till dropoff
@@ -366,5 +371,78 @@ class MacePuff2 : Actor
 	Spawn:
 		FX14 DEFGH 4 BRIGHT;
 		Stop;
+	}
+}
+
+class MaceFX5 : Actor
+{
+	const MAGIC_JUNK = 1234;
+	
+	Default
+	{
+		Radius 8;
+		Height 6;
+		Speed 20;
+		Damage 2;
+		Projectile;
+		+THRUGHOST
+		BounceType "HereticCompat";
+		Obituary "$OB_MPMACE";
+	}
+
+	States
+	{
+	Spawn:
+		FX02 AB 4 A_MacePL1Check;
+		Loop;
+	Death:
+		FX02 F 4 BRIGHT A_MaceBallImpact;
+		FX02 GHIJ 4 BRIGHT;
+		Stop;
+	}
+	
+	//----------------------------------------------------------------------------
+	//
+	// PROC A_MacePL1Check
+	//
+	//----------------------------------------------------------------------------
+
+	void A_MacePL1Check()
+	{
+		if (special1 == 0) return;
+		special1 -= 4;
+		if (special1 > 0) return;
+		special1 = 0;
+		bNoGravity = false;
+		Gravity = 1. / 8;
+		// [RH] Avoid some precision loss by scaling the velocity directly
+		double velscale = 7 / Vel.XY.Length();
+		Vel.XY *= velscale;
+		Vel.Z *= 0.5;
+	}
+
+	//----------------------------------------------------------------------------
+	//
+	// PROC A_MaceBallImpact
+	//
+	//----------------------------------------------------------------------------
+
+	void A_MaceBallImpact()
+	{
+		if ((health != MAGIC_JUNK) && bInFloat)
+		{ // Bounce
+			health = MAGIC_JUNK;
+			Vel.Z *= 0.75;
+			bBounceOnFloors = bBounceOnCeilings = false;
+			SetState (SpawnState);
+			A_StartSound ("weapons/macebounce", CHAN_BODY);
+		}
+		else
+		{ // Explode
+			Vel = (0,0,0);
+			bNoGravity = true;
+			Gravity = 1;
+			A_StartSound ("weapons/macehit", CHAN_BODY);
+		}
 	}
 }
