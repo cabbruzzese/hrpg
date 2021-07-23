@@ -95,7 +95,7 @@ class HRpgKnight : ExpSquishbag replaces Knight
 		}
 		else if (LeaderType & WML_LIGHTNING)
 		{ // Lightning
-			SpawnMissileZ (pos.Z + 36, targ, "Sorcerer2FX1");
+			SpawnMissileZ (pos.Z + 36, targ, "LightningMonsterBlast");
 		}
 		else if (self.bShadow || random[KnightAttack]() < 40 || LeaderType & WML_STONE)
 		{ // Red axe

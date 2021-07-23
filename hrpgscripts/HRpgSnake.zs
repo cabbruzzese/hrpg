@@ -70,7 +70,7 @@ class HRpgSnake : ExpSquishbag replaces Snake
 		}
 		else if (LeaderType & WML_LIGHTNING)
 		{
-			A_SpawnProjectile("Sorcerer2FX1", 32, 0, 0, CMF_CHECKTARGETDEAD);
+			A_SpawnProjectile("LightningMonsterBlast", 32, 0, 0, CMF_CHECKTARGETDEAD);
 		}
 		else
 		{

@@ -86,7 +86,7 @@ class ExpSquishbag : Actor
 		else if (LeaderType & WML_ICE)
 			missileType = "HeadFX1";
 		else if (LeaderType & WML_LIGHTNING)
-			missileType = "Sorcerer2FX1";
+			missileType = "LightningMonsterBlast";
 		else if (LeaderType & WML_DEATH)
 		{
 			A_FireDeathShot(target);
@@ -153,9 +153,9 @@ class ExpSquishbag : Actor
 		if (LeaderType & WML_POISON)
 			A_DropItem("CrossbowHefty", 20, DROP_AMMO_CHANCE);
 		else if (LeaderType & WML_ICE)
-			A_DropItem("BlasterHefty", 25, DROP_AMMO_CHANCE);
+			A_DropItem("BlasterHefty", 40, DROP_AMMO_CHANCE);
 		else if (LeaderType & WML_FIRE)
-			A_DropItem("PhoenixRodHefty", 100, DROP_AMMO_CHANCE);
+			A_DropItem("PhoenixRodHefty", 10, DROP_AMMO_CHANCE);
 		else if (LeaderType & WML_STONE)
 			A_DropItem("SkullRodHefty", 100, DROP_AMMO_CHANCE);
 		else if (LeaderType & WML_LIGHTNING)
@@ -330,8 +330,6 @@ class ExpSquishbag : Actor
 		props.LeaderFlag = 0;
 		if ((random(1,100) - RespawnLevel) < BOSSTYPE_CHANCE_BRUTE)
 			props.BossFlag |= WMF_BRUTE;
-		if ((random(1,100) - RespawnLevel) < BOSSTYPE_CHANCE_SPECTRE)
-			props.BossFlag |= WMF_SPECTRE;
 		if ((random(1,100) - RespawnLevel) < BOSSTYPE_CHANCE_LEADER)
 		{
 			props.BossFlag |= WMF_LEADER;
@@ -358,6 +356,10 @@ class ExpSquishbag : Actor
 			else
 				props.LeaderFlag = WML_STONE;
 		}
+
+		//Don't make Leader types invisible
+		if (!(props.BossFlag & WMF_LEADER) && (random(1,100) - RespawnLevel) < BOSSTYPE_CHANCE_SPECTRE)
+			props.BossFlag |= WMF_SPECTRE;
 			
 		if ((random(1,100)) < BOSSTYPE_CHANCE_RUNT) //since runts override all, do not scale their spawn chance with leveling
 			props.BossFlag = WMF_RUNT;
@@ -507,7 +509,7 @@ class DeathMonsterBlast : MummyFX1
 		Height 14;
 		Speed 10;
 		FastSpeed 12;
-		Damage 8;
+		Damage 6;
 		RenderStyle "Add";
 		Projectile;
 		-ACTIVATEPCROSS
@@ -528,5 +530,55 @@ class DeathMonsterBlast : MummyFX1
 	Death:
 		FX15 DEFG 5 Bright;
 		Stop;
+	}
+}
+
+// Sorcerer 2 FX 1 ----------------------------------------------------------
+
+class LightningMonsterBlast : Actor
+{
+	Default
+	{
+		Radius 10;
+		Height 6;
+		Speed 20;
+		FastSpeed 28;
+		Damage 1;
+		Projectile;
+		-ACTIVATEIMPACT
+		-ACTIVATEPCROSS
+		+ZDOOMTRANS
+		RenderStyle "Add";
+	}
+
+	States
+	{
+	Spawn:
+		FX16 ABC 3 BRIGHT A_BlueSpark;
+		Loop;
+	Death:
+		FX16 G 5 BRIGHT A_Explode(random[S2FX1](50,80));
+		FX16 HIJKL 5 BRIGHT;
+		Stop;
+	}
+	
+	//----------------------------------------------------------------------------
+	//
+	// PROC A_BlueSpark
+	//
+	//----------------------------------------------------------------------------
+
+	void A_BlueSpark ()
+	{
+		for (int i = 0; i < 2; i++)
+		{
+			Actor mo = Spawn("Sorcerer2FXSpark", pos, ALLOW_REPLACE);
+			if (mo != null)
+			{
+				mo.Vel.X = Random2[BlueSpark]() / 128.;
+				mo.Vel.Y = Random2[BlueSpark]() / 128.;
+				mo.Vel.Z = 1. + Random[BlueSpark]() / 256.;
+			}
+		}
 	}
 }
