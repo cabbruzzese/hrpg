@@ -37,6 +37,14 @@ Soul Essences give a small amount of ammo.
 
 The Blasphemer learns spells at level 1, 4, 8, 12, and 16 which are usable in the inventory.
 
+#### Bindings
+The Blasphemer earns spells as he levels. The following can be bound as shortcuts:
+ - use FireballSpell
+ - use IceSpell
+ - use VampireSpell
+ - use VolcanoSpell
+ - use LightningSpell
+
 ## Leveling
 Players now have XP and gain XP when damaging a monster.
 
@@ -121,6 +129,13 @@ Dodging their shots may still leave you with a cold reception.
 
 #### Fire
 A burning hatred coupled with volcanic retribution.
+
+#### Lightning
+Shockingly strong enemies with explosive attacks.
+
+#### Death
+The gravest of threats. When it's your time, they'll follow you anywhere.
+
 
 ### Runt
 Weee!!!!
