@@ -1,0 +1,11 @@
+addkeysection "Simple Heretic RPG: Blasphemer Spells" HRpgBlasphemerKeySection
+AddMenuKey "Fireball" "use FireballSpell"
+defaultbind KP1 "use FireballSpell"
+AddMenuKey "Ice" "use IceSpell"
+defaultbind KP2 "use IceSpell"
+AddMenuKey "Vampire" "use VampireSpell"
+defaultbind KP3 "use VampireSpell"
+AddMenuKey "Volcano" "use VolcanoSpell"
+defaultbind KP4 "use VolcanoSpell"
+AddMenuKey "Lightning" "use LightningSpell"
+defaultbind KP5 "use LightningSpell"
