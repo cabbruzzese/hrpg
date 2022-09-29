@@ -1,11 +1,10 @@
-// Staff --------------------------------------------------------------------
+const HAMMER_MELEE_RANGE = DEFMELEERANGE * 1.25;
 
 class HRpgHammer : HeathenWeapon
 {
 	Default
 	{
 		Weapon.SelectionOrder 2100;
-		+WEAPON.MELEEWEAPON
 		Weapon.sisterweapon "HRpgHammerPowered";
 		Obituary "$OB_MPHAMMER";
 		Tag "$TAG_HAMMER";
@@ -27,7 +26,7 @@ class HRpgHammer : HeathenWeapon
 		WARH A 3;
 		WARH B 3;
 		WARH C 3;
-		WARH D 3 A_HammerAttack(random(15, 35), "WarhammerPuff", 125, 0);
+		WARH D 3 A_HeathenMeleeAttack(random(15, 35), 125, "WarhammerPuff", HAMMER_MELEE_RANGE);
 		WARH E 2;
 		WARH F 2;
 		WARH G 10;
@@ -38,7 +37,7 @@ class HRpgHammer : HeathenWeapon
 		WARH B 2 Offset(150, 0);
 		WARH C 2 Offset(100, 0);
 		WARH C 2 Offset(50, 0);
-		WARH C 2 Offset(1, 0) A_HammerAttack(random(25, 40), "WarhammerPuff", 200, 0);
+		WARH C 2 Offset(1, 0) A_HeathenMeleeAttack(random(25, 40), 200, "WarhammerPuff", HAMMER_MELEE_RANGE);
 		WARH C 2 Offset(-50, 0);
 		WARH C 2 Offset(-100, 0);
 		WARH D 2 Offset(-150, 0);
@@ -46,50 +45,6 @@ class HRpgHammer : HeathenWeapon
 		WARH E 14 Offset(-225, 0);
 		WARH F 2 Offset(-225, 0) A_ReFire;
 		Goto Ready;
-	}
-	
-	//----------------------------------------------------------------------------
-	//
-	// PROC A_HammerAttack
-	//
-	//----------------------------------------------------------------------------
-
-	action void A_HammerAttack (int damage, class<Actor> puff, int kickback, double swingangle)
-	{
-		FTranslatedLineTarget t;
-		int kickbackSave;
-
-		if (player == null)
-		{
-			return;
-		}
-
-		//Scale up damage with level
-		let hrpgPlayer = HRpgPlayer(player.mo);
-		if (hrpgPlayer != null)
-			damage = hrpgPlayer.GetDamageForMelee(damage);
-
-		//Scale up damage with berserk
-		let berserk = Powerup(FindInventory("PowerStrength2"));
-		if (berserk)
-		{
-			damage *= 2;
-		}
-			
-		Weapon weapon = player.ReadyWeapon;
-		if (weapon != null)
-		{
-			if (!weapon.DepleteAmmo (weapon.bAltFire))
-				return;
-		}
-		
-		double ang = angle + swingangle;
-		double slope = AimLineAttack (ang, DEFMELEERANGE * 1.25);
-
-		kickbackSave = weapon.Kickback;
-		weapon.Kickback = kickback;
-		LineAttack (ang, DEFMELEERANGE * 1.25, slope, damage, 'Melee', puff, true, t);
-		weapon.Kickback = kickbackSave;
 	}
 }
 
@@ -120,7 +75,8 @@ class HRpgHammerPowered : HRpgHammer
 		WARH H 3;
 		WARH I 3;
 		WARH J 3;
-		WARH K 3 A_HammerAttack(random(45, 70), "WarhammerPuff2", 175, 0);
+		WARH D 3;
+		WARH K 3 A_HeathenMeleeAttack(random(45, 70), 175, "WarhammerPuff2", HAMMER_MELEE_RANGE);
 		WARH L 2;
 		WARH M 2;
 		WARH N 10;

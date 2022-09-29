@@ -1,3 +1,5 @@
+const WARAXE_MELEE_RANGE = DEFMELEERANGE * 1.25;
+
 class HRpgWarAxe : HeathenWeapon
 {
 	Default
@@ -29,9 +31,9 @@ class HRpgWarAxe : HeathenWeapon
 		Loop;
 	Fire:
 		TAXE B 8;
-		TAXE C 4 A_AxeSwingAttack(random(12, 17), "WarhammerPuff", 125, -20);
-		TAXE D 4 A_AxeSwingAttack(random(12, 25), "WarhammerPuff", 125, 0);
-		TAXE E 4 A_AxeSwingAttack(random(12, 17), "WarhammerPuff", 125, 20);
+		TAXE C 4 A_HeathenMeleeAttack(random(12, 17), 125, "WarhammerPuff", WARAXE_MELEE_RANGE, -20);
+		TAXE D 4 A_HeathenMeleeAttack(random(12, 25), 125, "WarhammerPuff", WARAXE_MELEE_RANGE, 0);
+		TAXE E 4 A_HeathenMeleeAttack(random(12, 17), 125, "WarhammerPuff", WARAXE_MELEE_RANGE, 20);
 		TAXE E 8;
 		TAXE E 4 A_ReFire;
 		Goto Ready;
@@ -41,50 +43,6 @@ class HRpgWarAxe : HeathenWeapon
 		TAXE EEEEE 4 OFFSET(0, 100);
 		TAXE E 4 A_ReFire;
 		Goto Ready;
-	}
-	
-	//----------------------------------------------------------------------------
-	//
-	// PROC A_AxeSwingAttack
-	//
-	//----------------------------------------------------------------------------
-
-	action void A_AxeSwingAttack (int damage, class<Actor> puff, int kickback, double swingangle)
-	{
-		FTranslatedLineTarget t;
-		int kickbackSave;
-
-		if (player == null)
-		{
-			return;
-		}
-
-		//Scale up damage with level
-		let hrpgPlayer = HRpgPlayer(player.mo);
-		if (hrpgPlayer != null)
-			damage = hrpgPlayer.GetDamageForMelee(damage);
-
-		//Scale up damage with berserk
-		let berserk = Powerup(FindInventory("PowerStrength2"));
-		if (berserk)
-		{
-			damage *= 2;
-		}
-			
-		Weapon weapon = player.ReadyWeapon;
-		if (weapon != null)
-		{
-			if (!weapon.DepleteAmmo (weapon.bAltFire))
-				return;
-		}
-		
-		double ang = angle + swingangle;
-		double slope = AimLineAttack (ang, DEFMELEERANGE * 1.25);
-
-		kickbackSave = weapon.Kickback;
-		weapon.Kickback = kickback;
-		LineAttack (ang, DEFMELEERANGE * 1.25, slope, damage, 'Melee', puff, true, t);
-		weapon.Kickback = kickbackSave;
 	}
 	
 	//----------------------------------------------------------------------------
@@ -159,9 +117,9 @@ class HRpgWarAxePowered : HRpgWarAxe
 		Loop;
 	Fire:
 		TAXE B 8;
-		TAXE C 4 A_AxeSwingAttack(random(20, 30), "WarAxePoweredPuff", 175, -20);
-		TAXE D 4 A_AxeSwingAttack(random(20, 40), "WarAxePoweredPuff", 175, 0);
-		TAXE E 4 A_AxeSwingAttack(random(20, 30), "WarAxePoweredPuff", 175, 20);
+		TAXE C 4 A_HeathenMeleeAttack(random(20, 30), 175, "WarAxePoweredPuff", WARAXE_MELEE_RANGE, -20);
+		TAXE D 4 A_HeathenMeleeAttack(random(20, 40), 175, "WarAxePoweredPuff", WARAXE_MELEE_RANGE, 0);
+		TAXE E 4 A_HeathenMeleeAttack(random(20, 30), 175, "WarAxePoweredPuff", WARAXE_MELEE_RANGE, 20);
 		TAXE E 8;
 		TAXE E 4 A_ReFire;
 		Goto Ready;

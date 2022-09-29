@@ -1,6 +1,9 @@
 const XPMULTI = 1000;
 const HEALTHBASE = 100;
 const STATNUM = 4;
+const REGENERATE_TICKS_MAX_DEFAULT = 32;
+const REGENERATE_MIN_VALUE = 15;
+
 
 class HRpgPlayer : HereticPlayer
 {
@@ -10,18 +13,25 @@ class HRpgPlayer : HereticPlayer
 	int brt;
 	int trk;
 	int crp;
+	int regenerateTicks;
+	int regenerateTicksMax;
+
 	property ExpLevel : expLevel;
 	property Exp : exp;
 	property ExpNext : expNext;
 	property Brt : brt;
 	property Trk : trk;
 	property Crp : crp;
-	
+	property RegenerateTicks : regenerateTicks;
+	property RegenerateTicksMax : regenerateTicksMax;
+
 	Default
 	{
 		HRpgPlayer.ExpLevel 1;
 		HRpgPlayer.Exp 0;
 		HRpgPlayer.ExpNext XPMULTI;
+		HRpgPlayer.RegenerateTicks 0;
+		HRpgPlayer.RegenerateTicksMax REGENERATE_TICKS_MAX_DEFAULT;
 		Player.MaxHealth HEALTHBASE;
 		Health HEALTHBASE;
 		Radius 16;
@@ -263,5 +273,30 @@ class HRpgPlayer : HereticPlayer
 			A_SetHealth(MaxHealth);
 			
 		DoLevelGainBlend();
+	}
+
+	void RegenerateHealth(int regenMax)
+	{
+		regenMax = Max(regenMax, REGENERATE_MIN_VALUE);
+		if (Health < regenMax)
+			GiveBody(1);
+	}
+
+	virtual void Regenerate() { }
+
+	override void Tick()
+	{
+		RegenerateTicks++;
+		if (RegenerateTicks > RegenerateTicksMax)
+		{
+			RegenerateTicks = 0;
+
+			if (Health > 0)
+			{
+				Regenerate();
+			}
+		}
+
+		Super.Tick();
 	}
 }

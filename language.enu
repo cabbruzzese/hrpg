@@ -10,6 +10,7 @@ TXT_WPNWARAXE = "You have found the War Axe.";
 TXT_WPNFLAIL = "You have found the Flail.";
 TXT_WPNTRIDENT = "You have found the Trident";
 TXT_WPNMAUL = "You have found the Maul.";
+TXT_ITEMSHIELDH = "Natural Armor";
 
 TAG_HAMMER = "War Hammer";
 TAG_SPELLBOOK = "Spell Book";

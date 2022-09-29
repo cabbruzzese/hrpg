@@ -1,3 +1,5 @@
+const TRIDENT_MELEE_RANGE = DEFMELEERANGE * 1.2;
+
 class HRpgTrident : HeathenWeapon
 {
 	Default
@@ -32,60 +34,35 @@ class HRpgTrident : HeathenWeapon
 		TRDT B 4 Offset(0, 60) A_ChargeForward(0, 0, 0, 15);
 		TRDT C 4 Offset(0, 40) A_ChargeForward(1, 100, random(10,25), 0, "WarhammerPuff");
 		TRDT C 4 Offset(0, 0) A_ChargeForward(1, 100, random(10,25), 0, "WarhammerPuff");
-		TRDT C 4 Offset(0, 0) A_ChargeForward(1, 500, random(20,30), 0, "WarhammerPuff");
+		TRDT C 4 Offset(0, 0) A_ChargeForward(1, 500, random(20,30), 0, "WarhammerPuff", 2.0);
 		TRDT BA 2;
 		TRDT A 2 A_ReFire;
 		Goto Ready;
 	AltFire:
-		TRDT DEFG 4;
+		TRDT DE 4;
+		TRDT FG 4;
 		TRDT H 4 A_FireTridentPL1(0);
+		TRDT H 0 A_ReFire;
 		TRDT IJ 4;
-		TRDT A 4 A_ReFire;
+		TRDT A 4;
+		Goto Ready;
+	AltHold:
+		TRDT H 2;
+		TRDT G 6;
+		TRDT FG 4;
+		TRDT H 4 A_FireTridentPL1(0);
+		TRDT H 0 A_ReFire;
+		TRDT IJ 4;
+		TRDT A 4;
 		Goto Ready;
 	}
 	
-	action void A_ChargeForward(int attack, int kickback, int damage, int thrust, class<Actor> puff = "")
+	action void A_ChargeForward(int attack, int kickback, int damage, int thrust, class<Actor> puff = "", float rangeMod = 1.0)
 	{
 		Thrust(thrust, angle);
 		
 		if (attack)
-		{
-		
-			FTranslatedLineTarget t;
-			int kickbackSave;
-
-			if (player == null)
-			{
-				return;
-			}
-			
-			//Scale up damage with level
-			let hrpgPlayer = HRpgPlayer(player.mo);
-			if (hrpgPlayer != null)
-				damage = hrpgPlayer.GetDamageForMelee(damage);
-				
-			//Scale up damage with berserk
-			let berserk = Powerup(FindInventory("PowerStrength2"));
-			if (berserk)
-			{
-				damage *= 2;
-			}
-
-			Weapon weapon = player.ReadyWeapon;
-
-			double slope = AimLineAttack (angle, DEFMELEERANGE * 1.1);
-			
-			kickbackSave = weapon.Kickback;
-			weapon.Kickback = kickback;
-			LineAttack (angle, DEFMELEERANGE * 1.1, slope, damage, 'Melee', puff, true, t);
-			weapon.Kickback = kickbackSave;
-			
-			if (t.linetarget)
-			{
-				// turn to face target
-				angle = t.angleFromSource;
-			}
-		}
+			A_HeathenMeleeAttack(damage, kickback, puff, TRIDENT_MELEE_RANGE * rangeMod, 0, true);
 	}
 	
 	action void FireTridentProjectile(double andleMod)
@@ -164,15 +141,26 @@ class HRpgTridentPowered : HRpgTrident
 		TRDT B 4 Offset(0, 60) A_ChargeForward(0, 0, 0, 15);
 		TRDT C 4 Offset(0, 40) A_ChargeForward(1, 100, random(30,45), 0, "HornRodPuff");
 		TRDT C 4 Offset(0, 0) A_ChargeForward(1, 100, random(30,45), 0, "HornRodPuff");
-		TRDT C 4 Offset(0, 0) A_ChargeForward(1, 500, random(40,50), 0, "HornRodPuff");
+		TRDT C 4 Offset(0, 0) A_ChargeForward(1, 500, random(40,50), 0, "HornRodPuff", 2.0);
 		TRDT BA 2;
 		TRDT A 2 A_ReFire;
 		Goto Ready;
 	AltFire:
-		TRDT DEFG 4;
+		TRDT DE 4;
+		TRDT FG 4;
 		TRDT H 4 A_FireTridentPL1(1);
+		TRDT H 0 A_ReFire;
 		TRDT IJ 4;
 		TRDT A 4 A_ReFire;
+		Goto Ready;
+	AltHold:
+		TRDT H 2;
+		TRDT G 6;
+		TRDT FG 4;
+		TRDT H 4 A_FireTridentPL1(1);
+		TRDT H 0 A_ReFire;
+		TRDT IJ 4;
+		TRDT A 4;
 		Goto Ready;
 	}
 }

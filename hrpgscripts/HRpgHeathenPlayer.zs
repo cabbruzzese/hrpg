@@ -118,4 +118,52 @@ class HRpgHeathenPlayer : HRpgPlayer
 	{
 		Brt += 1;
 	}
+
+	void RegenerateArmor(int regenMax)
+	{
+		int SaveAmount = SKULLITEM_ARMOR;
+		let armor = FindInventory("BasicArmor");
+
+		if (!armor || armor.Amount == 0)
+		{
+			class<Inventory> armorClass = "HeathenShield";
+			armor = GiveInventoryType(armorClass);
+		}
+
+		if (armor.Amount >= regenMax)
+			return;
+		
+		armor.Amount++;
+	}
+
+	const ARMOR_REGEN_MAX = 50;
+	override void Regenerate ()
+	{
+		int strengthRegen = Brt / 2 + REGENERATE_MIN_VALUE;
+		RegenerateHealth(strengthRegen);
+
+		int armorRegenMax = Min(Brt / 2, ARMOR_REGEN_MAX);
+		RegenerateArmor(armorRegenMax);
+	}
+}
+
+
+
+// Silver Shield (Shield1) --------------------------------------------------
+Class HeathenShield : BasicArmorPickup
+{
+	Default
+	{
+		+FLOATBOB
+		Inventory.Pickupmessage "$TXT_ITEMSHIELDH";
+		Inventory.Icon "SHLDC0";
+		Armor.Savepercent 25;
+		Armor.Saveamount 1;
+	}
+	States
+	{
+	Spawn:
+		SHLD C -1;
+		stop;
+	}
 }

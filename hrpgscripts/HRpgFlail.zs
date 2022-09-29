@@ -7,6 +7,7 @@ const CHAIN_VEL_MIN = 2;
 const CHAIN_VEL_MAX = 13;
 const CHAIN_HEALTH_RETURN = 5;
 const CHAIN_HEALTH_MAX = 30;
+const FLAIL_MELEE_RANGE = DEFMELEERANGE * 1.75;
 
 class HRpgFlail : HeathenWeapon
 {
@@ -40,7 +41,7 @@ class HRpgFlail : HeathenWeapon
 	Fire:
 		MSTR B 8;
 		MSTR C 4;
-		MSTR D 4 A_FlailSwingAttack(random(15, 45), "WarhammerPuff", 175, 0);
+		MSTR D 4 A_HeathenMeleeAttack(random(15, 45), 175, "WarhammerPuff", FLAIL_MELEE_RANGE);
 		MSTR E 4;
 		MSTR F 8;
 		MSTR F 2 A_ReFire;
@@ -54,52 +55,6 @@ class HRpgFlail : HeathenWeapon
 		MSTR G 2 A_ReFire;
 		Goto Ready;
 	}
-	
-	//----------------------------------------------------------------------------
-	//
-	// PROC A_FlailSwingAttack
-	//
-	//----------------------------------------------------------------------------
-
-	action void A_FlailSwingAttack (int damage, class<Actor> puff, int kickback, double swingangle)
-	{
-		FTranslatedLineTarget t;
-		int kickbackSave;
-
-		if (player == null)
-		{
-			return;
-		}
-
-		//Scale up damage with level
-		let hrpgPlayer = HRpgPlayer(player.mo);
-		if (hrpgPlayer != null)
-			damage = hrpgPlayer.GetDamageForMelee(damage);
-
-		//Scale up damage with berserk
-		let berserk = Powerup(FindInventory("PowerStrength2"));
-		if (berserk)
-		{
-			damage *= 2;
-		}
-			
-		Weapon weapon = player.ReadyWeapon;
-		if (weapon != null)
-		{
-			if (!weapon.DepleteAmmo (weapon.bAltFire))
-				return;
-		}
-		
-		double ang = angle + swingangle;
-		double slope = AimLineAttack (ang, DEFMELEERANGE * 1.25);
-
-		kickbackSave = weapon.Kickback;
-		weapon.Kickback = kickback;
-		LineAttack (ang, DEFMELEERANGE * 1.25, slope, damage, 'Melee', puff, true, t);
-		weapon.Kickback = kickbackSave;
-	}
-	
-	
 	
 	//----------------------------------------------------------------------------
 	//
@@ -185,7 +140,7 @@ class HRpgFlailPowered : HRpgFlail
 	Fire:
 		MSTR B 8;
 		MSTR C 4;
-		MSTR D 4 A_FlailSwingAttack(random(35, 90), "BlasterPuff", 175, 0);
+		MSTR D 4 A_HeathenMeleeAttack(random(35, 90), 175, "BlasterPuff", FLAIL_MELEE_RANGE);
 		MSTR E 4;
 		MSTR F 8;
 		MSTR F 2 A_ReFire;
@@ -200,8 +155,6 @@ class HRpgFlailPowered : HRpgFlail
 		Goto Ready;
 	}
 }
-
-
 
 class ClawChain : Actor
 {

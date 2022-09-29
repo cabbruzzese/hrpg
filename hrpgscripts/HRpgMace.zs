@@ -1,6 +1,8 @@
 // The mace itself ----------------------------------------------------------
 const MACE_VVEL_MOD = 2.0;
-class HRpgMace : HereticWeapon replaces Mace
+const MACE_MELEE_RANGE = DEFMELEERANGE * 1.2;
+
+class HRpgMace : HRpgWeapon replaces Mace
 {
 	Default
 	{
@@ -13,6 +15,8 @@ class HRpgMace : HereticWeapon replaces Mace
 		Inventory.PickupMessage "$TXT_WPNMACE";
 		Tag "$TAG_MACE";
 		Obituary "$OB_MPMACEHIT";
+		
+		+WEAPON.MELEEWEAPON
 	}
 
 	States
@@ -38,21 +42,21 @@ class HRpgMace : HereticWeapon replaces Mace
 		MACE DEFB 4;
 		Goto Ready;
 	Fire2:
-		HMAC G 6;
-		HMAC H 3;
-		HMAC I 3 A_MaceMeleeAttack(random(35, 75), "MacePuff1", 150);
-		HMAC J 3;
-		HMAC K 3;
-		HMAC K 10;
+		HMAC G 5;
+		HMAC H 2;
+		HMAC I 2 A_HeathenMeleeAttack(random(30, 60), 150, "MacePuff1", MACE_MELEE_RANGE);
+		HMAC J 2;
+		HMAC K 2;
+		HMAC K 8;
 		HMAC K 2 A_ReFire;
 		Goto Ready;
 	Fire3:
-		HMAC B 6;
-		HMAC C 3;
-		HMAC D 3 A_MaceMeleeAttack(random(35, 75), "MacePuff1", 150);
-		HMAC E 3;
-		HMAC F 3;
-		HMAC F 10;
+		HMAC B 5;
+		HMAC C 2;
+		HMAC D 2 A_HeathenMeleeAttack(random(30, 60), 150, "MacePuff1", MACE_MELEE_RANGE);
+		HMAC E 2;
+		HMAC F 2;
+		HMAC F 8;
 		HMAC F 2 A_ReFire;
 		Goto Ready;
 	AltFire:
@@ -196,52 +200,6 @@ class HRpgMace : HereticWeapon replaces Mace
 			}
 		}
 	}
-	
-	//----------------------------------------------------------------------------
-	//
-	// PROC A_MaceMeleeAttack
-	//
-	//----------------------------------------------------------------------------
-
-	action void A_MaceMeleeAttack (int damage, class<Actor> puff, int kickback)
-	{
-		FTranslatedLineTarget t;
-		int kickbackSave;
-
-		if (player == null)
-		{
-			return;
-		}
-		
-		//Scale up damage with level
-		let hrpgPlayer = HRpgPlayer(player.mo);
-		if (hrpgPlayer != null)
-			damage = hrpgPlayer.GetDamageForMelee(damage);
-
-		//Scale up damage with berserk
-		let berserk = Powerup(FindInventory("PowerStrength2"));
-		if (berserk)
-		{
-			damage *= 1.5;
-		}
-
-		Weapon weapon = player.ReadyWeapon;
-
-		double ang = angle + Random2[StaffAtk]() * (5.625 / 256);
-		double slope = AimLineAttack (ang, DEFMELEERANGE * 1.2);
-		
-		kickbackSave = weapon.Kickback;
-		weapon.Kickback = kickback;
-		LineAttack (ang, DEFMELEERANGE * 1.2, slope, damage, 'Melee', puff, true, t);
-		weapon.Kickback = kickbackSave;
-		
-		if (t.linetarget)
-		{
-			//S_StartSound(player.mo, sfx_stfhit);
-			// turn to face target
-			angle = t.angleFromSource;
-		}
-	}
 }
 
 class HRpgMacePowered : HRpgMace replaces MacePowered
@@ -268,21 +226,21 @@ class HRpgMacePowered : HRpgMace replaces MacePowered
 		MACE A 8 A_ReFire;
 		Goto Ready;
 	Fire2:
-		HMAC G 6;
-		HMAC H 3;
-		HMAC I 3 A_MaceMeleeAttack(random(55, 95), "MacePuff2", 250);
-		HMAC J 3;
-		HMAC K 3;
-		HMAC K 10;
+		HMAC G 5;
+		HMAC H 2;
+		HMAC I 2 A_HeathenMeleeAttack(random(50, 80), 250, "MacePuff2", MACE_MELEE_RANGE);
+		HMAC J 2;
+		HMAC K 2;
+		HMAC K 8;
 		HMAC K 2 A_ReFire;
 		Goto Ready;
 	Fire3:
-		HMAC B 6;
-		HMAC C 3;
-		HMAC D 3 A_MaceMeleeAttack(random(55, 95), "MacePuff2", 250);
-		HMAC E 3;
-		HMAC F 3;
-		HMAC F 10;
+		HMAC B 5;
+		HMAC C 2;
+		HMAC D 2 A_HeathenMeleeAttack(random(50, 80), 250, "MacePuff2", MACE_MELEE_RANGE);
+		HMAC E 2;
+		HMAC F 2;
+		HMAC F 8;
 		HMAC F 2 A_ReFire;
 		Goto Ready;
 	AltFire:

@@ -1,6 +1,7 @@
 const MAUL_FLOOR_RADIUS = 80;
 const MAUL_FLOOR_RADIUSDAMAGE = 50;
 const MAUL_FLOOR_DAMAGE = 0;
+const MAUL_MELEE_RANGE = DEFMELEERANGE * 2.0;
 
 class HRpgMaul : HeathenWeapon
 {
@@ -34,7 +35,7 @@ class HRpgMaul : HeathenWeapon
 	Fire:
 		RMAL B 18;
 		RMAL C 2;
-		RMAL D 2 A_MaulSwingAttack(random(40, 100), "WarhammerPuff", 125, 0);
+		RMAL D 2 A_HeathenMeleeAttack(random(50, 120), 125, "WarhammerPuff", MAUL_MELEE_RANGE);
 		RMAL E 2;
 		RMAL F 18;
 		RMAL F 4 A_ReFire;
@@ -147,7 +148,7 @@ class HRpgMaulPowered : HRpgMaul
 	Fire:
 		RMAL B 18;
 		RMAL C 2;
-		RMAL D 6 A_MaulSwingAttack(random(80, 160), "MaulPoweredPuff", 125, 0);
+		RMAL D 6 A_HeathenMeleeAttack(random(80, 180), 125, "MaulPoweredPuff", MAUL_MELEE_RANGE);
 		RMAL E 2;
 		RMAL F 18;
 		RMAL F 4 A_ReFire;
