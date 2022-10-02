@@ -1,4 +1,5 @@
-const MAXXPHIT = 75;
+const MAXXPHIT = 150;
+const XP_PERHIT_BONUS = 5;
 
 const RESPAWN_TICS_MIN = 1200; //1 minute
 const RESPAWN_TICS_MAX = 18000; //15 minutes
@@ -121,6 +122,11 @@ class ExpSquishbag : Actor
 	override int TakeSpecialDamage(Actor inflictor, Actor source, int damage, Name damagetype)
 	{
 		int xp = damage;
+		if (xp > 5)
+			xp += XP_PERHIT_BONUS;
+		else
+			xp += XP_PERHIT_BONUS / 2;
+		
 		if (xp > MAXXPHIT)
 			xp = MAXXPHIT;
 
