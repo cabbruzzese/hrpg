@@ -164,7 +164,7 @@ class HRpgMace : HRpgWeapon replaces Mace
 			{
 				ball.Vel.Z = 2 - clamp(tan(pitch), -5, 5);
 				ball.target = self;
-				ball.angle = self.angle;
+				ball.angle = self.angle + random[MaceAtk](-4, 3);
 				ball.AddZ(ball.Vel.Z);
 				ball.VelFromAngle();
 				ball.Vel += Vel.xy / 2;
