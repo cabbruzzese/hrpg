@@ -66,7 +66,8 @@ class HRpgSpellBook : BlasphemerWeapon
 			return;
 		}
 		
-		let mo = SpawnPlayerMissile ("SpellbookFx1", angle + spread);
+		// let mo = SpawnPlayerMissile ("SpellbookFx1", angle + spread);
+		let mo = SpawnPlayerMissile ("SpellBookIceFX", angle + spread);
 		
 		if (mo != null)
 		{
@@ -92,6 +93,8 @@ class HRpgSpellBook : BlasphemerWeapon
 		{
 			return;
 		}
+
+		A_StartSound("himp/leaderattack");
 		
 		A_SpellbookIceBall(FIREBALLSPREAD_X * 3, 0);
 		A_SpellbookIceBall(FIREBALLSPREAD_X, FIREBALLSPREAD_Y * 2);
@@ -102,14 +105,7 @@ class HRpgSpellBook : BlasphemerWeapon
 		
 		if (powered)
 		{
-			A_SpellbookIceBall(FIREBALLSPREAD_X * 5, 0);
-			A_SpellbookIceBall(FIREBALLSPREAD_X * 3, FIREBALLSPREAD_Y * 3);
-			A_SpellbookIceBall(FIREBALLSPREAD_X * 3, FIREBALLSPREAD_Y * -3);
-			A_SpellbookIceBall(0, FIREBALLSPREAD_Y * 4);
-			A_SpellbookIceBall(0, FIREBALLSPREAD_Y * -4);
-			A_SpellbookIceBall(FIREBALLSPREAD_X * -3, FIREBALLSPREAD_Y * 3);
-			A_SpellbookIceBall(FIREBALLSPREAD_X * -3, FIREBALLSPREAD_Y * -3);
-			A_SpellbookIceBall(FIREBALLSPREAD_X * -5, 0);
+			SpawnPlayerMissile ("SpellBookIceFX2");
 		}
 	}
 	
@@ -293,6 +289,7 @@ class SpellbookFx2 : Actor
 		-ACTIVATEPCROSS
 		-ACTIVATEIMPACT
 		-NOGRAVITY
+		+SEEKERMISSILE
 		Obituary "$OB_MPSPELLBOOKFIRE";
 	}
 	States
@@ -315,5 +312,36 @@ class SpellbookFx2 : Actor
 	{
 		A_SetGravity(0.2);
 		A_ChangeVelocity(Vel.X * FIREBLAST_SPEED, Vel.Y * FIREBLAST_SPEED, FIREBLAST_ZSPEED);
+		A_SeekerMissile(20, 10, SMF_LOOK | SMF_CURSPEED, 256);
+	}
+}
+
+class SpellBookIceFX : SpellIceFX2
+{
+	Default
+	{
+		Radius 6;
+		Speed 12;
+		Damage 1;
+		RenderStyle "Normal";
+		Obituary "$OB_MPSPELLBOOKICE";
+	}
+
+	States
+	{
+	Spawn:
+		FX05 HIJ 6 BRIGHT;
+	Death:
+		TNT1 A 0 A_NoGravity;
+		FX05 DEFG 5 BRIGHT A_Stop;
+		Stop;
+	}
+}
+
+class SpellBookIceFX2 : SpellIceFX1
+{
+	Default
+	{
+		Obituary "$OB_MPSPELLBOOKICE";
 	}
 }
