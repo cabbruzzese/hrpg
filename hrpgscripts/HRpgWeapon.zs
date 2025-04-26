@@ -111,6 +111,16 @@ class HRpgWeapon : HereticWeapon
 		double slope = AimLineAttack (angle + angleMod, meleeDist, null, 0., ALF_CHECK3D);
         LineAttack (angle + angleMod, meleeDist, slope, damage, 'Melee', puffType, true);
 	}
+
+	action void A_Mirror()
+    {
+        A_OverlayFlags(1,PSPF_FLIP|PSPF_MIRROR,true);
+    }
+
+    action void A_RestoreMirror()
+    {
+        A_OverlayFlags(1,PSPF_FLIP|PSPF_MIRROR,false);
+    }
 }
 
 class NonHeathenWeapon : HRpgWeapon

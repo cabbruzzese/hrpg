@@ -30,12 +30,21 @@ class HRpgSpellBook : BlasphemerWeapon
 	Fire:
 		SPBO B 4;
 		SPBO C 4;
-		SPBO D 4;
-		SPBO E 6 A_FireSpellbookPL2(0);
-		SPBO D 4;
-		SPBO C 4;
-		SPBO B 2;
+		SPBO D 5;
+		SPBO E 3 A_FireSpellbookPL2(0);
+		SPBO D 3;
+		SPBO C 3;
 		SPBO B 2 A_ReFire;
+		SPBO B 6;
+		Goto Ready;
+	Hold:
+		SPBO DDD 4 A_Jump(64, "JumpFire");
+	JumpFire:
+		SPBO E 3 A_FireSpellbookPL2(0);
+		SPBO D 3;
+		SPBO C 3;
+		SPBO B 2 A_ReFire;
+		SPBO B 6;
 		Goto Ready;
 	AltFire:
 		SPBO F 4;
@@ -104,20 +113,17 @@ class HRpgSpellBook : BlasphemerWeapon
 		}
 	}
 	
-	action void A_SpellbookFireBlast (double offsetZ)
+	action void A_SpellbookFireBlast ()
 	{
 		if (player == null)
 		{
 			return;
 		}
 		
-		let mo = SpawnPlayerMissile ("SpellbookFx2");
+		let randx = random(0, 20) - 10;
+		let randy = random(0, 20) - 10;
+		let mo = SpawnPlayerMissile ("SpellbookFx2", 1e37, randx, randy);
 		
-		if (mo != null)
-		{
-			mo.AddZ(offsetZ);
-		}
-
 		let hrpgPlayer = HRpgPlayer(player.mo);
 		if (hrpgPlayer != null)
 		{
@@ -131,11 +137,11 @@ class HRpgSpellBook : BlasphemerWeapon
 			return;
 		}
 		
-		A_SpellbookFireBlast(0);
+		A_SpellbookFireBlast();
 		if (powered)
 		{
-			A_SpellbookFireBlast(20);
-			A_SpellbookFireBlast(-20);
+			A_SpellbookFireBlast();
+			A_SpellbookFireBlast();
 		}
 	}
 }
@@ -166,12 +172,21 @@ class HRpgSpellBookPowered : HRpgSpellBook
 	Fire:
 		SPBO B 4;
 		SPBO C 4;
-		SPBO D 4;
-		SPBO E 6 A_FireSpellbookPL2(1);
-		SPBO D 4;
-		SPBO C 4;
-		SPBO B 2;
+		SPBO D 5;
+		SPBO E 3 A_FireSpellbookPL2(1);
+		SPBO D 3;
+		SPBO C 3;
 		SPBO B 2 A_ReFire;
+		SPBO B 6;
+		Goto Ready;
+	Hold:
+		SPBO DDD 4 A_Jump(64, "JumpFire");
+	JumpFire:
+		SPBO E 3 A_FireSpellbookPL2(1);
+		SPBO D 3;
+		SPBO C 3;
+		SPBO B 2 A_ReFire;
+		SPBO B 6;
 		Goto Ready;
 	AltFire:
 		SPBO F 4;
@@ -261,32 +276,44 @@ class SpellbookFx1 : Actor
 }
 
 //Fire Blast
+const FIREBLAST_SPEED = 20;
+const FIREBLAST_ZSPEED = 1;
 class SpellbookFx2 : Actor
 {
 	Default
 	{
-		Radius 12;
+		Radius 8;
 		Height 8;
-		Speed 24;
+		Speed 1;
 		Damage 2;
 		Projectile;
+		Gravity -0.1;
 		SeeSound "himp/leaderattack";
 		+SPAWNSOUNDSOURCE
 		-ACTIVATEPCROSS
 		-ACTIVATEIMPACT
-		+RIPPER
-		+ZDOOMTRANS
-		RenderStyle "Add";
+		-NOGRAVITY
 		Obituary "$OB_MPSPELLBOOKFIRE";
 	}
 	States
 	{
 	Spawn:
-		FX14 DE 8 Bright;
-		FX14 FGH 4 Bright;
-		Stop;
+		FX10 ABC 4 Bright;
+		FX10 ABC 4 Bright A_Jump(128, "Launch");
+	Launch:
+		FX10 A 6 Bright A_LaunchFireBall;
+		Goto Launched;
+	Launched:
+		FX10 ABC 6 Bright;
+		Goto Launched;
 	Death:
-		FX14 FGH 2 Bright;
+		FX10 DEFG 5 Bright;
 		Stop;
+	}
+
+	action void A_LaunchFireBall()
+	{
+		A_SetGravity(0.2);
+		A_ChangeVelocity(Vel.X * FIREBLAST_SPEED, Vel.Y * FIREBLAST_SPEED, FIREBLAST_ZSPEED);
 	}
 }

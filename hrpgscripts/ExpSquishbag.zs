@@ -1,8 +1,8 @@
 const MAXXPHIT = 150;
 const XP_PERHIT_BONUS = 5;
 
-const RESPAWN_TICS_MIN = 1200; //1 minute
-const RESPAWN_TICS_MAX = 18000; //15 minutes
+const RESPAWN_TICS_MIN = 2400; //2 minute
+const RESPAWN_TICS_MAX = 24000; //20 minutes
 
 const BOSSTYPE_CHANCE_BRUTE = 10;
 const BOSSTYPE_CHANCE_SPECTRE = 4;
@@ -171,7 +171,7 @@ class ExpSquishbag : Actor
 		
 		Super.Die(source, inflictor, dmflags, MeansOfDeath);
 
-		if (IsRespawnable)
+		if (IsRespawnable && hrpg_monsterrespawn)
 		{
 			let hrpgPlayer = HRpgPlayer(source);
 			if (hrpgPlayer)

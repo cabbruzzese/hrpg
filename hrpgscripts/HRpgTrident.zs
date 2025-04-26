@@ -33,8 +33,8 @@ class HRpgTrident : HeathenWeapon
 		TRDT A 4 Offset(0, 80) A_ChargeForward(0, 0, 0, 10);
 		TRDT B 4 Offset(0, 60) A_ChargeForward(0, 0, 0, 15);
 		TRDT C 4 Offset(0, 40) A_ChargeForward(1, 100, random(1,25), 0, "WarhammerPuff");
-		TRDT C 4 Offset(0, 0) A_ChargeForward(1, 100, random(1,30), 0, "WarhammerPuff", 2.0);
-		TRDT C 4 Offset(0, 0) A_ChargeForward(1, 500, random(1,25), 0, "WarhammerPuff");
+		TRDT C 4 Offset(0, 0) A_ChargeForward(1, 100, random(1,30), 0, "WarhammerPuffSilent", 2.0);
+		TRDT C 4 Offset(0, 0) A_ChargeForward(1, 500, random(1,25), 0, "WarhammerPuffSilent");
 		TRDT BA 2;
 		TRDT A 2 A_ReFire;
 		Goto Ready;

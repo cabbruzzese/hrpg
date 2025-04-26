@@ -32,8 +32,8 @@ class HRpgWarAxe : HeathenWeapon
 	Fire:
 		TAXE B 8;
 		TAXE C 4 A_HeathenMeleeAttack(random(12, 17), 125, "WarhammerPuff", WARAXE_MELEE_RANGE, -20);
-		TAXE D 4 A_HeathenMeleeAttack(random(12, 25), 125, "WarhammerPuff", WARAXE_MELEE_RANGE, 0);
-		TAXE E 4 A_HeathenMeleeAttack(random(12, 17), 125, "WarhammerPuff", WARAXE_MELEE_RANGE, 20);
+		TAXE D 4 A_HeathenMeleeAttack(random(12, 25), 125, "WarhammerPuffSilent", WARAXE_MELEE_RANGE, 0);
+		TAXE E 4 A_HeathenMeleeAttack(random(12, 17), 125, "WarhammerPuffSilent", WARAXE_MELEE_RANGE, 20);
 		TAXE E 8;
 		TAXE E 4 A_ReFire;
 		Goto Ready;

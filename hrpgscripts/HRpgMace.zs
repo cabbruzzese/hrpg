@@ -105,6 +105,7 @@ class HRpgMace : HRpgWeapon replaces Mace
 	//----------------------------------------------------------------------------
 	action void A_MaceAttackArc(int powered)
 	{
+		A_StartSound("weapons/maceshoot");
 		int enlarged = 0;
 		int costsExtraAmmo = 1;
 		if (powered)
@@ -300,6 +301,7 @@ class MacePuff1 : Actor
 		+ZDOOMTRANS
 		+FORCEXYBILLBOARD
 		AttackSound "weapons/phoenixhit";
+		ActiveSound "mummy/attack1";
 		Scale 0.5;
 	}
 
@@ -322,6 +324,7 @@ class MacePuff2 : Actor
 		+ZDOOMTRANS
 		+FORCEXYBILLBOARD
 		AttackSound "weapons/staffpowerhit";
+		ActiveSound "mummy/attack1";
 	}
 
 	States

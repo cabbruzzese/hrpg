@@ -14,13 +14,13 @@ class HRpgHammer : HeathenWeapon
 	States
 	{
 	Ready:	
-		WARH D 1 A_WeaponReady;
+		WARH A 1 A_WeaponReady;
 		Loop;
 	Deselect:
-		WARH D 1 A_Lower;
+		WARH A 1 A_Lower;
 		Loop;
 	Select:
-		WARH D 1 A_Raise;
+		WARH A 1 A_Raise;
 		Loop;
 	Fire:
 		WARH A 3;
@@ -29,21 +29,18 @@ class HRpgHammer : HeathenWeapon
 		WARH D 3 A_HeathenMeleeAttack(random(15, 35), 125, "WarhammerPuff", HAMMER_MELEE_RANGE);
 		WARH E 2;
 		WARH F 2;
-		WARH G 10;
-		WARH G 2 A_ReFire;
+		TNT1 A 10;
+		WARH A 2 A_ReFire;
 		Goto Ready;
 	AltFire:
-		WARH A 2 Offset(200, 40);
-		WARH B 2 Offset(150, 0);
-		WARH C 2 Offset(100, 0);
-		WARH C 2 Offset(50, 0);
-		WARH C 2 Offset(1, 0) A_HeathenMeleeAttack(random(25, 40), 200, "WarhammerPuff", HAMMER_MELEE_RANGE);
-		WARH C 2 Offset(-50, 0);
-		WARH C 2 Offset(-100, 0);
-		WARH D 2 Offset(-150, 0);
-		WARH D 2 Offset(-200, 0);
-		WARH E 14 Offset(-225, 0);
-		WARH F 2 Offset(-225, 0) A_ReFire;
+		WARH A 3 A_Mirror;
+		WARH B 3;
+		WARH C 3;
+		WARH D 3 A_HeathenMeleeAttack(random(15, 35), 125, "WarhammerPuff", HAMMER_MELEE_RANGE);
+		WARH E 2;
+		WARH F 2;
+		TNT1 A 10 A_RestoreMirror;
+		WARH A 2 A_ReFire;
 		Goto Ready;
 	}
 }
@@ -63,37 +60,33 @@ class HRpgHammerPowered : HRpgHammer
 	States
 	{
 	Ready:	
-		WARH K 1 A_WeaponReady;
+		WARH G 1 A_WeaponReady;
 		Loop;
 	Deselect:
-		WARH K 1 A_Lower;
+		WARH G 1 A_Lower;
 		Loop;
 	Select:
-		WARH K 1 A_Raise;
+		WARH G 1 A_Raise;
 		Loop;
 	Fire:
+		WARH G 3;
 		WARH H 3;
 		WARH I 3;
 		WARH J 3;
-		WARH D 3;
 		WARH K 3 A_HeathenMeleeAttack(random(45, 70), 175, "WarhammerPuff2", HAMMER_MELEE_RANGE);
 		WARH L 2;
-		WARH M 2;
-		WARH N 10;
-		WARH N 2 A_ReFire;
+		TNT1 A 10;
+		WARH G 2 A_ReFire;
 		Goto Ready;
 	AltFire:
-		WARH H 2 Offset(200, 40);
-		WARH I 2 Offset(150, 0);
-		WARH J 2 Offset(100, 0);
-		WARH J 2 Offset(50, 0) A_HammerFire(-10);
-		WARH J 2 Offset(1, 0);
-		WARH J 2 Offset(-50, 0) A_HammerFire(10);
-		WARH J 2 Offset(-100, 0);
-		WARH K 2 Offset(-150, 0);
-		WARH K 2 Offset(-200, 0);
-		WARH L 14 Offset(-225, 0);
-		WARH M 2 Offset(-225, 0) A_ReFire;
+		WARH G 3;
+		WARH H 3;
+		WARH I 3 A_HammerFire(-10);
+		WARH J 3 A_StartSound("mummy/attack1");
+		WARH K 3 A_HammerFire(10);
+		WARH L 2;
+		TNT1 A 10;
+		WARH G 2 A_ReFire;
 		Goto Ready;
 	}
 	
@@ -131,7 +124,7 @@ class WarhammerFx1 : Actor
 		Speed 14;
 		Damage 12;
 		Projectile;
-		DeathSound "weapons/staffpowerhit";
+		DeathSound "dsparil/explode";
 		Obituary "$OB_MPPHAMMERMAGIC";
 	}
 
@@ -157,6 +150,7 @@ class WarhammerPuff : Actor
 		+NOGRAVITY
 		+PUFFONACTORS
 		AttackSound "mummy/attack2";
+		ActiveSound "mummy/attack1";
 	}
 
 	States
@@ -179,6 +173,7 @@ class WarhammerPuff2 : Actor
 		+NOGRAVITY
 		+PUFFONACTORS
 		AttackSound "weapons/staffpowerhit";
+		ActiveSound "mummy/attack1";
 	}
 
 	States
@@ -186,5 +181,13 @@ class WarhammerPuff2 : Actor
 	Spawn:
 		FX16 GHIJKL 4 BRIGHT;
 		Stop;
+	}
+}
+
+class WarhammerPuffSilent : WarhammerPuff
+{
+	Default
+	{
+		ActiveSound "";
 	}
 }
