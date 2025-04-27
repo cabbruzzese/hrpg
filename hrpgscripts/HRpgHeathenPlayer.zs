@@ -1,5 +1,9 @@
+const HEATHEN_SLOW_REGEN_MIN = 5;
+
 class HRpgHeathenPlayer : HRpgPlayer
 {
+	bool slowRegenArmor;
+
 	Default
 	{
 		HRpgPlayer.ExpLevel 1;
@@ -129,6 +133,18 @@ class HRpgHeathenPlayer : HRpgPlayer
 			class<Inventory> armorClass = "HeathenShield";
 			armor = GiveInventoryType(armorClass);
 		}
+
+		//It takes 2 regen cycles when low
+		if (armor.Amount < HEATHEN_SLOW_REGEN_MIN)
+		{
+			if (!slowRegenArmor)
+			{
+				slowRegenArmor = true;
+				return;
+			}
+		}
+
+		slowRegenArmor = false;
 
 		if (armor.Amount >= regenMax)
 			return;

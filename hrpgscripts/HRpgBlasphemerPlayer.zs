@@ -174,6 +174,20 @@ class HRpgBlasphemerPlayer : HRpgPlayer
 	
 	override void Tick()
 	{
+		
+		RestoreMana();
+
+		// Update spell cooldown time
+		if (SpellLock > 0)
+		{
+			SpellLock--;
+		}
+		
+		Super.Tick();
+	}
+
+	void RestoreMana()
+	{
 		if (Mana < MaxMana)
 		{
 			int manaHeal = Crp / 10;
@@ -182,13 +196,6 @@ class HRpgBlasphemerPlayer : HRpgPlayer
 				
 			Mana += manaHeal;
 		}
-		
-		if (SpellLock > 0)
-		{
-			SpellLock--;
-		}
-		
-		Super.Tick();
 	}
 	
 	override void BeginPlay()

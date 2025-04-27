@@ -3,6 +3,10 @@ const XP_PERHIT_BONUS = 5;
 
 const RESPAWN_TICS_MIN = 2400; //2 minute
 const RESPAWN_TICS_MAX = 24000; //20 minutes
+// Uncomment for testing
+//const RESPAWN_TICS_MIN = 100;
+//const RESPAWN_TICS_MAX = 100;
+
 const RESPAWN_COUNT_MIN = 1;
 const RESPAWN_COUNT_MAX = 5;
 
@@ -22,7 +26,7 @@ const SNEAK_ATTACK_BONUS = 3.0;
 const SNEAK_DELAY_TIME = 30;
 
 const DROP_AMMO_CHANCE = 70;
-const DROP_SKULL_CHANCE = 35;
+const DROP_SKULL_CHANCE = 8;
 
 enum EWanderingMonsterFlags
 {

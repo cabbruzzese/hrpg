@@ -281,7 +281,7 @@ class SpellbookFx2 : Actor
 		Radius 8;
 		Height 8;
 		Speed 1;
-		Damage 2;
+		Damage 3;
 		Projectile;
 		Gravity -0.1;
 		SeeSound "himp/leaderattack";
@@ -336,10 +336,17 @@ class SpellBookIceFX : SpellIceFX2
 	States
 	{
 	Spawn:
-		FX05 HIJ 6 BRIGHT;
+		FX05 HIJ 5 BRIGHT;
+		FX06 J 0 A_IceShardStop;
 	Death:
-		FX05 DEFG 5 BRIGHT;
+		FX05 D 3 BRIGHT A_SetRenderStyle(0.5, STYLE_Add);
+		FX05 EFG 3 BRIGHT;
 		Stop;
+	}
+
+	action void A_IceShardStop()
+	{
+		ExplodeMissile();
 	}
 }
 
