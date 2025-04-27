@@ -7,14 +7,18 @@ class HRpgWeapon : HereticWeapon
 	
 	override void PostBeginPlay()
 	{
-		//If spawning additional items and not an owned item (not in inventory)
-		if (ExtraSpawnItem && ExtraSpawnItem != "" && !Owner)
+		// If spawning additional items and not an owned item (not in inventory) and there is a heathen in play
+		if (ExtraSpawnItem && ExtraSpawnItem != "" && !Owner && ActorUtils.HeathenPlayerExists())
 		{
 			let randomX = random(EXTRA_SPAWN_DIST * -1.0, EXTRA_SPAWN_DIST);
 			let randomY = random(EXTRA_SPAWN_DIST * -1.0, EXTRA_SPAWN_DIST);
 			let newItem = Spawn(ExtraSpawnItem, (Pos.X + randomX, Pos.Y + randomY, Pos.Z));
 
 			ExtraSpawnItem = "";
+
+			// If there is no non-heathen, just remove the original item
+			if (!ActorUtils.NonHeathenPlayerExists())
+				Destroy();
 		}
 		
 		Super.PostBeginPlay();

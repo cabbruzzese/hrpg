@@ -304,7 +304,12 @@ class SpellbookFx2 : Actor
 		FX10 ABC 6 Bright;
 		Goto Launched;
 	Death:
-		FX10 DEFG 5 Bright;
+		FX10 D 5
+		{
+			A_NoGravity();
+			A_Stop();
+		}
+		FX10 EFG 5 Bright;
 		Stop;
 	}
 
@@ -325,6 +330,7 @@ class SpellBookIceFX : SpellIceFX2
 		Damage 1;
 		RenderStyle "Normal";
 		Obituary "$OB_MPSPELLBOOKICE";
+		DamageType "ice";
 	}
 
 	States
@@ -332,8 +338,7 @@ class SpellBookIceFX : SpellIceFX2
 	Spawn:
 		FX05 HIJ 6 BRIGHT;
 	Death:
-		TNT1 A 0 A_NoGravity;
-		FX05 DEFG 5 BRIGHT A_Stop;
+		FX05 DEFG 5 BRIGHT;
 		Stop;
 	}
 }
@@ -343,5 +348,6 @@ class SpellBookIceFX2 : SpellIceFX1
 	Default
 	{
 		Obituary "$OB_MPSPELLBOOKICE";
+		DamageType "ice";
 	}
 }
