@@ -99,7 +99,7 @@ class HRpgKnight : ExpSquishbag replaces Knight
 		}
 		else if (self.bShadow || random[KnightAttack]() < 40 || LeaderType & WML_STONE)
 		{ // Red axe
-			SpawnMissileZ (pos.Z + 36, targ, "RedAxe");
+			SpawnMissileZ (pos.Z + 36, targ, "HrpgRedAxe");
 		}
 		else
 		{ // Green axe
@@ -122,5 +122,14 @@ class HRpgKnightGhost : HRpgKnight replaces KnightGhost
 		ExpSquishbag.IsRespawnable true;
 		ExpSquishbag.RespawnWaitBonus 1200;
 		ExpSquishbag.IsSpectreable false;
+	}
+}
+
+class HrpgRedAxe : RedAxe
+{
+	Default
+	{
+		Damage 15;
+		+STRIFEDAMAGE
 	}
 }

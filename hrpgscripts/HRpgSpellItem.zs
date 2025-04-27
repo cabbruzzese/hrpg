@@ -294,7 +294,7 @@ class VolcanoFX1 : Actor
 		Health--;
 		if (Health < 1)
 		{
-			SetStateLabel("Death");
+			ExplodeMissile();
 			return;
 		}
 

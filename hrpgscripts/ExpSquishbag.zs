@@ -26,7 +26,7 @@ const SNEAK_ATTACK_BONUS = 3.0;
 const SNEAK_DELAY_TIME = 30;
 
 const DROP_AMMO_CHANCE = 70;
-const DROP_SKULL_CHANCE = 8;
+const DROP_SKULL_CHANCE = 13;
 
 enum EWanderingMonsterFlags
 {
@@ -299,7 +299,7 @@ class ExpSquishbag : Actor
 			Health *= 3.5;
 		}
 
-		DamageMultiply += 1;
+		DamageMultiply = 2;
 	}
 	
 	void SetRunt()
@@ -479,6 +479,7 @@ class VolcanoMonsterBlast : Actor
 		Gravity 0.125;
 		+NOBLOCKMAP +MISSILE +DROPOFF
 		+NOTELEPORT
+		+STRIFEDAMAGE
 		DeathSound "world/volcano/blast";
 	}
 
@@ -540,6 +541,7 @@ class DeathMonsterBlast : MummyFX1
 		-ACTIVATEIMPACT
 		+SEEKERMISSILE
 		+ZDOOMTRANS
+		+STRIFEDAMAGE
 		Translation "DeathSkin";
 		Scale 1.5;
 	}
