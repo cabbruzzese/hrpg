@@ -3,6 +3,8 @@ const XP_PERHIT_BONUS = 5;
 
 const RESPAWN_TICS_MIN = 2400; //2 minute
 const RESPAWN_TICS_MAX = 24000; //20 minutes
+const RESPAWN_COUNT_MIN = 1;
+const RESPAWN_COUNT_MAX = 5;
 
 const BOSSTYPE_CHANCE_BRUTE = 10;
 const BOSSTYPE_CHANCE_SPECTRE = 4;
@@ -51,6 +53,7 @@ class ExpSquishbag : Actor
 	int respawnWaitTics;
 	int respawnWaitBonus;
 	int respawnLevel;
+	int respawnCount;
 	bool isRespawnable;
 	bool isSpectreable;
 	bool isBossOnly;
@@ -382,12 +385,23 @@ class ExpSquishbag : Actor
 			RespawnWaitTics = random(RESPAWN_TICS_MIN, RESPAWN_TICS_MAX);//no bonus for this respawnLevel
 			return;
 		}
-		
+
 		RespawnWaitTics = 0;
 		RespawnLevel = 1;
 
-		A_Respawn(false);
+		//Random chance to end spawning
+		if (respawnCount >= RESPAWN_COUNT_MIN)
+		{
+			int respawnChance = clamp(respawnCount, respawnCount, RESPAWN_COUNT_MAX);
+			if (random(0, 10) < respawnChance)
+				return;
+		}
+
+
+		int newRespawnCount = respawnCount + 1;
+		A_Respawn(RSF_FOG);
 		
+		respawnCount = newRespawnCount;
 		ApplyLeaderProps(props);
 	}
 }
