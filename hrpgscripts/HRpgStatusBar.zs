@@ -98,6 +98,14 @@ class HRpgStatusBar : HereticStatusBar
 		{
 			DrawGem("CHAIN", "LIFEGEM2",inthealth, CPlayer.mo.GetMaxHealth(true), (2, 191 + wiggle), 15, 25, 16, (multiplayer? DI_TRANSLATABLE : 0) | DI_ITEM_LEFT_TOP); 
 		}
+
+		let hPlayer = HRpgHereticPlayer(CPlayer.mo);
+		if (hPlayer && hPlayer.sneakAttackTimer > 0)
+		{
+			let sneakAttackAlpha = float(hPlayer.sneakAttackTimer) / float(SNEAKATTACK_TIMER_THRESHOLD);
+
+			DrawString(mSmallFont, "Sneak attack!", (100, 100), DI_SCREEN_CENTER_BOTTOM, Font.CR_UNTRANSLATED, sneakAttackAlpha);
+		}
 		
 		DrawImage("LTFACE", (0, 190), DI_ITEM_OFFSETS);
 		DrawImage("RTFACE", (276, 190), DI_ITEM_OFFSETS);

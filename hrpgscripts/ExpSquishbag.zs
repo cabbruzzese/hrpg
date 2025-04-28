@@ -7,8 +7,8 @@ const RESPAWN_TICS_MAX = 24000; //20 minutes
 //const RESPAWN_TICS_MIN = 100;
 //const RESPAWN_TICS_MAX = 100;
 
-const RESPAWN_COUNT_MIN = 1;
-const RESPAWN_COUNT_MAX = 5;
+const RESPAWN_COUNT_MIN = 3;
+const RESPAWN_COUNT_MAX = 7;
 
 const BOSSTYPE_CHANCE_BRUTE = 10;
 const BOSSTYPE_CHANCE_SPECTRE = 4;
@@ -149,7 +149,10 @@ class ExpSquishbag : Actor
 				if (target != hereticPlayer || sneakDelay > 0)
 				{
 					damage *= SNEAK_ATTACK_BONUS;
-					hereticPlayer.A_Print("Surprise Attack!");
+					
+					hereticPlayer.sneakAttackTimer = SNEAKATTACK_TIMER_MAX;
+					let blendColor = Color(120, 130, 20, 20);
+					hereticPlayer.A_SetBlend(blendColor, 0.4, 40);
 					
 					sneakDelay = 0;
 				}
@@ -396,7 +399,7 @@ class ExpSquishbag : Actor
 		//Random chance to end spawning
 		if (respawnCount >= RESPAWN_COUNT_MIN)
 		{
-			int respawnChance = clamp(respawnCount, respawnCount, RESPAWN_COUNT_MAX);
+			int respawnChance = clamp(respawnCount, RESPAWN_COUNT_MIN, RESPAWN_COUNT_MAX);
 			if (random(0, 10) < respawnChance)
 				return;
 		}
@@ -405,7 +408,7 @@ class ExpSquishbag : Actor
 		int newRespawnCount = respawnCount + 1;
 		A_Respawn(RSF_FOG);
 		
-		respawnCount = newRespawnCount;
+		respawnCount = clamp(newRespawnCount, RESPAWN_COUNT_MIN, RESPAWN_COUNT_MAX);
 		ApplyLeaderProps(props);
 	}
 }

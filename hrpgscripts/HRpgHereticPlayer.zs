@@ -1,5 +1,10 @@
+const SNEAKATTACK_TIMER_MAX = 70;
+const SNEAKATTACK_TIMER_THRESHOLD = 40;
+
 class HRpgHereticPlayer : HRpgPlayer
 {
+	int sneakAttackTimer;
+
 	Default
 	{
 		HRpgPlayer.ExpLevel 1;
@@ -117,4 +122,12 @@ class HRpgHereticPlayer : HRpgPlayer
 	{
 		Trk += 1;
 	}
+
+	override void Tick()
+	{
+		sneakAttackTimer--;
+
+		Super.Tick();
+	}
+
 }
