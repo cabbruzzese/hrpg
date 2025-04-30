@@ -54,7 +54,7 @@ class HRpgBlaster : NonHeathenWeapon replaces Blaster
 	//
 	//----------------------------------------------------------------------------
 
-	action void A_FireBlasterPL1(double angleSpread = 0.0, double pitchSpread = 0.0, bool useAmmo = true)
+	action void A_FireBlasterPL1(double angleSpread = 0.0, double pitchSpread = 0.0, bool useAmmo = true, int ammoAmount = -1)
 	{
 		if (player == null)
 		{
@@ -62,11 +62,16 @@ class HRpgBlaster : NonHeathenWeapon replaces Blaster
 		}
 
 		Weapon weapon = player.ReadyWeapon;
+
+		int ammoUse = ammoAmount;
+		if (ammoUse == -1)
+			ammoUse = weapon.AmmoUse1;
+
 		if (weapon != null && useAmmo)
 		{
-			if (!weapon.DepleteAmmo (false))
+			if (!weapon.DepleteAmmo (false, true, ammoUse, true))
 			{
-				weapon.CheckAmmo(Weapon.PrimaryFire, true);
+				weapon.CheckAmmo(Weapon.PrimaryFire, true, true, ammoUse);
 				return;
 			}
 		}
@@ -96,11 +101,11 @@ class HRpgBlaster : NonHeathenWeapon replaces Blaster
 			return;
 		}
 
-		A_FireBlasterPL1(6, 1.0);
-		A_FireBlasterPL1(3, 2.0);
-		A_FireBlasterPL1(0, 3.0);
-		A_FireBlasterPL1(-3, 2.0);
-		A_FireBlasterPL1(-6, 1.0);
+		A_FireBlasterPL1(6, 1.0, true, 1);
+		A_FireBlasterPL1(3, 2.0, true, 1);
+		A_FireBlasterPL1(0, 3.0, true, 1);
+		A_FireBlasterPL1(-3, 2.0, true, 1);
+		A_FireBlasterPL1(-6, 1.0, true, 1);
 		
 		if (powered)
 		{
@@ -108,13 +113,13 @@ class HRpgBlaster : NonHeathenWeapon replaces Blaster
 			if (!weapon.CheckAmmo(Weapon.PrimaryFire, true))
 				return;
 
-			A_FireBlasterPL1(12, 1.0, false);
-			A_FireBlasterPL1(8, 3.0, false);
+			A_FireBlasterPL1(12, 1.0, true, 1);
+			A_FireBlasterPL1(8, 3.0, true, 1);
 			A_FireBlasterPL1(4, 5.0, false);
-			A_FireBlasterPL1(0, 7.0, false);
+			A_FireBlasterPL1(0, 7.0, true, 1);
 			A_FireBlasterPL1(-4, 5.0, false);
-			A_FireBlasterPL1(-8, 3.0, false);
-			A_FireBlasterPL1(-12, 1.0, false);
+			A_FireBlasterPL1(-8, 3.0, true, 1);
+			A_FireBlasterPL1(-12, 1.0, true, 1);
 		}
 	}
 }

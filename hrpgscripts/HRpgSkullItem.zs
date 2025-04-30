@@ -11,8 +11,9 @@ const SKULLITEM_TICKS_FLY = 300;
 
 const SKULLITEM_LEVEL_INVIS = 1;
 const SKULLITEM_LEVEL_TORCH = 5;
-const SKULLITEM_LEVEL_TOME = 10;
-const SKULLITEM_LEVEL_FLY = 15;
+const SKULLITEM_LEVEL_EGG = 10;
+const SKULLITEM_LEVEL_TOME = 15;
+const SKULLITEM_LEVEL_FLY = 20;
 
 class HRpgSkullItem : Inventory
 {
@@ -121,6 +122,22 @@ class HRpgSkullItem : Inventory
 		}
 		return false;
 	}
+
+	bool ShootArtiEgg (Actor other)
+	{
+		if (other == null) return true;
+
+		let hereticPlayer = HRpgHereticPlayer(other.player.mo);
+		if (hereticPlayer == null)
+			return true;
+
+		for (double i = -15; i <= 15; i += 7.5)
+		{
+			hereticPlayer.SpawnPlayerMissile ("EggFX", hereticPlayer.angle + i);
+		}
+
+		return true;
+	}
 	
 	bool TryUsePowerup (Actor other, Class<Actor> powerupType, double effectTics)
 	{
@@ -133,21 +150,6 @@ class HRpgSkullItem : Inventory
 		{
 			power.EffectTics = effectTics;
 		}
-		
-		/*if (BlendColor != 0)
-		{
-			if (BlendColor != Powerup.SPECIALCOLORMAP_MASK | 65535) power.BlendColor = BlendColor;
-			else power.BlendColor = 0;
-		}*/
-		
-/*		if (mode != 'None')
-		{
-			power.Mode = mode;
-		}
-		if (strength != 0)
-		{
-			power.Strength = strength;
-		}*/
 
 		power.bAlwaysPickup |= bAlwaysPickup;
 		power.bAdditiveTime |= bAdditiveTime;
@@ -167,7 +169,7 @@ class HRpgSkullItem : Inventory
 		return false;
 	}
 	
-	//Only give invisible to heretic
+	//Only give artifacts to heretic
 	bool TryGiveArtifacts (Actor other)
 	{
 		let hereticPlayer = HRpgHereticPlayer(other.player.mo);
@@ -182,6 +184,11 @@ class HRpgSkullItem : Inventory
 			if (hereticPlayer.ExpLevel >= SKULLITEM_LEVEL_TORCH)
 			{
 				result |= TryUsePowerup(other, "PowerTorch", SKULLITEM_TICKS_TORCH);
+			}
+
+			if (hereticPlayer.ExpLevel >= SKULLITEM_LEVEL_EGG)
+			{
+				result = ShootArtiEgg(other);
 			}
 
 			if (hereticPlayer.ExpLevel >= SKULLITEM_LEVEL_TOME)

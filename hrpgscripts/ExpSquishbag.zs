@@ -151,7 +151,7 @@ class ExpSquishbag : Actor
 					damage *= SNEAK_ATTACK_BONUS;
 					
 					hereticPlayer.sneakAttackTimer = SNEAKATTACK_TIMER_MAX;
-					let blendColor = Color(120, 130, 20, 20);
+					let blendColor = Color(120, 170, 152, 0);
 					hereticPlayer.A_SetBlend(blendColor, 0.4, 40);
 					
 					sneakDelay = 0;
