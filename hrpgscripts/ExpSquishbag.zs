@@ -483,7 +483,8 @@ class VolcanoMonsterBlast : Actor
 		+NOBLOCKMAP +MISSILE +DROPOFF
 		+NOTELEPORT
 		+STRIFEDAMAGE
-		DeathSound "world/volcano/blast";
+		-EXPLODEONWATER
+		BounceType "Heretic";
 	}
 
 	States
@@ -507,6 +508,8 @@ class VolcanoMonsterBlast : Actor
 
 	void A_VolcBallImpact ()
 	{
+		A_Stop();
+		A_StartSound("world/volcano/blast");
 		if (pos.Z <= floorz)
 		{
 			bNoGravity = true;
