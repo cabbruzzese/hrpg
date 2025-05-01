@@ -6,7 +6,9 @@ const CHAIN_VEL_FAST_PERCENT = 0.7;
 const CHAIN_VEL_MIN = 2;
 const CHAIN_VEL_MAX = 13;
 const CHAIN_HEALTH_RETURN = 5;
-const CHAIN_HEALTH_MAX = 30;
+const CHAIN_HEALTH_MAX = 25;
+const CHAIN_MIN_DMG = 10;
+const CHAIN_MAX_DMG = 18;
 const FLAIL_MELEE_RANGE = DEFMELEERANGE * 1.75;
 
 class HRpgFlail : HeathenWeapon
@@ -166,7 +168,6 @@ class ClawChain : Actor
 		Radius 10;
 		Height 6;
 		Speed 0;
-		Damage 1;
 		Health CHAIN_HEALTH_MAX;
 		Projectile;
 		+RIPPER
@@ -180,6 +181,7 @@ class ClawChain : Actor
 		+BOUNCEONWALLS
 		+CANBOUNCEWATER
 		+FORCEXYBILLBOARD
+		DamageFunction ChainDamageFunction(CHAIN_MIN_DMG, CHAIN_MAX_DMG);
 	}
 
 	States
@@ -317,6 +319,11 @@ class ClawChain : Actor
 		if (tracker)
 			tracker.ClawChain1 = null;
 	}
+
+	int ChainDamageFunction (int minDamage, int maxDamage)
+	{
+		return random(minDamage, maxDamage);
+	}
 }
 
 class RedClawChain : ClawChain
@@ -325,13 +332,13 @@ class RedClawChain : ClawChain
 	{
 		Height 6;
 		Speed 0;
-		Damage 3;
 		Projectile;
 		+RIPPER
 		+ZDOOMTRANS
 		DeathSound "weapons/macebounce";
 		Obituary "$OB_MPPCLAWCHAIN";
 		Scale 1.5;
+		DamageFunction ChainDamageFunction(CHAIN_MIN_DMG * 2, CHAIN_MAX_DMG * 2);
 	}
 
 	States

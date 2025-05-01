@@ -1,4 +1,6 @@
 const HAMMER_MELEE_RANGE = DEFMELEERANGE * 1.25;
+const HAMMER_CHARGE_MIN = 5;
+const HAMMER_CHARGE_MAX = 30;
 
 class HRpgHammer : HeathenWeapon
 {
@@ -9,6 +11,8 @@ class HRpgHammer : HeathenWeapon
 		Obituary "$OB_MPHAMMER";
 		Tag "$TAG_HAMMER";
 		Scale 1.4;
+
+		HeathenWeapon.MaxCharge HAMMER_CHARGE_MAX;
 	}
 
 	States
@@ -34,14 +38,30 @@ class HRpgHammer : HeathenWeapon
 		Goto Ready;
 	AltFire:
 		WARH A 3 A_Mirror;
-		WARH B 3;
+	AltHold:
+		WARH B 0 A_Mirror;
+		WARH B 2 A_ChargeUp;
+		WARH B 1 A_ReFire;
 		WARH C 3;
-		WARH D 3 A_HeathenMeleeAttack(random(15, 35), 125, "WarhammerPuff", HAMMER_MELEE_RANGE);
+		WARH D 3 A_ChargedHammerAttack;
 		WARH E 2;
 		WARH F 2;
-		TNT1 A 10 A_RestoreMirror;
+		TNT1 A 18 A_RestoreMirror;
 		WARH A 2 A_ReFire;
 		Goto Ready;
+	}
+
+	action void A_ChargedHammerAttack()
+	{
+		double dmgMod = 1.0;
+
+		if (invoker.chargeValue > HAMMER_CHARGE_MIN)
+		{
+			dmgMod += (double(invoker.chargeValue) / double(HAMMER_CHARGE_MAX));
+		}
+
+		A_HeathenMeleeAttack(random(20, 35 * dmgMod), 150 * dmgMod, "WarhammerPuff", HAMMER_MELEE_RANGE);
+		invoker.chargeValue = 0;
 	}
 }
 

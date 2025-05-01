@@ -125,6 +125,11 @@ class HRpgWeapon : HereticWeapon
     {
         A_OverlayFlags(1,PSPF_FLIP|PSPF_MIRROR,false);
     }
+
+	action void A_SetWeapState(StateLabel stateName)
+    {
+        player.SetPsprite(PSP_WEAPON, player.ReadyWeapon.FindState(stateName));
+    }
 }
 
 class NonHeathenWeapon : HRpgWeapon
@@ -137,10 +142,47 @@ class NonHeathenWeapon : HRpgWeapon
 
 class HeathenWeapon : HRpgWeapon
 {
+	int chargeValue;
+    int maxCharge;
+	property ChargeValue : chargeValue;
+    property MaxCharge : maxCharge;
+
 	Default
 	{
 		Inventory.ForbiddenTo "HRpgHereticPlayer", "HRpgBlasphemerPlayer";
 		+WEAPON.MELEEWEAPON
+        HeathenWeapon.ChargeValue 0;
+        HeathenWeapon.MaxCharge 0;
+	}
+
+	action void A_ChargeUp(int overchargeMax = 0, StateLabel overchargeState = "Hold")
+	{
+		invoker.ChargeValue++;
+
+		if (invoker.chargeValue > invoker.MaxCharge)
+        {
+            if (overchargeMax > 0)
+            {
+                if (invoker.chargeValue > overchargeMax)
+                {
+                    invoker.chargeValue = invoker.MaxCharge;
+                    A_SetWeapState(overchargeState);
+                }
+            }
+            else
+            {
+                invoker.chargeValue = invoker.MaxCharge;
+            }
+        }
+	}
+
+    action void A_CheckMinCharge(int minCharge)
+	{
+        //If there is low charge attack
+        if (minCharge > 0 && invoker.chargeValue < minCharge)
+        {
+            A_SetWeapState("ShortChargeAttack");
+        }
 	}
 }
 
