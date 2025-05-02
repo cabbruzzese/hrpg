@@ -38,7 +38,7 @@ class HRpgWarAxe : HeathenWeapon
 		TAXE E 4 A_ReFire;
 		Goto Ready;
 	AltFire:
-		TAXE B 8 OFFSET(0, 24);
+		TAXE B 8 OFFSET(0, 24) A_CheckAmmoOrMelee(AltFire);
 		TAXE C 4 A_FireBowAxe(0);
 		TAXE EEEEE 4 OFFSET(0, 100);
 		TAXE E 4 A_ReFire;
@@ -124,7 +124,7 @@ class HRpgWarAxePowered : HRpgWarAxe
 		TAXE E 4 A_ReFire;
 		Goto Ready;
 	AltFire:
-		TAXE B 8 OFFSET(0, 24);
+		TAXE B 8 OFFSET(0, 24) A_CheckAmmoOrMelee(AltFire);
 		TAXE C 4 A_FireBowAxe(1);
 		TAXE EEEEE 4 OFFSET(0, 100);
 		TAXE E 4 A_ReFire;
@@ -174,6 +174,7 @@ class BowRedAxe : BowAxe
 		Speed 9;
 		Health 0;
 		Obituary "$OB_MPPBOWAXE";
+		SeeSound "hknight/axewhoosh";
 	}
 
 	States

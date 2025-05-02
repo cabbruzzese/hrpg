@@ -151,6 +151,8 @@ class HeathenWeapon : HRpgWeapon
 	{
 		Inventory.ForbiddenTo "HRpgHereticPlayer", "HRpgBlasphemerPlayer";
 		+WEAPON.MELEEWEAPON
+		+WEAPON.AMMO_OPTIONAL
+		+WEAPON.ALT_AMMO_OPTIONAL
         HeathenWeapon.ChargeValue 0;
         HeathenWeapon.MaxCharge 0;
 	}
@@ -184,6 +186,22 @@ class HeathenWeapon : HRpgWeapon
             A_SetWeapState("ShortChargeAttack");
         }
 	}
+
+	action void A_CheckAmmoOrMelee(int fireType)
+	{
+		Weapon weapon = player.ReadyWeapon;
+		if (weapon != null)
+		{
+			if (!weapon.CheckAmmo(fireType, false, true))
+			{
+				if (fireType == PrimaryFire)
+					A_SetWeapState("AltFire");
+				else
+					A_SetWeapState("Fire");
+			}
+		}
+	}
+
 }
 
 class BlasphemerWeapon : HRpgWeapon

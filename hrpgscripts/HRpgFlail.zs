@@ -7,8 +7,8 @@ const CHAIN_VEL_MIN = 2;
 const CHAIN_VEL_MAX = 13;
 const CHAIN_HEALTH_RETURN = 5;
 const CHAIN_HEALTH_MAX = 25;
-const CHAIN_MIN_DMG = 13;
-const CHAIN_MAX_DMG = 18;
+const CHAIN_MIN_DMG = 1;
+const CHAIN_MAX_DMG = 2;
 const FLAIL_MELEE_RANGE = DEFMELEERANGE * 1.75;
 
 class HRpgFlail : HeathenWeapon
@@ -49,7 +49,7 @@ class HRpgFlail : HeathenWeapon
 		MSTR F 2 A_ReFire;
 		Goto Ready;
 	AltFire:
-		MSTR B 8 Offset(0, 65);
+		MSTR B 8 Offset(0, 65) A_CheckAmmoOrMelee(AltFire);
 		MSTR C 4;
 		MSTR G 38 A_FireChain(0);
 		MSTR G 4;
@@ -76,6 +76,8 @@ class HRpgFlail : HeathenWeapon
 			if (!weapon.DepleteAmmo (weapon.bAltFire))
 				return;
 		}
+
+		A_StartSound("mummy/attack1");
 		
 		let tracker = ClawChainTracker(FindInventory("ClawChainTracker"));
 		if (tracker && tracker.ClawChain1)
@@ -92,16 +94,6 @@ class HRpgFlail : HeathenWeapon
 		if (hrpgPlayer != null && clawChain != null)
 		{
 			let newDamage = hrpgPlayer.GetDamageForMelee(clawChain.Damage);
-			
-			if (powered)
-				newDamage = hrpgPlayer.GetDamageForMagic(clawChain.Damage);
-				
-			//Scale up damage with berserk
-			let berserk = Powerup(FindInventory("PowerStrength2"));
-			if (berserk)
-			{
-				newDamage *= 2;
-			}
 				
 			clawChain.SetDamage (newDamage);
 		}
@@ -148,7 +140,7 @@ class HRpgFlailPowered : HRpgFlail
 		MSTR F 2 A_ReFire;
 		Goto Ready;
 	AltFire:
-		MSTR B 8 Offset(0, 35);
+		MSTR B 8 Offset(0, 35) A_CheckAmmoOrMelee(AltFire);
 		MSTR C 4;
 		MSTR G 32 A_FireChain(1);
 		MSTR E 4;
@@ -158,9 +150,12 @@ class HRpgFlailPowered : HRpgFlail
 	}
 }
 
+const CHAIN_LINK_COUNT = 3;
+const CHAIN_LINK_LAST_INDEX = 2;
+
 class ClawChain : Actor
 {
-	Actor links[4];
+	Actor links[CHAIN_LINK_COUNT];
 	property Links : links;
 	
 	Default
@@ -228,12 +223,19 @@ class ClawChain : Actor
 			return;
 		}
 		
+		// Get fraction of distance from self to flail ball
+		//  One portion per link plus 2 spaces for start and finish.
+		//  Then draw them with an offset of 1 so they draw only in the in between portions
+		//  For 3 links, this will draw like below starting at position 2
+		//       [1] [2] [3] [4] [5]
+		//  [Player] [x] [x] [x] [Ball]
 		let targetZ = target.Pos.Z + CHAIN_TARGETZ_OFFSET;
-		let particleStepX = (Pos.X - target.Pos.X) * 0.2;
-		let particleStepY = (Pos.Y - target.Pos.Y) * 0.2;
-		let particleStepZ = (Pos.Z - targetZ) * 0.2;
+		double numParts = CHAIN_LINK_COUNT + 2;
+		let particleStepX = double(Pos.X - target.Pos.X) / numParts;
+		let particleStepY = double(Pos.Y - target.Pos.Y) / numParts;
+		let particleStepZ = double(Pos.Z - targetZ) / numParts;
 		
-		for (int i = 1; i < 5; i++)
+		for (int i = 1; i < CHAIN_LINK_COUNT; i++)
 		{
 			int num = i + CHAIN_LINK_SKIP;
 			let mox = target.Pos.X + particleStepX * num;
@@ -247,12 +249,12 @@ class ClawChain : Actor
 					clawChain.Links[i-1] = Spawn ("ClawChainLink2", (mox, moy, moz), ALLOW_REPLACE);
 				else
 					clawChain.Links[i-1] = Spawn ("ClawChainLink", (mox, moy, moz), ALLOW_REPLACE);
+				
+				if (clawChain.Links[i-1])
+					clawChain.Links[i-1].target = target;
 			}
 			else
 			{
-				/*clawChain.Links[i-1].Pos.X = mox;
-				clawChain.Links[i-1].Pos.Y = moy;
-				clawChain.Links[i-1].Pos.Z = moz;*/
 				clawChain.Links[i-1].SetOrigin((mox, moy, moz), true);
 			}
 		}
@@ -305,7 +307,7 @@ class ClawChain : Actor
 			tracker = ClawChainTracker(target.FindInventory("ClawChainTracker"));
 			
 		let clawChain = ClawChain(self);
-		for (int i = 0; i < 4; i++)
+		for (int i = CHAIN_LINK_LAST_INDEX; i >= 0; i--)
 		{
 			if (clawChain.Links[i] != null)
 			{
@@ -369,10 +371,11 @@ class ClawChainLink : Actor
 {
 	Default
 	{
-		+NOBLOCKMAP
-		+NOGRAVITY
-		+NOTELEPORT
-		+CANNOTPUSH
+		Projectile;
+		+RIPPER
+		DamageFunction ChainLinkDamage(1);
+		Speed 0;
+
 		+FORCEXYBILLBOARD
 		Scale 0.33;
 	}
@@ -382,6 +385,11 @@ class ClawChainLink : Actor
 	Spawn:
 		FX18 M 24;
 		Stop;
+	}
+
+	int ChainLinkDamage (int damageMin)
+	{
+		return damageMin;
 	}
 }
 
@@ -396,6 +404,8 @@ class ClawChainLink2 : ClawChainLink
 		+ZDOOMTRANS
 		RenderStyle "Translucent";
 		Scale 0.5;
+
+		DamageFunction ChainLinkDamage(2);
 	}
 
 	States
