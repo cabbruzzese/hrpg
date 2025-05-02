@@ -118,8 +118,8 @@ class HRpgWarAxePowered : HRpgWarAxe
 	Fire:
 		TAXE B 8;
 		TAXE C 4 A_HeathenMeleeAttack(random(20, 30), 175, "WarAxePoweredPuff", WARAXE_MELEE_RANGE, -20);
-		TAXE D 4 A_HeathenMeleeAttack(random(20, 40), 175, "WarAxePoweredPuff", WARAXE_MELEE_RANGE, 0);
-		TAXE E 4 A_HeathenMeleeAttack(random(20, 30), 175, "WarAxePoweredPuff", WARAXE_MELEE_RANGE, 20);
+		TAXE D 4 A_HeathenMeleeAttack(random(20, 40), 175, "WarAxePoweredPuffSilent", WARAXE_MELEE_RANGE, 0);
+		TAXE E 4 A_HeathenMeleeAttack(random(20, 30), 175, "WarAxePoweredPuffSilent", WARAXE_MELEE_RANGE, 20);
 		TAXE E 8;
 		TAXE E 4 A_ReFire;
 		Goto Ready;
@@ -260,6 +260,7 @@ class WarAxePoweredPuff : Actor
 		+NOGRAVITY
 		+PUFFONACTORS
 		AttackSound "weapons/staffpowerhit";
+		ActiveSound "mummy/attack1";
 	}
 
 	States
@@ -267,5 +268,13 @@ class WarAxePoweredPuff : Actor
 	Spawn:
 		RAXE CDE 6 BRIGHT;
 		Stop;
+	}
+}
+
+class WarAxePoweredPuffSilent : WarAxePoweredPuff
+{
+	Default
+	{
+		ActiveSound "";
 	}
 }

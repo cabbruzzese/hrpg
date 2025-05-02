@@ -7,7 +7,7 @@ const CHAIN_VEL_MIN = 2;
 const CHAIN_VEL_MAX = 13;
 const CHAIN_HEALTH_RETURN = 5;
 const CHAIN_HEALTH_MAX = 25;
-const CHAIN_MIN_DMG = 10;
+const CHAIN_MIN_DMG = 13;
 const CHAIN_MAX_DMG = 18;
 const FLAIL_MELEE_RANGE = DEFMELEERANGE * 1.75;
 
@@ -142,7 +142,7 @@ class HRpgFlailPowered : HRpgFlail
 	Fire:
 		MSTR B 8;
 		MSTR C 4;
-		MSTR D 4 A_HeathenMeleeAttack(random(35, 90), 175, "BlasterPuff", FLAIL_MELEE_RANGE);
+		MSTR D 4 A_HeathenMeleeAttack(random(35, 90), 175, "FlailPuffPowered", FLAIL_MELEE_RANGE);
 		MSTR E 4;
 		MSTR F 8;
 		MSTR F 2 A_ReFire;
@@ -403,5 +403,13 @@ class ClawChainLink2 : ClawChainLink
 	Spawn:
 		FX15 D 40;
 		Stop;
+	}
+}
+
+class FlailPuffPowered : BlasterPuff
+{
+	Default
+	{
+		ActiveSound "mummy/attack1";
 	}
 }

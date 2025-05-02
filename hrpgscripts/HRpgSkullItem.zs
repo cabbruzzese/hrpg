@@ -3,7 +3,8 @@ const SKULLITEM_ARMOR = 50;
 const SKULLITEM_ARMORSAVE = 50;
 const SKULLITEM_AMMO = 10;
 
-const SKULLITEM_TICKS_BESERK = 500;
+const SKULLITEM_TICKS_BESERK = 700;
+
 const SKULLITEM_TICKS_INVIS = 700;
 const SKULLITEM_TICKS_TORCH = 1200;
 const SKULLITEM_TICKS_TOME = 300;
@@ -155,12 +156,21 @@ class HRpgSkullItem : Inventory
 		power.bAdditiveTime |= bAdditiveTime;
 		power.bNoTeleportFreeze |= bNoTeleportFreeze;
 		
-		let strengthPowerup = PowerStrength2(power);
-		if (strengthPowerup)
+		if (power.CallTryPickup (other))
 		{
-			strengthPowerup.MaxTics = effectTics * 2;
+			return true;
 		}
-		
+		power.GoAwayAndDie ();
+		return false;
+	}
+
+	bool TryUsePowerupGiver (Actor other, Class<Actor> powerupType)
+	{
+		if (powerupType == NULL) return true;	// item is useless
+		if (other == null) return true;
+
+		let power = PowerupGiver(Spawn (powerupType));
+
 		if (power.CallTryPickup (other))
 		{
 			return true;
@@ -212,7 +222,7 @@ class HRpgSkullItem : Inventory
 		let heathenPlayer = HRpgHeathenPlayer(other.player.mo);
 		if (heathenPlayer)
 		{
-			return TryUsePowerup(other, "PowerStrength2", SKULLITEM_TICKS_BESERK);
+			return TryUsePowerupGiver(other, "BerserkPowerItem");
 		}
 		return false;		
 	}
@@ -266,17 +276,40 @@ class HRpgSkullItem : Inventory
 //
 //===========================================================================
 
+const POWERSTRENGTH_MAX_TICS = -20;
+const POWERSTRENGTH_BLEND_TICS = 700;
+class BerserkPowerItem : PowerUpGiver
+{
+	Default
+	{
+		+COUNTITEM
+		+INVENTORY.AUTOACTIVATE
+		+INVENTORY.ALWAYSPICKUP
+		Inventory.MaxAmount 0;
+		Powerup.Type "PowerStrength2";
+	}
+}
+
 class PowerStrength2 : Powerup
 {
 	int maxTics;
+	int currentTics;
 	property MaxTics : maxTics;
+	property CurrentTics : currentTics;
 	Default
 	{
-		Powerup.Duration 1;
+		+COUNTITEM;
+		+INVENTORY.AUTOACTIVATE;
+
+		Powerup.Duration POWERSTRENGTH_MAX_TICS;
 		Powerup.Color "ff 00 00", 0.5;
+		Inventory.Icon "FACEB2";
 		+INVENTORY.HUBPOWER
+
+		Powerup.Duration -20;
 		
-		PowerStrength2.MaxTics 556;
+		PowerStrength2.MaxTics POWERSTRENGTH_BLEND_TICS;
+		PowerStrength2.CurrentTics 0;
 	}
 	
 	override bool HandlePickup (Inventory item)
@@ -297,13 +330,9 @@ class PowerStrength2 : Powerup
 
 	override void Tick ()
 	{
-		// Strength counts up to diminish the fade.
-		EffectTics += 2;
+		currentTics ++;
 
 		Super.Tick();
-
-		if (EffectTics >= MaxTics)
-			Destroy();
 	}
 
 	//===========================================================================
@@ -315,7 +344,7 @@ class PowerStrength2 : Powerup
 	override color GetBlend ()
 	{
 		// slowly fade the berserk out
-		int cnt = 128 - (EffectTics>>3);
+		int cnt = 128 - (currentTics>>3);
 
 		if (cnt > 0)
 		{
@@ -323,6 +352,5 @@ class PowerStrength2 : Powerup
 				BlendColor.r, BlendColor.g, BlendColor.b);
 		}
 		return 0;
-	}
-	
+	}	
 }
