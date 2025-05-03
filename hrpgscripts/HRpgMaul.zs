@@ -41,7 +41,8 @@ class HRpgMaul : HeathenWeapon
 		RMAL F 4 A_ReFire;
 		Goto Ready;
 	AltFire:
-		RMAL B 10;
+		RMAL B 0 Offset(1, WEAPONTOP);
+		RMAL B 10 A_CheckAmmoOrMelee(AltFire);
 		RMAL C 2 Offset(100, 0);
 		RMAL D 2 Offset(120, 0);
 		RMAL E 2 Offset(140, 0);
@@ -148,13 +149,14 @@ class HRpgMaulPowered : HRpgMaul
 	Fire:
 		RMAL B 18;
 		RMAL C 2;
-		RMAL D 6 A_HeathenMeleeAttack(random(80, 180), 125, "MaulPoweredPuff", MAUL_MELEE_RANGE);
+		RMAL D 2 A_HeathenMeleeAttack(random(80, 180), 125, "MaulPoweredPuff", MAUL_MELEE_RANGE);
 		RMAL E 2;
 		RMAL F 18;
 		RMAL F 4 A_ReFire;
 		Goto Ready;
 	AltFire:
-		RMAL B 10;
+		RMAL B 0 Offset(1, WEAPONTOP);
+		RMAL B 10 A_CheckAmmoOrMelee(AltFire);
 		RMAL C 2 Offset(100, 0);
 		RMAL D 2 Offset(120, 0);
 		RMAL E 2 Offset(140, 0);
