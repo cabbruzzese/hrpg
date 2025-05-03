@@ -38,7 +38,7 @@ class HRpgMace : HRpgWeapon replaces Mace
 		HMAC A 1 A_MaceAttackRandomize;
 	Hold:
 		MACE B 1 A_MaceAttackRandomize;
-		MACE CDEF 3 A_FireMacePL1(0.0, 1, 1);
+		MACE CDEF 3 A_FireMacePL1(false, 0.0, 1, 1);
 		MACE C 4 A_ReFire;
 		MACE DEFB 4;
 		Goto Ready;
@@ -99,14 +99,10 @@ class HRpgMace : HRpgWeapon replaces Mace
 		}
 	}
 
-	//----------------------------------------------------------------------------
-	//
-	// PROC A_MaceAttackArc
-	//
-	//----------------------------------------------------------------------------
 	action void A_MaceAttackArc(int powered)
 	{
-		A_StartSound("weapons/maceshoot");
+		A_StartSound("minotaur/attack2");
+		
 		int enlarged = 0;
 		int costsExtraAmmo = 1;
 		if (powered)
@@ -122,24 +118,19 @@ class HRpgMace : HRpgWeapon replaces Mace
 				return;
 		}
 
-		A_FireMacePL1(0.1, 1, enlarged, AltFire); //Fire two for the price of 1.
-		A_FireMacePL1(0.2, 0, enlarged);
-		A_FireMacePL1(0.3, costsExtraAmmo, enlarged); // Only charge extra if not powered
-		A_FireMacePL1(0.4, 0, enlarged);
-		A_FireMacePL1(0.5, costsExtraAmmo, enlarged);
-		A_FireMacePL1(0.6, 0, enlarged);
-		A_FireMacePL1(0.7, costsExtraAmmo, enlarged);
-		A_FireMacePL1(0.8, 0, enlarged);
-		A_FireMacePL1(0.9, costsExtraAmmo, enlarged);
-		A_FireMacePL1(1.0, 0, enlarged);
+		A_FireMacePL1(true, 0.1, 1, enlarged, AltFire); //Fire two for the price of 1.
+		A_FireMacePL1(true, 0.2, 0, enlarged);
+		A_FireMacePL1(true, 0.3, costsExtraAmmo, enlarged); // Only charge extra if not powered
+		A_FireMacePL1(true, 0.4, 0, enlarged);
+		A_FireMacePL1(true, 0.5, costsExtraAmmo, enlarged);
+		A_FireMacePL1(true, 0.6, 0, enlarged);
+		A_FireMacePL1(true, 0.7, costsExtraAmmo, enlarged);
+		A_FireMacePL1(true, 0.8, 0, enlarged);
+		A_FireMacePL1(true, 0.9, costsExtraAmmo, enlarged);
+		A_FireMacePL1(true, 1.0, 0, enlarged);
 	}
 
-	//----------------------------------------------------------------------------
-	//
-	// PROC A_FireMacePL1
-	//
-	//----------------------------------------------------------------------------
-	action void A_FireMacePL1(float apitch, int checkAmmo, int canEnlarge, int fireMode = PrimaryFire)
+	action void A_FireMacePL1(bool isSilent, float apitch, int checkAmmo, int canEnlarge, int fireMode = PrimaryFire)
 	{
 		if (player == null)
 		{
@@ -161,16 +152,16 @@ class HRpgMace : HRpgWeapon replaces Mace
 
 		if ((random[MaceAtk]() < 28 && canEnlarge != 0) || canEnlarge > 1)
 		{
-			Actor ball = Spawn("MaceFX2", Pos + (0, 0, 28 - Floorclip), ALLOW_REPLACE);
+			let spawnType = "MaceFX2Loud";
+			if (isSilent)
+				spawnType = "MaceFX2Silent";
+
+			Actor ball = SpawnPlayerMissile(spawnType, angle + (random[MaceAtk](-4, 3) * (360. / 256)));
 			if (ball != null)
 			{
-				ball.Vel.Z = 2 - clamp(tan(pitch), -5, 5);
-				ball.target = self;
-				ball.angle = self.angle + random[MaceAtk](-4, 3);
-				ball.AddZ(ball.Vel.Z);
-				ball.VelFromAngle();
-				ball.Vel += Vel.xy / 2;
-				ball.A_StartSound ("weapons/maceshoot", CHAN_BODY);
+				if (!isSilent)
+					ball.A_StartSound ("weapons/maceshoot", CHAN_BODY);
+				
 				ball.CheckMissileSpawn (radius);
 				
 				hrpgPlayer.SetProjectileDamageForWeapon(ball);
@@ -178,7 +169,7 @@ class HRpgMace : HRpgWeapon replaces Mace
 				ball.Vel.Z = ball.Vel.Z + (MACE_VVEL_MOD * apitch);
 			}
 		}
-		else
+		else //normal shot
 		{
 			let psp = player.GetPSprite(PSP_WEAPON);
 			if (psp)
@@ -188,8 +179,15 @@ class HRpgMace : HRpgWeapon replaces Mace
 			}
 
 			let fxClass = "MaceFX1";
+			if (isSilent)
+				"MaceFX1Silent";
+
 			if (canEnlarge == 0)
+			{
 				fxClass = "MaceFX5";
+				if (isSilent)
+					fxClass = "MaceFX5Silent";
+			}
 			
 			Actor ball = SpawnPlayerMissile(fxClass, angle + (random[MaceAtk](-4, 3) * (360. / 256)));
 			if (ball)
@@ -418,5 +416,102 @@ class MaceFX5 : Actor
 			Gravity = 1;
 			A_StartSound ("weapons/macehit", CHAN_BODY);
 		}
+	}
+}
+
+class MaceFX1Silent : MaceFX1
+{
+	Default
+	{
+		SeeSound "";
+	}
+}
+
+class MaceFX2Silent : MaceFX2Loud
+{
+	Default
+	{
+		SeeSound "";
+	}
+}
+
+class MaceFX5Silent : MaceFX5
+{
+	Default
+	{
+		SeeSound "";
+	}
+}
+
+class MaceFX2Loud : MaceFX1
+{
+	Default
+	{
+		Speed 10;
+		Damage 6;
+		Gravity 0.125;
+		-NOGRAVITY
+		SeeSound "";
+	}
+
+	States
+	{
+	Spawn:
+		FX02 CD 4;
+		Loop;
+	Death:
+		FX02 F 4 A_MaceBallImpact2;
+		goto Super::Death+1;
+	}
+	
+	//----------------------------------------------------------------------------
+	//
+	// PROC A_MaceBallImpact2
+	//
+	//----------------------------------------------------------------------------
+
+	void A_MaceBallImpact2()
+	{
+		if ((pos.Z <= floorz) && HitFloor ())
+		{ // Landed in some sort of liquid
+			Destroy ();
+			return;
+		}
+		if (bInFloat)
+		{
+			if (Vel.Z >= 2)
+			{
+				// Bounce
+				Vel.Z *= 0.75;
+				SetState (SpawnState);
+
+				Actor tiny = Spawn("MaceFX3", Pos, ALLOW_REPLACE);
+				if (tiny != null)
+				{
+					tiny.target = target;
+					tiny.angle = angle + 90.;
+					tiny.VelFromAngle(Vel.Z - 1.);
+					tiny.Vel += (Vel.XY * .5, Vel.Z);
+					tiny.CheckMissileSpawn (radius);
+				}
+
+				tiny = Spawn("MaceFX3", Pos, ALLOW_REPLACE);
+				if (tiny != null)
+				{
+					tiny.target = target;
+					tiny.angle = angle - 90.;
+					tiny.VelFromAngle(Vel.Z - 1.);
+					tiny.Vel += (Vel.XY * .5, Vel.Z);
+					tiny.CheckMissileSpawn (radius);
+				}
+
+				A_StartSound ("weapons/macebounce", CHAN_BODY);
+				return;
+			}
+		}
+		Vel = (0,0,0);
+		bNoGravity = true;
+		bBounceOnFloors = bBounceOnCeilings = false;
+		Gravity = 1;
 	}
 }
