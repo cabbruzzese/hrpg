@@ -193,30 +193,6 @@ class HRpgSkullRodPowered : HRpgSkullRod replaces SkullRodPowered
 	}
 }
 
-class HornRodPuff : Actor
-{
-	Default
-	{
-		RenderStyle "Translucent";
-		Alpha 0.4;
-		VSpeed 1;
-		Scale 0.33;
-		+NOBLOCKMAP
-		+NOGRAVITY
-		+PUFFONACTORS
-		AttackSound "weapons/staffhit";
-	}
-
-	States
-	{
-	Spawn:
-		FX00 HI 5 BRIGHT;
-		FX00 JK 4 BRIGHT;
-		FX00 LM 3 BRIGHT;
-		Stop;
-	}
-}
-
 class HornBallFX1 : Actor
 {
 	Default

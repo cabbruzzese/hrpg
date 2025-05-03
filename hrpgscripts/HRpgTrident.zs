@@ -30,16 +30,16 @@ class HRpgTrident : HeathenWeapon
 		TRDT A 1 A_Raise;
 		Loop;
 	Fire:
-		TRDT A 4 Offset(0, 80) A_ChargeForward(0, 0, 0, 10);
-		TRDT B 4 Offset(0, 60) A_ChargeForward(0, 0, 0, 15);
-		TRDT C 4 Offset(0, 40) A_ChargeForward(1, 100, random(1,25), 0, "WarhammerPuff");
-		TRDT C 4 Offset(0, 0) A_ChargeForward(1, 100, random(1,30), 0, "WarhammerPuffSilent", 2.0);
-		TRDT C 4 Offset(0, 0) A_ChargeForward(1, 500, random(1,25), 0, "WarhammerPuffSilent");
+		TRDT A 4 Offset(0, 80) A_ChargeForward(true, 0, 0, 0, 10);
+		TRDT B 4 Offset(0, 60) A_ChargeForward(true, 0, 0, 0, 15);
+		TRDT C 4 Offset(0, 40) A_ChargeForward(true, 1, 100, random(1,25), 0, "WarhammerPuff");
+		TRDT C 4 Offset(0, 0) A_ChargeForward(true, 1, 100, random(1,30), 0, "WarhammerPuffSilent", 2.0);
+		TRDT C 4 Offset(0, 0) A_ChargeForward(true, 1, 500, random(1,25), 0, "WarhammerPuffSilent");
 		TRDT BA 2;
 		TRDT A 2 A_ReFire;
 		Goto Ready;
 	AltFire:
-		TRDT DE 4;
+		TRDT DE 4 A_CheckAmmoOrMelee(AltFire);
 		TRDT FG 4;
 		TRDT H 4 A_FireTridentPL1(0);
 		TRDT H 0 A_ReFire;
@@ -47,9 +47,8 @@ class HRpgTrident : HeathenWeapon
 		TRDT A 4;
 		Goto Ready;
 	AltHold:
-		TRDT H 2;
-		TRDT G 6;
-		TRDT FG 4;
+		TRDT G 8 A_CheckAmmoOrMelee(AltFire);
+		TRDT KG 4;
 		TRDT H 4 A_FireTridentPL1(0);
 		TRDT H 0 A_ReFire;
 		TRDT IJ 4;
@@ -57,9 +56,17 @@ class HRpgTrident : HeathenWeapon
 		Goto Ready;
 	}
 	
-	action void A_ChargeForward(int attack, int kickback, int damage, int thrust, class<Actor> puff = "", float rangeMod = 1.0)
+	action void A_ChargeForward(bool noThrustAltHold, int attack, int kickback, int damage, int thrust, class<Actor> puff = "", float rangeMod = 1.0)
 	{
-		Thrust(thrust, angle);
+		bool doThrust = true;
+		if (noThrustAltHold)
+		{
+			if (player.cmd.buttons & BT_ALTATTACK)
+				doThrust = false;
+		}
+
+		if (doThrust)
+			Thrust(thrust, angle);
 		
 		if (attack)
 			A_HeathenMeleeAttack(damage, kickback, puff, TRIDENT_MELEE_RANGE * rangeMod, 0, true);
@@ -137,16 +144,16 @@ class HRpgTridentPowered : HRpgTrident
 		TRDT A 1 A_Raise;
 		Loop;
 	Fire:
-		TRDT A 4 Offset(0, 80) A_ChargeForward(0, 0, 0, 10);
-		TRDT B 4 Offset(0, 60) A_ChargeForward(0, 0, 0, 15);
-		TRDT C 4 Offset(0, 40) A_ChargeForward(1, 100, random(10,40), 0, "HornRodPuff");
-		TRDT C 4 Offset(0, 0) A_ChargeForward(1, 100, random(10,50), 0, "HornRodPuff", 2.0);
-		TRDT C 4 Offset(0, 0) A_ChargeForward(1, 500, random(10,40), 0, "HornRodPuff");
+		TRDT A 4 Offset(0, 80) A_ChargeForward(true, 0, 0, 0, 10);
+		TRDT B 4 Offset(0, 60) A_ChargeForward(true, 0, 0, 0, 15);
+		TRDT C 4 Offset(0, 40) A_ChargeForward(true, 1, 100, random(10,40), 0, "TridentPoweredPuff");
+		TRDT C 4 Offset(0, 0) A_ChargeForward(true, 1, 100, random(10,50), 0, "TridentPoweredPuffSilent", 2.0);
+		TRDT C 4 Offset(0, 0) A_ChargeForward(true, 1, 500, random(10,40), 0, "TridentPoweredPuffSilent");
 		TRDT BA 2;
 		TRDT A 2 A_ReFire;
 		Goto Ready;
 	AltFire:
-		TRDT DE 4;
+		TRDT DE 4 A_CheckAmmoOrMelee(AltFire);
 		TRDT FG 4;
 		TRDT H 4 A_FireTridentPL1(1);
 		TRDT H 0 A_ReFire;
@@ -154,9 +161,8 @@ class HRpgTridentPowered : HRpgTrident
 		TRDT A 4 A_ReFire;
 		Goto Ready;
 	AltHold:
-		TRDT H 2;
-		TRDT G 6;
-		TRDT FG 4;
+		TRDT G 8 A_CheckAmmoOrMelee(AltFire);
+		TRDT KG 4;
 		TRDT H 4 A_FireTridentPL1(1);
 		TRDT H 0 A_ReFire;
 		TRDT IJ 4;
@@ -172,17 +178,29 @@ class TridentPoweredPuff : Actor
 		RenderStyle "Translucent";
 		Alpha 0.4;
 		VSpeed 1;
+		Scale 0.33;
 		+NOBLOCKMAP
 		+NOGRAVITY
 		+PUFFONACTORS
-		AttackSound "weapons/staffpowerhit";
+		AttackSound "weapons/staffhit";
+		ActiveSound "mummy/attack1";
 	}
 
 	States
 	{
 	Spawn:
-		RAXE CDE 6 BRIGHT;
+		FX00 HI 5 BRIGHT;
+		FX00 JK 4 BRIGHT;
+		FX00 LM 3 BRIGHT;
 		Stop;
+	}
+}
+
+class TridentPoweredPuffSilent : TridentPoweredPuff
+{
+	Default
+	{
+		ActiveSound "";
 	}
 }
 
