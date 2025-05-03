@@ -1,16 +1,17 @@
 // The mace itself ----------------------------------------------------------
 const MACE_VVEL_MOD = 2.0;
-const MACE_MELEE_RANGE = DEFMELEERANGE * 1.2;
+const MACE_MELEE_RANGE = int(DEFMELEERANGE * 1.2);
+const MACE_ALT_AMMO_USE = 5;
 
 class HRpgMace : HRpgWeapon replaces Mace
 {
 	Default
 	{
 		Weapon.SelectionOrder 1400;
-		Weapon.AmmoUse2 1;
-		Weapon.AmmoGive2 50;
+		Weapon.AmmoUse 1;
+		Weapon.AmmoGive 50;
+		Weapon.AmmoType "MaceAmmo";
 		Weapon.YAdjust 15;
-		Weapon.AmmoType2 "MaceAmmo";
 		Weapon.SisterWeapon "HRpgMacePowered";
 		Inventory.PickupMessage "$TXT_WPNMACE";
 		Tag "$TAG_MACE";
@@ -60,7 +61,7 @@ class HRpgMace : HRpgWeapon replaces Mace
 		HMAC F 2 A_ReFire;
 		Goto Ready;
 	AltFire:
-		HMAC G 6;
+		HMAC G 6 A_CheckAmmoOrMeleeIfHeathen(AltFire, PrimaryFire);
 		HMAC H 3;
 		HMAC I 3 A_MaceAttackArc(0);
 		HMAC J 3;
@@ -117,11 +118,11 @@ class HRpgMace : HRpgWeapon replaces Mace
 		Weapon weapon = player.ReadyWeapon;
 		if (weapon != null)
 		{
-			if (!weapon.CheckAmmo(Weapon.AltFire, true))
+			if (!weapon.CheckAmmo(Weapon.PrimaryFire, true))
 				return;
 		}
 
-		A_FireMacePL1(0.1, 1, enlarged); //Fire two for the price of 1.
+		A_FireMacePL1(0.1, 1, enlarged, AltFire); //Fire two for the price of 1.
 		A_FireMacePL1(0.2, 0, enlarged);
 		A_FireMacePL1(0.3, costsExtraAmmo, enlarged); // Only charge extra if not powered
 		A_FireMacePL1(0.4, 0, enlarged);
@@ -138,7 +139,7 @@ class HRpgMace : HRpgWeapon replaces Mace
 	// PROC A_FireMacePL1
 	//
 	//----------------------------------------------------------------------------
-	action void A_FireMacePL1(float apitch, int checkAmmo, int canEnlarge)
+	action void A_FireMacePL1(float apitch, int checkAmmo, int canEnlarge, int fireMode = PrimaryFire)
 	{
 		if (player == null)
 		{
@@ -147,10 +148,10 @@ class HRpgMace : HRpgWeapon replaces Mace
 
 		Weapon weapon = player.ReadyWeapon;
 		if (weapon != null && checkAmmo)
-		{
-			if (!weapon.DepleteAmmo (true))
+		{			
+			if (!weapon.DepleteAmmo (false))
 			{
-				weapon.CheckAmmo(Weapon.AltFire, true);
+				weapon.CheckAmmo(fireMode, true);
 				return;
 			}
 		}
@@ -201,6 +202,18 @@ class HRpgMace : HRpgWeapon replaces Mace
 			}
 		}
 	}
+
+	override bool CheckAmmo(int fireMode, bool autoSwitch, bool requireAmmo, int ammocount)
+	{
+		let htPlayer = HRpgHeathenPlayer(Owner);
+		if (htPlayer && htPlayer.player.ReadyWeapon)
+		{
+			htPlayer.player.ReadyWeapon.bAMMO_OPTIONAL = true;
+			htPlayer.player.ReadyWeapon.bALT_AMMO_OPTIONAL = true;
+		}
+
+		return super.CheckAmmo(firemode, autoSwitch, requireAmmo, ammocount);
+	}
 }
 
 class HRpgMacePowered : HRpgMace replaces MacePowered
@@ -208,8 +221,8 @@ class HRpgMacePowered : HRpgMace replaces MacePowered
 	Default
 	{
 		+WEAPON.POWERED_UP
-		Weapon.AmmoUse2 5;
-		Weapon.AmmoGive2 0;
+		Weapon.AmmoUse 5;
+		Weapon.AmmoGive 0;
 		Weapon.SisterWeapon "HRpgMace";
 		Tag "$TAG_MACEP";
 		Obituary "$OB_MPPMACEHIT";
@@ -245,7 +258,7 @@ class HRpgMacePowered : HRpgMace replaces MacePowered
 		HMAC F 2 A_ReFire;
 		Goto Ready;
 	AltFire:
-		HMAC G 6;
+		HMAC G 6 A_CheckAmmoOrMeleeIfHeathen(AltFire, PrimaryFire);
 		HMAC H 3;
 		HMAC I 3 A_MaceAttackArc(1);
 		HMAC J 3;
@@ -273,7 +286,7 @@ class HRpgMacePowered : HRpgMace replaces MacePowered
 		Weapon weapon = player.ReadyWeapon;
 		if (weapon != null)
 		{
-			if (!weapon.DepleteAmmo (true))
+			if (!weapon.DepleteAmmo (false))
 				return;
 		}
 		Actor mo = SpawnPlayerMissile ("MaceFX4", angle, pLineTarget:t);

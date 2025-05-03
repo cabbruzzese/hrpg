@@ -130,6 +130,43 @@ class HRpgWeapon : HereticWeapon
     {
         player.SetPsprite(PSP_WEAPON, player.ReadyWeapon.FindState(stateName));
     }
+
+	action void A_CheckAmmoOrMeleeIfHeathen(int fireType, int ammoFireType = -1)
+	{
+		let htPlayer = HRpgHeathenPlayer(player.mo);
+		if (htPlayer)
+		{
+			A_CheckAmmoOrMelee(firetype, ammoFireType);
+		}
+		else
+		{
+			int checkAmmoType = fireType;
+			if (ammoFireType != -1)
+				checkAmmoType = ammoFireType;
+
+			if (player.ReadyWeapon)
+				player.ReadyWeapon.CheckAmmo(checkAmmoType, true);
+		}
+	}
+
+	action void A_CheckAmmoOrMelee(int fireType, int ammoFireType = -1)
+	{
+		Weapon weapon = player.ReadyWeapon;
+		if (weapon != null)
+		{
+			int checkAmmoType = fireType;
+			if (ammoFireType != -1)
+				checkAmmoType = ammoFireType;
+
+			if (!weapon.CheckAmmo(checkAmmoType, false, true))
+			{
+				if (fireType == PrimaryFire)
+					A_SetWeapState("AltFire");
+				else
+					A_SetWeapState("Fire");
+			}
+		}
+	}
 }
 
 class NonHeathenWeapon : HRpgWeapon
@@ -186,22 +223,6 @@ class HeathenWeapon : HRpgWeapon
             A_SetWeapState("ShortChargeAttack");
         }
 	}
-
-	action void A_CheckAmmoOrMelee(int fireType)
-	{
-		Weapon weapon = player.ReadyWeapon;
-		if (weapon != null)
-		{
-			if (!weapon.CheckAmmo(fireType, false, true))
-			{
-				if (fireType == PrimaryFire)
-					A_SetWeapState("AltFire");
-				else
-					A_SetWeapState("Fire");
-			}
-		}
-	}
-
 }
 
 class BlasphemerWeapon : HRpgWeapon
