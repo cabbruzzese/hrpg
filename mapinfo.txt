@@ -1,1 +1,6 @@
 include "mapinfo/hrpg.txt"
+
+GameInfo
+{
+    AddEventHandlers = "HRpgMonsterCounter"
+}

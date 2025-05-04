@@ -1,10 +1,14 @@
 class HRpgStatusBar : HereticStatusBar
 {
+	int TotalSpawnableMonsters;
+	int TotalSpawnableMonstersMax;
+
 	DynamicValueInterpolator mHealthInterpolator;
 	HUDFont mHUDFont;
 	HUDFont mIndexFont;
 	HUDFont mBigFont;
 	HUDFont mSmallFont;
+	HUDFont mMapFont;
 	InventoryBarState diparms;
 	InventoryBarState diparms_sbar;
 	private int wiggle;
@@ -24,6 +28,8 @@ class HRpgStatusBar : HereticStatusBar
 		mBigFont = HUDFont.Create(fnt, fnt.GetCharWidth("0"), Mono_CellLeft, 2, 2);
 		fnt = "SMALLFONT";
 		mSmallFont = HUDFont.Create(fnt, fnt.GetCharWidth("0"), Mono_CellLeft);
+		mMapFont = HUDFont.Create(fnt, fnt.GetCharWidth("0"), Mono_CellCenter);
+		
 		diparms = InventoryBarState.Create(mIndexFont);
 		diparms_sbar = InventoryBarState.CreateNoBox(mIndexFont, boxsize:(31, 31), arrowoffs:(0,-10));
 		mHealthInterpolator = DynamicValueInterpolator.Create(0, 0.25, 1, 8);
@@ -164,6 +170,15 @@ class HRpgStatusBar : HereticStatusBar
 		{
 			DrawImage("INVBAR", (34, 160), DI_ITEM_OFFSETS);
 			DrawInventoryBar(diparms_sbar, (49, 160), 7, DI_ITEM_LEFT_TOP, HX_SHADOW);
+		}
+
+		if (automapactive)
+		{
+			if (hrpg_monsterrespawn)
+			{
+				let respawnCountMsg = String.Format("\ckSouls:\cc %d / %d", TotalSpawnableMonsters, TotalSpawnableMonstersMax);
+				DrawString(mMapFont, respawnCountMsg, (-215, -112), DI_TEXT_ALIGN_LEFT);
+			}
 		}
 	}
 

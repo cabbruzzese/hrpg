@@ -7,7 +7,7 @@ const RESPAWN_TICS_MAX = 24000; //20 minutes
 //const RESPAWN_TICS_MIN = 100;
 //const RESPAWN_TICS_MAX = 100;
 
-const RESPAWN_COUNT_MIN = 3;
+const RESPAWN_COUNT_MIN = 2;
 const RESPAWN_COUNT_MAX = 7;
 
 const BOSSTYPE_CHANCE_BRUTE = 10;
@@ -55,6 +55,7 @@ struct LeaderProps
 class ExpSquishbag : Actor
 {
 	bool oldGhost;
+	bool isDoneRespawning;
 
 	int respawnWaitTics;
 	int respawnWaitBonus;
@@ -183,15 +184,38 @@ class ExpSquishbag : Actor
 		
 		Super.Die(source, inflictor, dmflags, MeansOfDeath);
 
-		if (IsRespawnable && hrpg_monsterrespawn)
+		isDoneRespawning = true;
+
+		
+
+		if (hrpg_monsterrespawn)
 		{
-			let hrpgPlayer = HRpgPlayer(source);
-			if (hrpgPlayer)
+			//Random chance to end respawning
+			respawnCount += 1;
+
+			int respawnChance = clamp(respawnCount, RESPAWN_COUNT_MIN, RESPAWN_COUNT_MAX);
+			if (random(0, 10) < respawnChance)
+				IsRespawnable = false;
+
+			if (IsRespawnable)
 			{
-				RespawnLevel = hrpgPlayer.ExpLevel;
+				let hrpgPlayer = HRpgPlayer(source);
+				if (hrpgPlayer)
+				{
+					RespawnLevel = hrpgPlayer.ExpLevel;
+				}
+				RespawnWaitTics = random(RESPAWN_TICS_MIN, RESPAWN_TICS_MAX) + RespawnWaitBonus;
+
+				isDoneRespawning = false;
 			}
-			RespawnWaitTics = random(RESPAWN_TICS_MIN, RESPAWN_TICS_MAX) + RespawnWaitBonus;
+			else 
+			{
+				A_SpawnItemEx("MonsterSoul", 0,0,1, 0,0,0);
+			}
 		}
+		
+
+		HRpgMonsterCounter.UpdateSpawnCounts();
 	}
 
 	int GetPlayerLevel()
@@ -408,19 +432,8 @@ class ExpSquishbag : Actor
 		RespawnWaitTics = 0;
 		RespawnLevel = 1;
 
-		//Random chance to end spawning
-		if (respawnCount >= RESPAWN_COUNT_MIN)
-		{
-			int respawnChance = clamp(respawnCount, RESPAWN_COUNT_MIN, RESPAWN_COUNT_MAX);
-			if (random(0, 10) < respawnChance)
-				return;
-		}
-
-
-		int newRespawnCount = respawnCount + 1;
 		A_Respawn(RSF_FOG);
 		
-		respawnCount = clamp(newRespawnCount, RESPAWN_COUNT_MIN, RESPAWN_COUNT_MAX);
 		ApplyLeaderProps(props);
 	}
 }
@@ -624,5 +637,26 @@ class LightningMonsterBlast : Actor
 				mo.Vel.Z = 1. + Random[BlueSpark]() / 256.;
 			}
 		}
+	}
+}
+
+class MonsterSoul:MummySoul
+{
+	Default
+	{
+		Scale 1.5;
+		DeathSound "mummy/death";
+	}
+  
+	States
+	{
+	Spawn:
+		TNT1 A 6;
+		TNT1 A 0 A_Scream;
+		MUMM QRS 5;
+		MUMM TUVW 9;
+		FDTH O 5 A_StartSound("beast/attack");
+		FDTH PQR 5;
+		Stop;
 	}
 }

@@ -16,7 +16,7 @@ class HRpgMummy : ExpSquishbag replaces Mummy
 		SeeSound "mummy/sight";
 		AttackSound "mummy/attack1";
 		PainSound "mummy/pain";
-		DeathSound "mummy/death";
+		DeathSound "misc/ripslop";
 		ActiveSound "mummy/active";
 		HitObituary "$OB_MUMMY";
 		Tag "$FN_MUMMY";
@@ -42,9 +42,9 @@ class HRpgMummy : ExpSquishbag replaces Mummy
 		MUMM H 4 A_Pain;
 		Goto See;
 	Death:
-		MUMM I 5;
-		MUMM J 5 A_Scream;
-		MUMM K 5 A_SpawnItemEx("MummySoul", 0,0,10, 0,0,1);
+		MUMM I 5 A_Scream;
+		MUMM J 5;
+		MUMM K 5; // A_SpawnItemEx("MummySoul", 0,0,10, 0,0,1);
 		MUMM L 5;
 		MUMM M 5 A_NoBlocking;
 		MUMM NO 5;
