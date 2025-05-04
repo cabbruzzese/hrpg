@@ -1,14 +1,16 @@
 // Skull (Horn) Rod ---------------------------------------------------------
+const SKULLROD_ALT_AMMO_COST = 3;
+const SKULLROD_POWER_AMMO_COST = 5;
 
 class HRpgSkullRod : NonHeathenWeapon replaces SkullRod
 {
 	Default
 	{
 		Weapon.SelectionOrder 200;
-		Weapon.AmmoUse1 1;
-		Weapon.AmmoGive1 50;
+		Weapon.AmmoUse 1;
+		Weapon.AmmoGive 50;
 		Weapon.YAdjust 15;
-		Weapon.AmmoType1 "SkullRodAmmo";
+		Weapon.AmmoType "SkullRodAmmo";
 		Weapon.SisterWeapon "HRpgSkullRodPowered";
 		Inventory.PickupMessage "$TXT_WPNSKULLROD";
 		Tag "$TAG_SKULLROD";
@@ -36,6 +38,7 @@ class HRpgSkullRod : NonHeathenWeapon replaces SkullRod
 		HROD B 0 A_ReFire;
 		Goto Ready;
 	AltFire:
+		TNT1 A 0 A_CheckAltAmmoOrFire(SKULLROD_ALT_AMMO_COST);
 		HROD CDEF 4;
 		HROD G 4 A_FireSkullRodPL3(0);
 		HROD FED 4;
@@ -43,12 +46,6 @@ class HRpgSkullRod : NonHeathenWeapon replaces SkullRod
 		Goto Ready;
 	}
 	
-	//----------------------------------------------------------------------------
-	//
-	// PROC A_FireSkullRodPL1
-	//
-	//----------------------------------------------------------------------------
-
 	action void A_FireSkullRodPL1()
 	{
 		if (player == null)
@@ -59,8 +56,10 @@ class HRpgSkullRod : NonHeathenWeapon replaces SkullRod
 		Weapon weapon = player.ReadyWeapon;
 		if (weapon != null)
 		{
-			if (!weapon.DepleteAmmo (weapon.bAltFire))
+			if (!weapon.CheckAmmo(PrimaryFire, true))
 				return;
+			
+			weapon.DepleteAmmo (false, true);
 		}
 		Actor mo = SpawnPlayerMissile ("HornRodFX1");
 		// Randomize the first frame
@@ -99,9 +98,11 @@ class HRpgSkullRod : NonHeathenWeapon replaces SkullRod
 		Weapon weapon = player.ReadyWeapon;
 		if (weapon != null)
 		{
-			if (!weapon.DepleteAmmo (false))
+			int ammoUse = SKULLROD_ALT_AMMO_COST;
+			if (powered)
+				ammoUse = SKULLROD_POWER_AMMO_COST;
+			if (!weapon.DepleteAmmo(false, true, ammoUse, true))
 			{
-				weapon.CheckAmmo(Weapon.PrimaryFire, true);
 				return;
 			}
 		}
@@ -122,8 +123,8 @@ class HRpgSkullRodPowered : HRpgSkullRod replaces SkullRodPowered
 	Default
 	{
 		+WEAPON.POWERED_UP
-		Weapon.AmmoUse1 5;
-		Weapon.AmmoGive1 0;
+		Weapon.AmmoUse 5;
+		Weapon.AmmoGive 0;
 		Weapon.SisterWeapon "HRpgSkullRod";
 		Tag "$TAG_SKULLRODP";
 	}
@@ -131,6 +132,7 @@ class HRpgSkullRodPowered : HRpgSkullRod replaces SkullRodPowered
 	States
 	{
 	Fire:
+		TNT1 A 0 A_ForceCheckAmmo;
 		HROD C 2;
 		HROD D 3;
 		HROD E 2;
@@ -142,7 +144,8 @@ class HRpgSkullRodPowered : HRpgSkullRod replaces SkullRodPowered
 		HROD C 2 A_ReFire;
 		Goto Ready;
 	AltFire:
-		HROD C 2;
+		TNT1 A 0 A_CheckAltAmmoOrFire(SKULLROD_POWER_AMMO_COST);
+		HROD C 2 ;
 		HROD D 2;
 		HROD E 2;
 		HROD F 2;
@@ -152,6 +155,15 @@ class HRpgSkullRodPowered : HRpgSkullRod replaces SkullRodPowered
 		HROD D 2;
 		HROD C 2 A_ReFire;
 		Goto Ready;
+	}
+
+	action void A_ForceCheckAmmo()
+	{
+		Weapon weapon = player.ReadyWeapon;
+		if (weapon != null)
+		{
+			weapon.CheckAmmo(false, true);
+		}
 	}
 	
 	//----------------------------------------------------------------------------
@@ -175,7 +187,7 @@ class HRpgSkullRodPowered : HRpgSkullRod replaces SkullRodPowered
 		Weapon weapon = player.ReadyWeapon;
 		if (weapon != null)
 		{
-			if (!weapon.DepleteAmmo (weapon.bAltFire))
+			if (!weapon.DepleteAmmo (PrimaryFire, true))
 				return;
 		}
 		// Use MissileActor instead of the first return value from P_SpawnPlayerMissile 

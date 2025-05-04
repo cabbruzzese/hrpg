@@ -118,16 +118,12 @@ class HRpgMace : HRpgWeapon replaces Mace
 				return;
 		}
 
-		A_FireMacePL1(true, 0.1, 1, enlarged, AltFire); //Fire two for the price of 1.
-		A_FireMacePL1(true, 0.2, 0, enlarged);
-		A_FireMacePL1(true, 0.3, costsExtraAmmo, enlarged); // Only charge extra if not powered
-		A_FireMacePL1(true, 0.4, 0, enlarged);
+		A_FireMacePL1(true, 0.1, 1, enlarged, AltFire);
+		A_FireMacePL1(true, 0.2, 0, enlarged); // one extra for ammo efficiency
+		A_FireMacePL1(true, 0.3, costsExtraAmmo, enlarged);
 		A_FireMacePL1(true, 0.5, costsExtraAmmo, enlarged);
-		A_FireMacePL1(true, 0.6, 0, enlarged);
 		A_FireMacePL1(true, 0.7, costsExtraAmmo, enlarged);
-		A_FireMacePL1(true, 0.8, 0, enlarged);
 		A_FireMacePL1(true, 0.9, costsExtraAmmo, enlarged);
-		A_FireMacePL1(true, 1.0, 0, enlarged);
 	}
 
 	action void A_FireMacePL1(bool isSilent, float apitch, int checkAmmo, int canEnlarge, int fireMode = PrimaryFire)

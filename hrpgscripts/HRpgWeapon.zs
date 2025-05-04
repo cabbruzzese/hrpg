@@ -167,6 +167,17 @@ class HRpgWeapon : HereticWeapon
 			}
 		}
 	}
+
+	action void A_CheckAltAmmoOrFire(int ammoUse)
+	{
+		if (player.ReadyWeapon)
+		{
+			if (!player.ReadyWeapon.CheckAmmo(PrimaryFire, true, true, ammoUse))
+			{
+				A_SetWeapState("Fire");
+			}
+		}
+	}
 }
 
 class NonHeathenWeapon : HRpgWeapon
