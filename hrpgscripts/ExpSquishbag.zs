@@ -54,6 +54,8 @@ struct LeaderProps
 
 class ExpSquishbag : Actor
 {
+	bool oldGhost;
+
 	int respawnWaitTics;
 	int respawnWaitBonus;
 	int respawnLevel;
@@ -207,6 +209,8 @@ class ExpSquishbag : Actor
 
 		if (IsRespawnable)
 		{
+			SaveNormal();
+
 			RespawnLevel = GetPlayerLevel();
 			LeaderProps props;
 			GetWanderingMonsterProperties(props);
@@ -235,6 +239,11 @@ class ExpSquishbag : Actor
 		
 		Super.Tick();
 	}
+
+	void SaveNormal()
+	{
+		oldGhost = bGhost;
+	}
 	
 	void SetNormal()
 	{
@@ -243,6 +252,7 @@ class ExpSquishbag : Actor
 		Translation = 0;
 		bALWAYSFAST = false;
 		LeaderType = 0;
+		bGhost = oldGhost;
 		
 		if (isSpectreable)
 			A_SetRenderStyle(1.0, STYLE_Normal);
@@ -267,6 +277,8 @@ class ExpSquishbag : Actor
 
 		A_SetRenderStyle(HR_SHADOW, STYLE_Translucent);
 		DamageMultiply = 1.5;
+
+		bGhost = true;
 	}
 	
 	void SetLeader()
