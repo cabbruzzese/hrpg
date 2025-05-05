@@ -176,7 +176,10 @@ class HRpgStatusBar : HereticStatusBar
 		{
 			if (hrpg_monsterrespawn)
 			{
-				let respawnCountMsg = String.Format("\ckSouls:\cc %d / %d", TotalSpawnableMonsters, TotalSpawnableMonstersMax);
+				int soulsRemaining = TotalSpawnableMonstersMax - TotalSpawnableMonsters;
+				if (soulsRemaining < 0)
+					soulsRemaining = 0;
+				let respawnCountMsg = String.Format("\ckSouls:\cc %d / %d", soulsRemaining, TotalSpawnableMonstersMax);
 				DrawString(mMapFont, respawnCountMsg, (-215, -112), DI_TEXT_ALIGN_LEFT);
 			}
 		}

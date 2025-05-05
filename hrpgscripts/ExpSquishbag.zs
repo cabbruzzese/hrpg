@@ -191,7 +191,10 @@ class ExpSquishbag : Actor
 		if (hrpg_monsterrespawn)
 		{
 			//Random chance to end respawning
-			respawnCount += 1;
+			if (respawnCount == 0 && isBossOnly)
+				respawnCount = 5; // Boss only monsters respawn less
+			else
+				respawnCount += 1;
 
 			int respawnChance = clamp(respawnCount, RESPAWN_COUNT_MIN, RESPAWN_COUNT_MAX);
 			if (random(0, 10) < respawnChance)
