@@ -23,7 +23,6 @@ class HRpgBeast : ExpSquishbag replaces Beast
 		DropItem "CrossbowAmmo", 84, 10;
 		
 		ExpSquishbag.IsRespawnable true;
-		ExpSquishbag.RespawnWaitBonus 2400;
 	}
 	States
 	{

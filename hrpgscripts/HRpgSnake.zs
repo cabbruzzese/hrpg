@@ -20,7 +20,7 @@ class HRpgSnake : ExpSquishbag replaces Snake
 		DropItem "PhoenixRodAmmo", 84, 5;
 		
 		ExpSquishbag.IsRespawnable true;
-		ExpSquishbag.IsBossOnly true;
+		ExpSquishbag.isSpawnLess true;
 	}
 	States
 	{

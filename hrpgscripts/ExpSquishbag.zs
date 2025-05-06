@@ -2,7 +2,7 @@ const MAXXPHIT = 150;
 const XP_PERHIT_BONUS = 5;
 
 const RESPAWN_TICS_MIN = 2400; //2 minute
-const RESPAWN_TICS_MAX = 24000; //20 minutes
+const RESPAWN_TICS_MAX = 12000; //10 minutes
 // Uncomment for testing
 //const RESPAWN_TICS_MIN = 100;
 //const RESPAWN_TICS_MAX = 100;
@@ -56,37 +56,35 @@ class ExpSquishbag : Actor
 {
 	bool oldGhost;
 	bool isDoneRespawning;
+	Vector3 spawnPos;
 
 	int respawnWaitTics;
-	int respawnWaitBonus;
 	int respawnLevel;
 	int respawnCount;
 	bool isRespawnable;
 	bool isSpectreable;
-	bool isBossOnly;
+	bool isSpawnLess;
 	int baseSpeed;
 	int leaderType;
 	int sneakDelay;
 	property RespawnWaitTics : respawnWaitTics;
-	property RespawnWaitBonus : respawnWaitBonus;
 	property RespawnLevel : respawnLevel;
 	property IsRespawnable : isRespawnable;
 	property IsSpectreable : isSpectreable;
 	property BaseSpeed : baseSpeed;
 	property LeaderType : leaderType;
-	property IsBossOnly : isBossOnly;
+	property isSpawnLess : isSpawnLess;
 	property SneakDelay : sneakDelay;
 	
 	Default
 	{
 		ExpSquishbag.RespawnWaitTics 0;
-		ExpSquishbag.RespawnWaitBonus 0;
 		ExpSquishbag.respawnLevel 1;
 		ExpSquishbag.IsRespawnable false;
 		ExpSquishbag.IsSpectreable true;
 		ExpSquishbag.BaseSpeed -1;
 		ExpSquishbag.LeaderType 0;
-		ExpSquishbag.IsBossOnly false;
+		ExpSquishbag.isSpawnLess false;
 		ExpSquishbag.SneakDelay 0;
 	}
 	
@@ -186,19 +184,22 @@ class ExpSquishbag : Actor
 
 		isDoneRespawning = true;
 
-		
-
 		if (hrpg_monsterrespawn)
 		{
 			//Random chance to end respawning
-			if (respawnCount == 0 && isBossOnly)
-				respawnCount = 5; // Boss only monsters respawn less
+			if (respawnCount == 0 && isSpawnLess)
+				respawnCount = 5; // 50% chance to remove spawn less
 			else
 				respawnCount += 1;
 
 			int respawnChance = clamp(respawnCount, RESPAWN_COUNT_MIN, RESPAWN_COUNT_MAX);
 			if (random(0, 10) < respawnChance)
 				IsRespawnable = false;
+
+			if (isRespawnable)
+				isDoneRespawning = false;
+				
+			let soulCounts = HRpgMonsterCounter.UpdateSpawnCounts();
 
 			if (IsRespawnable)
 			{
@@ -207,18 +208,35 @@ class ExpSquishbag : Actor
 				{
 					RespawnLevel = hrpgPlayer.ExpLevel;
 				}
-				RespawnWaitTics = random(RESPAWN_TICS_MIN, RESPAWN_TICS_MAX) + RespawnWaitBonus;
+				RespawnWaitTics = random(RESPAWN_TICS_MIN, RESPAWN_TICS_MAX);
 
-				isDoneRespawning = false;
+				//If last few remaining, reduce time
+				double remainingPercent = double(soulCounts.Remaining) / double(soulCounts.Total);
+				if (remainingPercent < 0.2)
+					RespawnWaitTics = RESPAWN_TICS_MIN + random(1, 100);
+
+				GiveInventoryType("MonsterStars");
 			}
 			else 
 			{
-				A_SpawnItemEx("MonsterSoul", 0,0,1, 0,0,0);
+				//A_PrintBold(String.Format("Is Won: %i Has Won: %i Count: %d Total: %d ", soulCounts.IsWin, soulCounts.HasWon, soulCounts.Remaining, soulCounts.Total));
+				// Win the soul hunting prize
+				if (soulCounts.IsWin && !soulCounts.HasWon)
+				{
+					A_DropItem("EnchantedShield", 1);
+					A_DropItem("BagOfHolding", 1);
+					A_DropItem("ArtiSuperHealth", 1);
+
+					A_SpawnItemEx("WinTrophy", 0,0,32, 0,0,0);
+
+					A_PrintBold("You have vanquished all of the monster souls!");
+				}
+				else
+				{
+					A_SpawnItemEx("MonsterSoul", 0,0,1, 0,0,0);
+				}
 			}
 		}
-		
-
-		HRpgMonsterCounter.UpdateSpawnCounts();
 	}
 
 	int GetPlayerLevel()
@@ -270,6 +288,7 @@ class ExpSquishbag : Actor
 	void SaveNormal()
 	{
 		oldGhost = bGhost;
+		spawnPos = (Pos.X, Pos.Y, Pos.Z);
 	}
 	
 	void SetNormal()
@@ -422,21 +441,43 @@ class ExpSquishbag : Actor
 
 	void WanderingMonsterRespawn()
 	{
+		//FCheckPosition tm;
+
+		// A_PrintBold(String.Format("Spawn X: %d Y:%d Z:%d", spawnPos.X, spawnPos.Y, spawnPos.Z));
+		// A_PrintBold(String.Format("Self X: %d Y:%d Z:%d", Pos.X, Pos.Y, Pos.Z));
+		// let tester = Spawn("PositionTester", (spawnPos.X, spawnPos.Y, spawnPos.Z));
+		// bool canSpawn = true;
+		// if (tester)
+		// {
+		// 	// A_PrintBold(String.Format("Tester X: %d Y:%d Z:%d", tester.Pos.X, tester.Pos.Y, tester.Pos.Z));
+		// 	canSpawn = tester.CheckPosition((spawnPos.X, spawnPos.Y), false, tm);
+		// 	tester.Destroy();
+		// }
+
+		// if (!tester || !canSpawn)
+		// {
+		// 	A_PrintBold("Path blocked");
+		// 	RespawnWaitTics = 15;
+		// 	return;
+		// }
+
 		LeaderProps props;
 		GetWanderingMonsterProperties(props);
 
-		//If only respawns bosses, reset timer and try again later
-		if (IsBossOnly && props.LeaderFlag == 0)
+		A_Respawn(RSF_FOG);
+
+		//If still dead, then this failed. Try again later.
+		if (health < 1)
 		{
-			RespawnWaitTics = random(RESPAWN_TICS_MIN, RESPAWN_TICS_MAX);//no bonus for this respawnLevel
+			RespawnWaitTics = 35;
 			return;
 		}
 
+		TakeInventory("MonsterStars", 1);
+
 		RespawnWaitTics = 0;
 		RespawnLevel = 1;
-
-		A_Respawn(RSF_FOG);
-		
+				
 		ApplyLeaderProps(props);
 	}
 }
@@ -658,8 +699,173 @@ class MonsterSoul:MummySoul
 		TNT1 A 0 A_Scream;
 		MUMM QRS 5;
 		MUMM TUVW 9;
-		FDTH O 5 A_StartSound("beast/attack");
-		FDTH PQR 5;
+		FDT2 O 5 A_StartSound("beast/attack");
+		FDT2 PQR 5;
 		Stop;
+	}
+}
+
+class PositionTester: Barrel
+{
+	States
+	{
+	Spawn:
+		TNT1 A 1;
+		Loop;
+	}
+}
+
+class WinTrophy:Actor
+{
+	Default
+	{
+		-SOLID;
+		+NOBLOCKMAP;
+		//+NOINTERACTION;
+		-NOGRAVITY;
+		DeathSound "world/amb6";
+		Scale 0.75;
+		Translation "LightningSkin";
+	}
+
+	States
+	{
+	Spawn:
+		TNT1 A 12;
+		TNT1 A 0 Bright A_Scream;
+		TROP A 5 Bright;
+		Goto Stay;
+	Stay:
+		TROP A 5 Bright;
+		Loop;
+	}
+}
+class WinTrophyBase:Actor
+{
+	Default
+	{
+		-SOLID;
+		+NOBLOCKMAP;
+		+NOINTERACTION;
+		Translation "LightningSkin";
+	}
+
+	States
+	{
+	Spawn:
+		SMPL A 2 Bright;
+		Loop;
+	}
+}
+
+class SoulGlitter:TeleGlitter1 // Let your soul GLOW!!!!
+{
+	Default
+	{
+		-SOLID;
+		+NOBLOCKMAP;
+		+NOINTERACTION;
+		Translation "DeathSkin";
+		RenderStyle "Translucent";
+		Alpha 0.4;
+	}
+
+	States
+	{
+	Spawn:
+		TGLT A 5 Bright;
+		TGLT B 5 Bright A_AccTeleGlitter;
+		TGLT C 5 Bright;
+		TGLT D 5 Bright A_AccTeleGlitter;
+		TGLT E 5 Bright;
+		TGLT A 5 Bright;
+		TGLT B 5 Bright A_AccTeleGlitter;
+		TGLT C 5 Bright;
+		TGLT D 5 Bright A_AccTeleGlitter;
+		TGLT E 5 Bright;
+		TGLT A 5 Bright;
+		TGLT B 5 Bright A_AccTeleGlitter;
+		TGLT C 5 Bright;
+		TGLT D 5 Bright A_AccTeleGlitter;
+		TGLT E 5 Bright;
+		Stop;
+	}
+}
+
+class MonsterStarsMarker : MapMarker
+{
+	Default
+	{
+		Translation "DeathSkin";
+		RenderStyle "Translucent";
+		Alpha 0.4;
+		Scale 0.7;
+	}
+
+	States
+	{
+	Spawn:
+		TGLT ABCDE 4;
+		Loop;
+	}
+}
+
+class MonsterStars : Powerup
+{
+	Actor mapMark;
+	int starTics;
+	Default
+	{
+		+INVENTORY.UNDROPPABLE
+        +INVENTORY.UNTOSSABLE
+        +INVENTORY.AUTOACTIVATE
+        +INVENTORY.PERSISTENTPOWER
+        +INVENTORY.UNCLEARABLE
+
+        Powerup.Duration 0x7FFFFFFF;
+	}
+
+	void DestroyMapMarker()
+	{
+		if (mapMark)
+		{
+			mapMark.Destroy();
+			mapMark = null;
+		}
+	}
+
+	void AddMapMarker(Actor other)
+	{
+		bool success = false;
+		[success, mapMark] = other.A_SpawnItemEx("MonsterStarsMarker");
+	}
+
+	override void AttachToOwner(Actor other)
+	{
+		if (mapMark)
+			DestroyMapMarker();
+		
+		AddMapMarker(other);
+
+		Super.AttachToOwner(other);
+	}
+
+	override void DetachFromOwner()
+	{
+		DestroyMapMarker();
+
+		Super.DetachFromOwner();
+	}
+
+	override void Tick()
+	{
+		starTics--;
+		if (starTics <= 0)
+		{
+			starTics = random[SoulGlitter](5,35);
+			if (Owner)
+				Owner.A_SpawnItemEx("SoulGlitter", random[SoulGlitter](0,31)-16, random[SoulGlitter](0,31)-16, 1, 0, 0, 0.18);
+		}
+		Super.Tick();
 	}
 }

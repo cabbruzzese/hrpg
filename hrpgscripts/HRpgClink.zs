@@ -21,7 +21,7 @@ class HRpgClink : ExpSquishbag replaces Clink
 		DropItem "SkullRodAmmo", 84, 20;
 		
 		ExpSquishbag.IsRespawnable true;
-		ExpSquishbag.IsBossOnly true;
+		ExpSquishbag.isSpawnLess true;
 	}
 	States
 	{
