@@ -187,13 +187,11 @@ class ExpSquishbag : Actor
 			let selfObj = ExpSquishbag(self);
 			if (selfObj)
 			{
-				A_PrintBold("Self is real");
 				selfObj.DoSoulActions(source);
 			}	
 		}
 		else
 		{
-			A_PrintBold("Killed a chicken");
 			//If morphed and this is the last monster, spawn trophy
 			let monsterCounts = HRpgMonsterCounter.UpdateSpawnCounts();
 			if (monsterCounts.IsWin && !monsterCounts.HasWon)
@@ -485,26 +483,6 @@ class ExpSquishbag : Actor
 
 	void WanderingMonsterRespawn()
 	{
-		//FCheckPosition tm;
-
-		// A_PrintBold(String.Format("Spawn X: %d Y:%d Z:%d", spawnPos.X, spawnPos.Y, spawnPos.Z));
-		// A_PrintBold(String.Format("Self X: %d Y:%d Z:%d", Pos.X, Pos.Y, Pos.Z));
-		// let tester = Spawn("PositionTester", (spawnPos.X, spawnPos.Y, spawnPos.Z));
-		// bool canSpawn = true;
-		// if (tester)
-		// {
-		// 	// A_PrintBold(String.Format("Tester X: %d Y:%d Z:%d", tester.Pos.X, tester.Pos.Y, tester.Pos.Z));
-		// 	canSpawn = tester.CheckPosition((spawnPos.X, spawnPos.Y), false, tm);
-		// 	tester.Destroy();
-		// }
-
-		// if (!tester || !canSpawn)
-		// {
-		// 	A_PrintBold("Path blocked");
-		// 	RespawnWaitTics = 15;
-		// 	return;
-		// }
-
 		LeaderProps props;
 		GetWanderingMonsterProperties(props);
 
