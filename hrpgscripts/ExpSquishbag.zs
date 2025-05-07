@@ -86,6 +86,8 @@ class ExpSquishbag : Actor
 		ExpSquishbag.LeaderType 0;
 		ExpSquishbag.isSpawnLess false;
 		ExpSquishbag.SneakDelay 0;
+
+		+STAYMORPHED; //Can't recover soul count, so don't allow unmorph
 	}
 	
 	void A_CustomComboAttack2(class<Actor> missiletype, double spawnheight, int damage, sound meleesound = "", name damagetype = "none", bool bleed = true)
@@ -162,9 +164,59 @@ class ExpSquishbag : Actor
 		
 		return Super.TakeSpecialDamage(inflictor, source, damage, damagetype);
 	}
-	
+
+	override void PreMorph(Actor mo, bool current)
+	{
+		Super.PreMorph(mo, current);
+
+		if (!current)
+		{
+			isRespawnable = false;
+			isDoneRespawning = true;
+
+			HRpgMonsterCounter.UpdateSpawnCounts();
+		}
+	}
+
 	override void Die(Actor source, Actor inflictor, int dmgflags, Name MeansOfDeath)
 	{
+		Super.Die(source, inflictor, dmflags, MeansOfDeath);
+
+		if (!Alternative) //Only do soul actions if not morphed
+		{
+			let selfObj = ExpSquishbag(self);
+			if (selfObj)
+			{
+				A_PrintBold("Self is real");
+				selfObj.DoSoulActions(source);
+			}	
+		}
+		else
+		{
+			A_PrintBold("Killed a chicken");
+			//If morphed and this is the last monster, spawn trophy
+			let monsterCounts = HRpgMonsterCounter.UpdateSpawnCounts();
+			if (monsterCounts.IsWin && !monsterCounts.HasWon)
+			{
+				SpawnTrophy();
+			}
+		}
+	}
+
+	void SpawnTrophy()
+	{
+		A_DropItem("EnchantedShield", 1);
+		A_DropItem("BagOfHolding", 1);
+		A_DropItem("ArtiSuperHealth", 1);
+
+		A_SpawnItemEx("WinTrophy", 0,0,32, 0,0,0);
+
+		A_PrintBold("You have vanquished all of the monster souls!");
+	}
+
+	void DoSoulActions(Actor source)
+	{
+		
 		A_DropItem("HRpgSkullItem", 1, DROP_SKULL_CHANCE);
 
 		if (LeaderType & WML_POISON)
@@ -180,8 +232,6 @@ class ExpSquishbag : Actor
 		else if (LeaderType & WML_DEATH)
 			A_DropItem("MaceHefty", 100, DROP_AMMO_CHANCE);
 		
-		Super.Die(source, inflictor, dmflags, MeansOfDeath);
-
 		isDoneRespawning = true;
 
 		if (hrpg_monsterrespawn)
@@ -214,22 +264,16 @@ class ExpSquishbag : Actor
 				double remainingPercent = double(soulCounts.Remaining) / double(soulCounts.Total);
 				if (remainingPercent < 0.2)
 					RespawnWaitTics = RESPAWN_TICS_MIN + random(1, 100);
-
-				GiveInventoryType("MonsterStars");
+				
+				if (!Alternative)
+					GiveInventoryType("MonsterStars");
 			}
 			else 
 			{
-				//A_PrintBold(String.Format("Is Won: %i Has Won: %i Count: %d Total: %d ", soulCounts.IsWin, soulCounts.HasWon, soulCounts.Remaining, soulCounts.Total));
 				// Win the soul hunting prize
 				if (soulCounts.IsWin && !soulCounts.HasWon)
 				{
-					A_DropItem("EnchantedShield", 1);
-					A_DropItem("BagOfHolding", 1);
-					A_DropItem("ArtiSuperHealth", 1);
-
-					A_SpawnItemEx("WinTrophy", 0,0,32, 0,0,0);
-
-					A_PrintBold("You have vanquished all of the monster souls!");
+					SpawnTrophy();
 				}
 				else
 				{
@@ -773,6 +817,11 @@ class SoulGlitter:TeleGlitter1 // Let your soul GLOW!!!!
 	States
 	{
 	Spawn:
+		TGLT A 5 Bright;
+		TGLT B 5 Bright A_AccTeleGlitter;
+		TGLT C 5 Bright;
+		TGLT D 5 Bright A_AccTeleGlitter;
+		TGLT E 5 Bright;
 		TGLT A 5 Bright;
 		TGLT B 5 Bright A_AccTeleGlitter;
 		TGLT C 5 Bright;
