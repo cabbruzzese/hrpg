@@ -75,24 +75,24 @@ Megic and raw power.
 Determines damage with magic wands and staffs (Spellbook, Gold Wand, Hellstaff, Pheonix staff)
 
 ## Monster Soul Essence
-Monsters sometimes drop soul essences which power the player. Their effect is based on class.
+Monsters sometimes leak some of their power as soul essence. These strange objects power the player. Their effects are based on class.
 
 Every class gains some health back.
 
-- Heretic becomes invisible for a short time
-- Heathen gains armor and goes berserk, giving a damage bonus to the melee weapons.
-- Blasphemer gains some ammo.
+- Heretic becomes invisible for a short time and can gain even more powers
+- Heathen gains armor and goes berserk, giving a damage bonus to his melee weapons.
+- Blasphemer regains magical ammuntion.
 
 ## Weapons
 
 ### Blasphemer Spellbook
 
-The no-ammo weapon for this magic user is a spellbook with medium and short range spells that specialize in crowd damage.
+The no-ammo weapon for this magic user is a spellbook with medium and short range spells. A bolt of fire that guides towards foes and a chilling touch of cold.
 
-In addition, there are new spells that the Blasphemer learns when leveling, usable like items.
+In addition, there are new spells that the Blasphemer learns when leveling, usable like items or through hot keys.
 
 ### Heathen Melee Weapons
-The Heathen's aresenal has been replaced by melee weapons with much weaker ranged alt fires. The ranged attacks use ammo.
+The Heathen's aresenal has been replaced by melee weapons with weaker alternative ranged attacks. The ranged attacks use ammo.
 
  - Warhammer
  - War Axe
@@ -101,11 +101,20 @@ The Heathen's aresenal has been replaced by melee weapons with much weaker range
  - Maul
 
 ### Alt Fires
-Each weapon gains an alt fire designed to bridge some of the gaps for each weapon, such as slower and more accurate blasts for rapid fire weapons.
+Each weapon gains an alt fire designed to enhance strategy for each weapon, such as slower and more accurate blasts from rapid fire weapons.
+
+## Captured Souls
+The Serpent Riders have captured souls of the innocent and bound them into terrifying monsters. These spirits have unlimited energy that the evil D'Sparil and his kin torture into grotesque minions. Only a Heretic would be willing to risk his eternity to free this poor souls.
+
+When a monster is killed, they will pulsate with soul energy. These pulses can be viewed on your magic map. After a time the energy will revive the monster. This viscious cycle repeats until the soul is freed and purified with holy fire.
+
+Every time one of these monsters is killed, one of these souls has a chance to escape. The most powerful monsters take too much energy to stitch back together, and the soul escapes right away.
+
+The only way to stop each level from refilling with deadly minions is to free the soul from every monster.
 
 ## New Monsters
 
-Most monsters respawn as wandering monsters. (Randomly between a few minutes and 20 minutes). Respawning monsters have a chance to come back stronger. As players level, the monsters they kill have a higher chance of respawning as special monsters.
+Monsters have a chance to appear stronger. As players level, the monsters they kill have a higher chance of spawning as special monsters.
 
 There are 4 monster types, and many of them can combine to make even stronger mini-bosses. As the spawn chance increases, so does the chance they will combine. The higher level, the more challenging monsters that respawn.
 
@@ -116,7 +125,7 @@ Bigger and tougher with more health.
 A vengful spirit that packs a stronger punch.
 
 ### Miniboss
-A beefed up monster made of one of 3 elements.
+A beefed up monster made up of one of the elements.
 
 #### Stone
 Hard as stone, really hard to kill.
@@ -134,7 +143,7 @@ A burning hatred coupled with volcanic retribution.
 Shockingly strong enemies with explosive attacks.
 
 #### Death
-The gravest of threats. When it's your time, they'll follow you anywhere.
+The gravest of threats. When it's your time to go, they'll follow you anywhere.
 
 
 ### Runt

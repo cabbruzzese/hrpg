@@ -209,7 +209,7 @@ class ExpSquishbag : Actor
 
 		A_SpawnItemEx("WinTrophy", 0,0,32, 0,0,0);
 
-		A_PrintBold("You have vanquished all of the monster souls!");
+		A_PrintBold("You have freed all of the souls!");
 	}
 
 	void DoSoulActions(Actor source)
