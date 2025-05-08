@@ -237,6 +237,7 @@ class MaulFloorFireFX2 : MaulFloorFireFX1
 		RenderStyle "Add";
 		
 		+RIPPER
+		+THRUACTORS
 	}
 	
 	states
@@ -247,7 +248,7 @@ class MaulFloorFireFX2 : MaulFloorFireFX1
 	Death:
 		FX13 I 6 BRIGHT MaulFloorFireExplode;
 		FX13 JKLM 6 BRIGHT;
-		Stop;
+		Stop;		
 	}
 	
 	//----------------------------------------------------------------------------

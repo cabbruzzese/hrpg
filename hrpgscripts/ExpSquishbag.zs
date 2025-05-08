@@ -261,7 +261,7 @@ class ExpSquishbag : Actor
 				//If last few remaining, reduce time
 				double remainingPercent = double(soulCounts.Remaining) / double(soulCounts.Total);
 				if (remainingPercent < 0.2)
-					RespawnWaitTics = RESPAWN_TICS_MIN + random(1, 100);
+					RespawnWaitTics = random((RESPAWN_TICS_MIN / 4), RESPAWN_TICS_MIN);
 				
 				if (!Alternative)
 					GiveInventoryType("MonsterStars");
