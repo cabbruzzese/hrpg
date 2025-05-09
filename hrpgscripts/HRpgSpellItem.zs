@@ -112,7 +112,6 @@ class SpellIceFX1 : Actor
 		Speed 16;
 		-THRUGHOST;
 		Obituary "$OB_ICESPELL";
-		DamageType "ice";
 	}
 
 
@@ -164,7 +163,6 @@ class SpellIceFX2 : Actor
 		+ZDOOMTRANS
 		RenderStyle "Add";
 		Obituary "$OB_ICESPELL";
-		DamageType "ice";
 	}
 
 	States

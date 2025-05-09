@@ -330,7 +330,6 @@ class SpellBookIceFX : SpellIceFX2
 		Damage 1;
 		RenderStyle "Normal";
 		Obituary "$OB_MPSPELLBOOKICE";
-		DamageType "ice";
 	}
 
 	States
@@ -355,6 +354,5 @@ class SpellBookIceFX2 : SpellIceFX1
 	Default
 	{
 		Obituary "$OB_MPSPELLBOOKICE";
-		DamageType "ice";
 	}
 }

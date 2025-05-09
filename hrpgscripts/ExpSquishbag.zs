@@ -3,9 +3,10 @@ const XP_PERHIT_BONUS = 5;
 
 const RESPAWN_TICS_MIN = 2400; //2 minute
 const RESPAWN_TICS_MAX = 12000; //10 minutes
+const RESPAWN_RETRY_MAX = 100;
 // Uncomment for testing
-//const RESPAWN_TICS_MIN = 100;
-//const RESPAWN_TICS_MAX = 100;
+// const RESPAWN_TICS_MIN = 100;
+// const RESPAWN_TICS_MAX = 100;
 
 const RESPAWN_COUNT_MIN = 2;
 const RESPAWN_COUNT_MAX = 7;
@@ -57,6 +58,7 @@ class ExpSquishbag : Actor
 	bool oldGhost;
 	bool isDoneRespawning;
 	Vector3 spawnPos;
+	int respawnRetryLimit;
 
 	int respawnWaitTics;
 	int respawnLevel;
@@ -192,14 +194,30 @@ class ExpSquishbag : Actor
 		}
 		else
 		{
-			//If morphed and this is the last monster, spawn trophy
-			let monsterCounts = HRpgMonsterCounter.UpdateSpawnCounts();
-			if (monsterCounts.IsWin && !monsterCounts.HasWon)
-			{
-				SpawnTrophy();
-			}
+			CheckCountAndSpawnTrophy();
 		}
 	}
+
+	void CheckCountAndSpawnTrophy()
+	{
+		//If morphed and this is the last monster, spawn trophy
+		let monsterCounts = HRpgMonsterCounter.UpdateSpawnCounts();
+		if (monsterCounts.IsWin && !monsterCounts.HasWon)
+		{
+			SpawnTrophy();
+		}
+	}
+
+	void RespawnBrokenCleanUpSoul()
+	{
+		TakeInventory("MonsterStars", 1);
+
+		//consider dead
+		isRespawnable = false;
+		isDoneRespawning = true;
+		respawnWaitTics = 0;
+		CheckCountAndSpawnTrophy();
+	}				
 
 	void SpawnTrophy()
 	{
@@ -491,6 +509,15 @@ class ExpSquishbag : Actor
 		//If still dead, then this failed. Try again later.
 		if (health < 1)
 		{
+			//If respawn is impossible
+			respawnRetryLimit++;
+			if (respawnRetryLimit > RESPAWN_RETRY_MAX)
+			{
+				//consider dead
+				RespawnBrokenCleanUpSoul();
+				return;
+			}
+
 			RespawnWaitTics = 35;
 			return;
 		}
