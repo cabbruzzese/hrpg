@@ -4,6 +4,17 @@ const XP_PERHIT_BONUS = 5;
 const RESPAWN_TICS_MIN = 2400; //2 minute
 const RESPAWN_TICS_MAX = 12000; //10 minutes
 const RESPAWN_RETRY_MAX = 100;
+
+const RESPAWN_LASTCALL_PERCENT = 0.1;
+const RESPAWN_LASTCALL_MIN = 350;
+const RESPAWN_LASTCALL_MAX = 1200;
+const RESPAWN_WARNINGCALL_PERCENT = 0.25;
+const RESPAWN_WARNINGCALL_MIN = 1200;
+const RESPAWN_WARNINGCALL_MAX = 2400;
+const RESPAWN_FIRSTCALL_PERCENT = 0.5;
+const RESPAWN_FIRSTCALL_MIN = 2400;
+const RESPAWN_FIRSTCALL_MAX = 6000;
+
 // Uncomment for testing
 // const RESPAWN_TICS_MIN = 100;
 // const RESPAWN_TICS_MAX = 100;
@@ -59,6 +70,8 @@ class ExpSquishbag : Actor
 	bool isDoneRespawning;
 	Vector3 spawnPos;
 	int respawnRetryLimit;
+	MonsterMapTracker mapTracker;
+	double latestSoulPercent;
 
 	int respawnWaitTics;
 	int respawnLevel;
@@ -194,6 +207,7 @@ class ExpSquishbag : Actor
 		}
 		else
 		{
+			Spawn("DeadMonsterCounter");
 			CheckCountAndSpawnTrophy();
 		}
 	}
@@ -232,7 +246,12 @@ class ExpSquishbag : Actor
 
 	void DoSoulActions(Actor source)
 	{
-		
+		if (mapTracker)
+		{				
+			mapTracker.EndTracker();
+			mapTracker = null;
+		}
+
 		A_DropItem("HRpgSkullItem", 1, DROP_SKULL_CHANCE);
 
 		if (LeaderType & WML_POISON)
@@ -265,8 +284,6 @@ class ExpSquishbag : Actor
 			if (isRespawnable)
 				isDoneRespawning = false;
 				
-			let soulCounts = HRpgMonsterCounter.UpdateSpawnCounts();
-
 			if (IsRespawnable)
 			{
 				let hrpgPlayer = HRpgPlayer(source);
@@ -274,28 +291,71 @@ class ExpSquishbag : Actor
 				{
 					RespawnLevel = hrpgPlayer.ExpLevel;
 				}
-				RespawnWaitTics = random(RESPAWN_TICS_MIN, RESPAWN_TICS_MAX);
-
-				//If last few remaining, reduce time
-				double remainingPercent = double(soulCounts.Remaining) / double(soulCounts.Total);
-				if (remainingPercent < 0.2)
-					RespawnWaitTics = random((RESPAWN_TICS_MIN / 4), RESPAWN_TICS_MIN);
+				RespawnWaitTics = random[RespawnWaitTics](RESPAWN_TICS_MIN, RESPAWN_TICS_MAX);
 				
 				if (!Alternative)
 					GiveInventoryType("MonsterStars");
 			}
-			else 
+
+			CheckTrophyWin();
+		}
+	}
+
+	void CheckTrophyWin()
+	{
+		// Update soul counts, get win conditions, apply last call data
+		let soulCounts = HRpgMonsterCounter.UpdateSpawnCounts();
+
+		// If this soul is dead, check if we won
+		if (!IsRespawnable)
+		{
+			// Win the soul hunting prize
+			if (soulCounts.IsWin && !soulCounts.HasWon)
 			{
-				// Win the soul hunting prize
-				if (soulCounts.IsWin && !soulCounts.HasWon)
+				SpawnTrophy();
+			}
+			else
+			{
+				A_SpawnItemEx("MonsterSoul", 0,0,1, 0,0,0);
+			}
+		}
+	}
+
+	void DoLastCallUpdate(double percent)
+	{
+		latestSoulPercent = percent;
+		//If dead
+		if (health < 1)
+		{
+			//if not finished respawning
+			if (!isDoneRespawning && RespawnWaitTics > 1)
+			{
+				//Make sure tics are valid for this stage
+				if (percent <= RESPAWN_LASTCALL_PERCENT && RespawnWaitTics > RESPAWN_LASTCALL_MAX)
 				{
-					SpawnTrophy();
+					RespawnWaitTics = random[RespawnWaitTics](RESPAWN_LASTCALL_MIN, RESPAWN_LASTCALL_MAX);
+				}		
+				else if (percent <= RESPAWN_FIRSTCALL_PERCENT && RespawnWaitTics > RESPAWN_FIRSTCALL_MAX)
+				{
+					RespawnWaitTics = random[RespawnWaitTics](RESPAWN_FIRSTCALL_MIN, RESPAWN_FIRSTCALL_MAX);
 				}
-				else
+				else if (percent <= RESPAWN_WARNINGCALL_PERCENT && RespawnWaitTics > RESPAWN_WARNINGCALL_MAX)
 				{
-					A_SpawnItemEx("MonsterSoul", 0,0,1, 0,0,0);
+					RespawnWaitTics = random[RespawnWaitTics](RESPAWN_WARNINGCALL_MIN, RESPAWN_WARNINGCALL_MAX);
 				}
 			}
+		}
+
+		TryGiveTracker();
+	}
+
+	void TryGiveTracker()
+	{
+		if (health > 0 && latestSoulPercent <= RESPAWN_WARNINGCALL_PERCENT && !mapTracker)
+		{
+			mapTracker = MonsterMapTracker(Spawn("MonsterMapTracker"));
+			if (mapTracker)
+				mapTracker.monsterTracker = self;
 		}
 	}
 
@@ -523,6 +583,8 @@ class ExpSquishbag : Actor
 		}
 
 		TakeInventory("MonsterStars", 1);
+
+		TryGiveTracker();
 
 		RespawnWaitTics = 0;
 		RespawnLevel = 1;

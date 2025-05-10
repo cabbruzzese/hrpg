@@ -23,28 +23,34 @@ class HRpgMonsterCounter : StaticEventHandler
         bool win = false;
         bool won = false;
 
-        // Create a ThinkerIterator for all actors
-        let iterator = ThinkerIterator.Create("Actor");
-        Actor currentActor;
-
-        // Iterate through all actors
-        while (currentActor = Actor(iterator.Next()))
+        // Cycle through all squishy xp bags
+        let iterator = ThinkerIterator.Create("ExpSquishbag");
+        ExpSquishbag currentMonster;
+        while (currentMonster = ExpSquishbag(iterator.Next()))
         {
-            // Filter for living monsters
-            let spawnableActor = ExpSquishbag(currentActor);
-            if (spawnableActor)
-            {
-                squishTotal++;
+            // Count as total
+            squishTotal++;
 
-                if (!spawnableActor.isDoneRespawning)
-                    count++;
-            }
+            // See if soul is freed
+            if (!currentMonster.isDoneRespawning)
+                count++;
+        }
 
-            let winActor = WinTrophy(currentActor);
-            if (winActor)
-            {
-                won = true;
-            }
+        // Cycle through any (and all) trophies
+        iterator = ThinkerIterator.Create("WinTrophy");
+        WinTrophy currentTrophy;
+        while (currentTrophy = WinTrophy(iterator.Next()))
+        {
+            // If at least one exists, we won
+            won = true;
+        }
+
+        // Cycle through all dead monster placeholders (morph, etc)
+        iterator = ThinkerIterator.Create("DeadMonsterCounter");
+        DeadMonsterCounter currentDeadCounter;
+        while (currentDeadCounter = DeadMonsterCounter(iterator.Next()))
+        {
+            squishTotal++;
         }
 
         EventHandler.SendInterfaceEvent(consoleplayer , "TotalSpawnableMonstersUpdate", count, squishTotal);
@@ -52,7 +58,23 @@ class HRpgMonsterCounter : StaticEventHandler
         SpawnTotalCount response = new("SpawnTotalCount");
         response.Set(count, squishTotal, count == 0, won);
 
+        // Update monsters with latest info
+        double remainingPercent = double(response.Remaining) / double(response.Total);
+        UpdateMonsterTics(remainingPercent);
+
         return response;
+    }
+
+    static void UpdateMonsterTics(double percent)
+    {
+        // Cycle through all squishy xp bags
+        let iterator = ThinkerIterator.Create("ExpSquishbag");
+        ExpSquishbag currentMonster;
+        while (currentMonster = ExpSquishbag(iterator.Next()))
+        {
+            if (currentMonster)
+                currentMonster.DoLastCallUpdate(percent);
+        }
     }
 
     override void WorldLoaded (WorldEvent e)

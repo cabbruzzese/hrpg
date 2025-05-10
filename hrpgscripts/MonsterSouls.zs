@@ -1,3 +1,7 @@
+class DeadMonsterCounter : Actor
+{
+}
+
 class MonsterSoul:MummySoul
 {
 	Default
@@ -126,6 +130,42 @@ class MonsterStarsMarker : MapMarker
 	Spawn:
 		TGLT ABCDE 4;
 		Loop;
+	}
+}
+
+class MonsterMapTracker : MonsterStarsMarker
+{
+	Actor monsterTracker;
+	Default
+	{
+		Translation "DeathSkin";
+		Alpha 0.4;
+		Scale 0.25;
+		AutomapOffsets (0,25);
+	}
+
+	States
+	{
+	Spawn:
+		IMPX ABC 3;
+		Loop;
+	Death:
+		IMPX STUVWXYZ 3;
+		Stop;
+	}
+
+	void EndTracker()
+	{
+		monsterTracker = null;
+		SetStateLabel ("Death");
+	}
+
+	override void Tick()
+	{
+		if (monsterTracker)
+			SetOrigin(monsterTracker.Pos, true);
+		
+		Super.Tick();
 	}
 }
 
