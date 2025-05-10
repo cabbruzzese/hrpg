@@ -140,17 +140,19 @@ class MonsterMapTracker : MonsterStarsMarker
 	{
 		Translation "DeathSkin";
 		Alpha 0.4;
-		Scale 0.25;
-		AutomapOffsets (0,25);
+		Scale 0.3;
+		AutomapOffsets (0,-700);
 	}
 
 	States
 	{
 	Spawn:
-		IMPX ABC 3;
+//		IMPX ABC 3;
+		MUMS A 4;
 		Loop;
 	Death:
-		IMPX STUVWXYZ 3;
+//		IMPX STUVWXYZ 3;
+		MUMS ABCD 9;
 		Stop;
 	}
 

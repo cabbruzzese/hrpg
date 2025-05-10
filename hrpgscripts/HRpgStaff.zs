@@ -6,7 +6,6 @@ class HRpgStaff : HereticWeapon replaces Staff
 	{
 		Weapon.SelectionOrder 3800;
 		+THRUGHOST
-		+WEAPON.WIMPY_WEAPON
 		+WEAPON.MELEEWEAPON
 		Weapon.sisterweapon "HRpgStaffPowered";
 		Obituary "$OB_MPSTAFF";
