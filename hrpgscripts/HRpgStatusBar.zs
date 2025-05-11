@@ -104,14 +104,6 @@ class HRpgStatusBar : HereticStatusBar
 		{
 			DrawGem("CHAIN", "LIFEGEM2",inthealth, CPlayer.mo.GetMaxHealth(true), (2, 191 + wiggle), 15, 25, 16, (multiplayer? DI_TRANSLATABLE : 0) | DI_ITEM_LEFT_TOP); 
 		}
-
-		let hPlayer = HRpgHereticPlayer(CPlayer.mo);
-		if (hPlayer && hPlayer.sneakAttackTimer > 0)
-		{
-			let sneakAttackAlpha = float(hPlayer.sneakAttackTimer) / float(SNEAKATTACK_TIMER_THRESHOLD);
-
-			DrawString(mSmallFont, "Sneak attack!", (100, 100), DI_SCREEN_CENTER_BOTTOM, Font.CR_UNTRANSLATED, sneakAttackAlpha);
-		}
 		
 		DrawImage("LTFACE", (0, 190), DI_ITEM_OFFSETS);
 		DrawImage("RTFACE", (276, 190), DI_ITEM_OFFSETS);
@@ -266,14 +258,23 @@ class HRpgStatusBar : HereticStatusBar
 		let xPos = 0;
 		let yPos = 126;
 		let yStep = 8;
+		int sneakX = 160;
+		int sneakY = 100;
+		int levelFlags = DI_TEXT_ALIGN_LEFT;
+		int statFlags = DI_TEXT_ALIGN_RIGHT;
+		int sneakFlags = DI_SCREEN_CENTER_BOTTOM | DI_TEXT_ALIGN_CENTER ;
 		
 		let xPosStats = 320;
 		
 		if (isFullscreen)
 		{
-			xPos = 8;
-			yPos = 346;
-			xPosStats = 740;
+			xPos = 25;
+			yPos = -80;
+			sneakX = 0;
+			sneakY = -80;
+			xPosStats = -25;
+			levelFlags = DI_SCREEN_LEFT_BOTTOM | DI_TEXT_ALIGN_LEFT;
+			statFlags = DI_SCREEN_RIGHT_BOTTOM | DI_TEXT_ALIGN_RIGHT;
 		}
 
 		let hrpgPlayer = HRpgPlayer(CPlayer.mo);
@@ -284,23 +285,31 @@ class HRpgStatusBar : HereticStatusBar
 		let text2 = String.Format("XP: %s / %s", FormatNumber(hrpgPlayer.Exp, 0), FormatNumber(hrpgPlayer.ExpNext, 0));
 				
 		//Exp
-		DrawString(mSmallFont, text1, (xPos, yPos), DI_TEXT_ALIGN_LEFT);
-		DrawString(mSmallFont, text2, (xPos, yPos + yStep), DI_TEXT_ALIGN_LEFT);
+		DrawString(mSmallFont, text1, (xPos, yPos), levelFlags);
+		DrawString(mSmallFont, text2, (xPos, yPos + yStep), levelFlags);
 		
 		let statText1 = String.Format("Brutality: %s", FormatNumber(hrpgPlayer.Brt, 0));
 		let statText2 = String.Format("Trickery: %s", FormatNumber(hrpgPlayer.Trk, 0));
 		let statText3 = String.Format("Corruption: %s", FormatNumber(hrpgPlayer.Crp, 0));
 
 		//Stats
-		DrawString(mSmallFont, statText1, (xPosStats, yPos - yStep), DI_TEXT_ALIGN_RIGHT);
-		DrawString(mSmallFont, statText2, (xPosStats, yPos), DI_TEXT_ALIGN_RIGHT);
-		DrawString(mSmallFont, statText3, (xPosStats, yPos + yStep), DI_TEXT_ALIGN_RIGHT);
+		DrawString(mSmallFont, statText1, (xPosStats, yPos - yStep), statFlags);
+		DrawString(mSmallFont, statText2, (xPosStats, yPos), statFlags);
+		DrawString(mSmallFont, statText3, (xPosStats, yPos + yStep), statFlags);
 		
 		let bPlayer = HRpgBlasphemerPlayer(CPlayer.mo);
 		if (bPlayer && isFullscreen)
 		{
 			let text3 = String.Format("Mana: %s / %s", FormatNumber(bPlayer.Mana / MANA_SCALE_MOD, 0), FormatNumber(bPlayer.MaxMana / MANA_SCALE_MOD, 0));
-			DrawString(mSmallFont, text3, (xPos, yPos - yStep), DI_TEXT_ALIGN_LEFT);
+			DrawString(mSmallFont, text3, (xPos, yPos - yStep), levelFlags);
+		}
+
+		let hPlayer = HRpgHereticPlayer(CPlayer.mo);
+		if (hPlayer && hPlayer.sneakAttackTimer > 0)
+		{
+			let sneakAttackAlpha = float(hPlayer.sneakAttackTimer) / float(SNEAKATTACK_TIMER_THRESHOLD);
+
+			DrawString(mSmallFont, "Sneak attack!", (sneakX, sneakY), sneakFlags, Font.CR_UNTRANSLATED, sneakAttackAlpha);
 		}
 	}
 	
