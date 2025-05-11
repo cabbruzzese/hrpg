@@ -5,7 +5,8 @@ class HRpgStaff : HereticWeapon replaces Staff
 	Default
 	{
 		Weapon.SelectionOrder 3800;
-		+THRUGHOST
+		-THRUGHOST
+		-WEAPON.WIMPY_WEAPON
 		+WEAPON.MELEEWEAPON
 		Weapon.sisterweapon "HRpgStaffPowered";
 		Obituary "$OB_MPSTAFF";
@@ -27,18 +28,20 @@ class HRpgStaff : HereticWeapon replaces Staff
 		Loop;
 	Fire:
 		STFF B 6;
-		STFF C 8 A_StaffAttack(random[StaffAttack](5, 20), "StaffPuff", 100);
+		STFF C 8 A_StaffAttack(random[StaffAttack](5, 20), "StaffAttackPuff", 100);
 		STFF B 8 A_ReFire;
 		Goto Ready;
 	AltFire:
-		STFF B 2 Offset(140, 60);
-		STFF B 2 Offset(100, 40);
-		STFF B 2 Offset(60, 20);
-		STFF B 2 Offset(20, 0) A_StaffAttack(random[StaffAttack](10, 30), "StaffPuff", 200);
-		STFF B 2 Offset(-20, 20);
-		STFF B 2 Offset(-60, 40);
-		STFF B 2 Offset(-100, 60);
-		STFF B 12 Offset(-140, 60);
+		STFF B 6 Offset(140, 80);
+		STFF B 3 Offset(100, 50);
+		STFF C 2 Offset(60, 40);
+		STFF C 1 Offset(20, 30);
+		STFF C 1 Offset(-20, 20) A_StaffAttack(random[StaffAttack](25, 60), "StaffAttackPuff", 200);
+		STFF C 1 Offset(-60, 10);
+		STFF C 2 Offset(-100, 20);
+		STFF C 2 Offset(-140, 30);
+		STFF B 3 Offset(-140, 40);
+		STFF B 14 Offset(-140, 50);
 		STFF B 2 Offset(-140, 60) A_ReFire;
 		Goto Ready;
 	}
@@ -49,7 +52,7 @@ class HRpgStaff : HereticWeapon replaces Staff
 	//
 	//----------------------------------------------------------------------------
 
-	action void A_StaffAttack (int damage, class<Actor> puff, int kickback)
+	action void A_StaffAttack (int damage, class<Actor> puff, int kickback, bool fireLightning = false)
 	{
 		FTranslatedLineTarget t;
 		int kickbackSave;
@@ -80,10 +83,24 @@ class HRpgStaff : HereticWeapon replaces Staff
 		weapon.Kickback = kickbackSave;
 		if (t.linetarget)
 		{
-			//S_StartSound(player.mo, sfx_stfhit);
-			// turn to face target
+			if (fireLightning)
+				A_VerticalStaffFire(t.linetarget.Pos, t.linetarget);
+
 			angle = t.angleFromSource;
 		}
+	}
+
+	action void A_VerticalStaffFire(Vector3 newPos, actor strikeTarget)
+	{
+		let mo = StaffLightningMissile(SpawnPlayerMissile("StaffLightningMissile"));
+		mo.strikeTarget = strikeTarget;
+		double newz = mo.CurSector.HighestCeilingAt(mo.Pos.XY);
+        mo.SetOrigin((newPos.X, newPos.Y, newz), false);
+		mo.Vel.X = MinVel; // Force collision detection
+        mo.Vel.Y = MinVel; // Force collision detection
+		mo.Vel.Z = -15;
+
+		mo.CheckMissileSpawn (radius);
 	}
 }
 
@@ -93,9 +110,11 @@ class HRpgStaffPowered : HRpgStaff replaces StaffPowered
 	{
 		Weapon.sisterweapon "HRpgStaff";
 		Weapon.ReadySound "weapons/staffcrackle";
+		-THRUGHOST
 		+WEAPON.POWERED_UP
 		+WEAPON.READYSNDHALF
 		+WEAPON.STAFF2_KICKBACK
+		-WEAPON.WIMPY_WEAPON
 		Obituary "$OB_MPPSTAFF";
 		Tag "$TAG_STAFFP";
 	}
@@ -117,15 +136,118 @@ class HRpgStaffPowered : HRpgStaff replaces StaffPowered
 		STFF G 8 A_ReFire;
 		Goto Ready;
 	AltFire:
-		STFF G 2 Offset(140, 60);
-		STFF G 2 Offset(100, 40);
-		STFF G 2 Offset(60, 20);
-		STFF G 2 Offset(20, 0) A_StaffAttack(random[StaffAttack](30, 90), "StaffPuff2", 200);
-		STFF G 2 Offset(-20, 20);
-		STFF G 2 Offset(-60, 40);
-		STFF G 2 Offset(-100, 60);
-		STFF G 12 Offset(-140, 60);
+		STFF G 6 Offset(140, 80);
+		STFF G 3 Offset(100, 50);
+		STFF H 2 Offset(60, 40);
+		STFF H 1 Offset(20, 30);
+		STFF H 1 Offset(-20, 20) A_StaffLightningAttack();
+		STFF H 1 Offset(-60, 10);
+		STFF H 2 Offset(-100, 20);
+		STFF H 2 Offset(-140, 30);
+		STFF G 3 Offset(-140, 40);
+		STFF G 14 Offset(-140, 50);
 		STFF G 2 Offset(-140, 60) A_ReFire;
 		Goto Ready;
+	}
+
+	action void A_StaffLightningAttack()
+	{
+		A_StaffAttack(random[StaffAttack](35, 81), "StaffAttackPuff2Small", 200, true);
+	}
+}
+
+class StaffAttackPuff : StaffPuff
+{
+	Default
+	{
+		ActiveSound "mummy/attack1";
+	}
+}
+
+class StaffAttackPuffSilent : StaffAttackPuff
+{
+	Default
+	{
+		ActiveSound "";
+	}
+}
+
+class StaffAttackPuff2 : StaffPuff2
+{
+	Default
+	{
+		ActiveSound "mummy/attack1";
+	}
+}
+
+class StaffAttackPuff2Silent : StaffAttackPuff2
+{
+	Default
+	{
+		ActiveSound "";
+	}
+}
+
+class StaffAttackPuff2Small : StaffAttackPuff2
+{
+	Default
+	{
+		Scale 0.4;
+	}
+}
+
+class StaffLightningMissile : Actor
+{
+	Actor strikeTarget;
+	Default
+	{
+		Radius 10;
+		Height 6;
+		Speed 2;
+		Damage 6;
+		Projectile;
+		-ACTIVATEIMPACT
+		-ACTIVATEPCROSS
+		+ZDOOMTRANS
+		+RIPPER
+		RenderStyle "Add";
+		Obituary "$OB_MPPSTAFF";
+		Scale 1;
+	}
+
+	States
+	{
+	Spawn:
+		FX16 DDEEFF 1 Bright A_BlueSpark;
+		Loop;
+	Death:
+		FX16 GH 2 BRIGHT;
+		FX16 IJ 2 BRIGHT;
+		FX16 IJ 2 BRIGHT;
+		FX16 IJ 2 BRIGHT;
+		FX16 KL 2 BRIGHT;
+		Stop;
+	}
+
+	void A_BlueSpark ()
+	{
+		for (int i = 0; i < 2; i++)
+		{
+			Actor mo = Spawn("Sorcerer2FXSpark", pos, ALLOW_REPLACE);
+			if (mo != null)
+			{
+				mo.Vel.X = Random2[BlueSpark]() / 128.;
+				mo.Vel.Y = Random2[BlueSpark]() / 128.;
+				mo.Vel.Z = 1. + Random[BlueSpark]() / 256.;
+			}
+		}
+	}
+
+	override void Tick()
+	{
+		if (strikeTarget)
+			SetOrigin((strikeTarget.Pos.X, strikeTarget.Pos.Y, Pos.Z), true);
+
+		Super.Tick();
 	}
 }
