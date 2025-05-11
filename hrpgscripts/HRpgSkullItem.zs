@@ -164,21 +164,6 @@ class HRpgSkullItem : Inventory
 		return false;
 	}
 
-	bool TryUsePowerupGiver (Actor other, Class<Actor> powerupType)
-	{
-		if (powerupType == NULL) return true;	// item is useless
-		if (other == null) return true;
-
-		let power = PowerupGiver(Spawn (powerupType));
-
-		if (power.CallTryPickup (other))
-		{
-			return true;
-		}
-		power.GoAwayAndDie ();
-		return false;
-	}
-	
 	//Only give artifacts to heretic
 	bool TryGiveArtifacts (Actor other)
 	{
@@ -222,7 +207,7 @@ class HRpgSkullItem : Inventory
 		let heathenPlayer = HRpgHeathenPlayer(other.player.mo);
 		if (heathenPlayer)
 		{
-			return TryUsePowerupGiver(other, "BerserkPowerItem");
+			return heathenPlayer.TryUsePowerupGiver("BerserkPowerItem");
 		}
 		return false;		
 	}
@@ -305,8 +290,6 @@ class PowerStrength2 : Powerup
 		Powerup.Color "ff 00 00", 0.5;
 		Inventory.Icon "FACEB2";
 		+INVENTORY.HUBPOWER
-
-		Powerup.Duration -20;
 		
 		PowerStrength2.MaxTics POWERSTRENGTH_BLEND_TICS;
 		PowerStrength2.CurrentTics 0;
@@ -353,4 +336,53 @@ class PowerStrength2 : Powerup
 		}
 		return 0;
 	}	
+}
+
+const POWERUP_INFORMATIVE_TIME = -5;
+class SneakAttackIconGiver : PowerUpGiver
+{
+	Default
+	{
+		+COUNTITEM
+		+INVENTORY.AUTOACTIVATE
+		+INVENTORY.ALWAYSPICKUP
+		Inventory.MaxAmount 0;
+		Powerup.Type "SneakAttackIcon";
+	}
+}
+class SneakAttackIcon : Powerup
+{
+	Default
+	{
+		+COUNTITEM;
+		+INVENTORY.AUTOACTIVATE;
+
+		Powerup.Duration POWERUP_INFORMATIVE_TIME;
+		Inventory.Icon "FACEA0";
+		+INVENTORY.HUBPOWER
+	}
+}
+
+class NewSpellIconGiver : PowerUpGiver
+{
+	Default
+	{
+		+COUNTITEM
+		+INVENTORY.AUTOACTIVATE
+		+INVENTORY.ALWAYSPICKUP
+		Inventory.MaxAmount 0;
+		Powerup.Type "NewSpellIcon";
+	}
+}
+class NewSpellIcon : Powerup
+{
+	Default
+	{
+		+COUNTITEM;
+		+INVENTORY.AUTOACTIVATE;
+
+		Powerup.Duration POWERUP_INFORMATIVE_TIME;
+		Inventory.Icon "FACEB3";
+		+INVENTORY.HUBPOWER
+	}
 }

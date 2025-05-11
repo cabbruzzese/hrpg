@@ -235,8 +235,10 @@ class HRpgPlayer : HereticPlayer
 
 		ExpLevel++;
 		Exp = Exp - ExpNext;
-		ExpNext = CalcXpNeeded();
-		
+		ExpNext = CalcXpNeeded();		
+					
+		DoLevelGainBlend();
+
 		//Distribute points randomly, giving weight to highest stats
 		int statPoints = STATNUM;
 		while (statPoints > 0)
@@ -271,8 +273,6 @@ class HRpgPlayer : HereticPlayer
 		MaxHealth = newHealth;
 		if (Health < MaxHealth)
 			A_SetHealth(MaxHealth);
-			
-		DoLevelGainBlend();
 	}
 
 	void RegenerateHealth(int regenMax)
@@ -283,6 +283,20 @@ class HRpgPlayer : HereticPlayer
 	}
 
 	virtual void Regenerate() { }
+
+	bool TryUsePowerupGiver (Class<Actor> powerupType)
+	{
+		if (powerupType == NULL) return true;	// item is useless
+
+		let power = PowerupGiver(Spawn (powerupType));
+
+		if (power.CallTryPickup (self))
+		{
+			return true;
+		}
+		power.Destroy();
+		return false;
+	}
 
 	override void Tick()
 	{
@@ -298,5 +312,35 @@ class HRpgPlayer : HereticPlayer
 		}
 
 		Super.Tick();
+	}
+
+	override void CheatGive (String name, int amount)
+	{
+		let player = self.player;
+
+		if (player.mo == NULL || player.health <= 0)
+		{
+			return;
+		}
+
+		if (name ~== "blackmoor" || name ~== "tonisborg")
+		{			
+			GiveXP(1000);
+			return;
+		}
+
+		if (name ~== "thac0")
+		{			
+			GiveXP(5000);
+			return;
+		}
+
+		if (name ~== "arneson" || name ~== "gygax")
+		{			
+			GiveXP(50000);
+			return;
+		}
+
+		Super.CheatGive(name, amount);
 	}
 }

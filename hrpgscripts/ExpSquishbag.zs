@@ -173,6 +173,8 @@ class ExpSquishbag : Actor
 					hereticPlayer.A_SetBlend(blendColor, 0.4, 40);
 					
 					sneakDelay = 0;
+
+					hereticPlayer.TryUsePowerupGiver("SneakAttackIconGiver");
 				}
 			}
 		}

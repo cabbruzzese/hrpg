@@ -1,6 +1,6 @@
 const MANA_SCALE_MOD = 5;
 
-const SPELL_LEVEL_FIREBALL = 1;
+const SPELL_LEVEL_FIREBALL = 2;
 const SPELL_LEVEL_ICE = 4;
 const SPELL_LEVEL_VAMPIRE = 8;
 const SPELL_LEVEL_VOLCANO = 12;
@@ -40,7 +40,6 @@ class HRpgBlasphemerPlayer : HRpgPlayer
 		Player.SpawnClass "Blasphemer";
 		Player.StartItem "HRpgSpellBook";
 		Player.StartItem "HRpgGoldWand";
-		Player.StartItem "FireballSpell";
 		Player.StartItem "GoldWandAmmo", 50;
 		Player.WeaponSlot 1, "HRpgGauntlets", "HRpgSpellBook";
 		Player.WeaponSlot 2, "HRpgGoldWand";
@@ -139,7 +138,10 @@ class HRpgBlasphemerPlayer : HRpgPlayer
 		let spell = GiveInventoryType(itemtype);
 
 		if (spell)
+		{
 			A_Print(spell.PickupMessage());
+			TryUsePowerupGiver("NewSpellIconGiver");
+		}
 	}
 	
 	void GiveSpellsByLevel()
