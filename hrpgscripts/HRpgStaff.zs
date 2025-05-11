@@ -28,7 +28,7 @@ class HRpgStaff : HereticWeapon replaces Staff
 		Loop;
 	Fire:
 		STFF B 6;
-		STFF C 8 A_StaffAttack(random[StaffAttack](5, 20), "StaffAttackPuff", 100);
+		STFF C 8 A_StaffAttack(random[StaffAttack](5, 20), "StaffAttackPuff", 100, DEFMELEERANGE * 1.25);
 		STFF B 8 A_ReFire;
 		Goto Ready;
 	AltFire:
@@ -36,7 +36,7 @@ class HRpgStaff : HereticWeapon replaces Staff
 		STFF B 3 Offset(100, 50);
 		STFF C 2 Offset(60, 40);
 		STFF C 1 Offset(20, 30);
-		STFF C 1 Offset(-20, 20) A_StaffAttack(random[StaffAttack](25, 60), "StaffAttackPuff", 200);
+		STFF C 1 Offset(-20, 20) A_StaffAttack(random[StaffAttack](25, 60), "StaffAttackPuff", 200, DEFMELEERANGE * 1.75);
 		STFF C 1 Offset(-60, 10);
 		STFF C 2 Offset(-100, 20);
 		STFF C 2 Offset(-140, 30);
@@ -52,7 +52,7 @@ class HRpgStaff : HereticWeapon replaces Staff
 	//
 	//----------------------------------------------------------------------------
 
-	action void A_StaffAttack (int damage, class<Actor> puff, int kickback, bool fireLightning = false)
+	action void A_StaffAttack (int damage, class<Actor> puff, int kickback, int meleeDist, bool fireLightning = false)
 	{
 		FTranslatedLineTarget t;
 		int kickbackSave;
@@ -132,7 +132,7 @@ class HRpgStaffPowered : HRpgStaff replaces StaffPowered
 		Loop;
 	Fire:
 		STFF G 6;
-		STFF H 8 A_StaffAttack(random[StaffAttack](18, 81), "StaffPuff2", 150);
+		STFF H 8 A_StaffAttack(random[StaffAttack](18, 81), "StaffPuff2", 150, DEFMELEERANGE * 1.25);
 		STFF G 8 A_ReFire;
 		Goto Ready;
 	AltFire:
@@ -152,7 +152,7 @@ class HRpgStaffPowered : HRpgStaff replaces StaffPowered
 
 	action void A_StaffLightningAttack()
 	{
-		A_StaffAttack(random[StaffAttack](35, 81), "StaffAttackPuff2Small", 200, true);
+		A_StaffAttack(random[StaffAttack](35, 81), "StaffAttackPuff2Small", 200, DEFMELEERANGE * 1.75, true);
 	}
 }
 
