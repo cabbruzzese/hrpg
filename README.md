@@ -148,6 +148,10 @@ The gravest of threats. When it's your time to go, they'll follow you anywhere.
 ### Runt
 Weee!!!!
 
+# Console Variables
+
+Set `hrpg_monsterrespawn false` to disable monster respawning and the Soul Hunting feature.
+
 # Credits
 
 Heretic is a product of Raven Software and id Software.
