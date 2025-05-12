@@ -92,7 +92,7 @@ The no-ammo weapon for this magic user is a spellbook with medium and short rang
 In addition, there are new spells that the Blasphemer learns when leveling, usable like items or through hot keys.
 
 ### Heathen Melee Weapons
-The Heathen's aresenal has been replaced by melee weapons weaker alternative ranged attacks. The ranged attacks are weaker and use ammo.
+The Heathen's arsenal has been replaced by melee weapons weaker alternative ranged attacks. The ranged attacks are weaker and use ammo.
 
  - Warhammer
  - War Axe
