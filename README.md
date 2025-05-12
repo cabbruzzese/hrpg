@@ -1,8 +1,8 @@
-# hrpg
-Heretic RPG by Peewee RotA
+# HRPG
+A Heretic RPG
 
 ## Summary
-This is a gameplay mod that adds classes, leveling, and melee enhancements to Heretic. Each weapon gets a melee or similar attack for alt-fire. The two new calsses get their own signature weapon. This enhances the RPG and fantasy elements of the game as well as gives players more options when out of ammo.
+This is a gameplay mod that adds classes, leveling, and melee enhancements to Heretic. Each weapon gets a melee or similar attack for alt-fire. The two new classes get their own signature weapon. This enhances the RPG and fantasy elements of the game as well as gives players more options when out of ammo.
 
 This mod was made for COOP and Single Player.
 
