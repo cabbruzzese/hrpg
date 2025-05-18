@@ -165,7 +165,11 @@ class MonsterMapTracker : MonsterStarsMarker
 	override void Tick()
 	{
 		if (monsterTracker)
+		{
 			SetOrigin(monsterTracker.Pos, true);
+			if (monsterTracker.health < 1)
+				EndTracker();
+		}
 		
 		Super.Tick();
 	}
